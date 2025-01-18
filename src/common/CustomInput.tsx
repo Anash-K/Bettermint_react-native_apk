@@ -66,23 +66,30 @@ const CustomInput: React.FC<CustomInputProps> = ({
     setIsSecure(!isSecure);
   };
 
-  const InputStyle = isDisabled ? styles.disabledInputStyle : styles.input;
-  const InputContentStyle = isDisabled
-    ? styles.disabledInputContentStyle
-    : styles.inputContent;
-
   return (
     <View style={[styles.container, inputBoxStyle]}>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>{label}</Text>
-        <View>
+        <View
+          style={[
+            styles.inputBox,
+            isFocused ? styles.focusInputBox : { borderColor: "transparent" },
+          ]}
+        >
           <TextInput
-            style={[styles.input, isFocused && styles.focusInput, inputStyle]}
+            style={[
+              styles.input,
+              isPassword && { paddingRight: 50 },
+              inputStyle,
+            ]}
             placeholder={placeholderText}
             onFocus={handleFocus}
             onBlur={handleBlur}
             secureTextEntry={isPassword && isSecure}
             editable={!isDisabled}
+            multiline={false} // Ensure multiline is false to avoid line breaks
+            numberOfLines={1}
+            textAlign="left"
             {...inputConfigurations}
           />
 
@@ -99,7 +106,12 @@ const CustomInput: React.FC<CustomInputProps> = ({
                 source={
                   isSecure ? CustomImages.secureEye : CustomImages.unSecureEye
                 }
-                style={[styles.iconEye, !isSecure && { width: 18 }, iconStyle]}
+                tintColor={"#C9C7C5"}
+                style={[
+                  styles.iconEye,
+                  !isSecure && { width: 18, marginRight: 8 },
+                  iconStyle,
+                ]}
                 resizeMode="contain"
               />
             </Pressable>
@@ -130,12 +142,12 @@ const CustomInput: React.FC<CustomInputProps> = ({
 export default CustomInput;
 
 const styles = StyleSheet.create({
-  focusInput: {
-    shadowColor: "rgba(28, 101, 124, 0.2)",
-    shadowOffset: { width: 2, height: 10 },
-    shadowOpacity: 1,
-    shadowRadius: 54, 
-    elevation: 2,
+  inputBox: {
+    borderWidth: 4,
+    borderRadius: 54,
+  },
+  focusInputBox: {
+    borderColor: "rgba(28, 101, 124, 0.2)",
   },
   openEyeStyle: {
     width: 19,
@@ -152,14 +164,8 @@ const styles = StyleSheet.create({
     height: 56,
     marginBottom: 17,
   },
-  outlineInput: {
-    borderRadius: 10,
-    borderColor: "rgba(56, 57, 62, 1)",
-    borderWidth: 1,
-    // fontFamily: CustomFont.Urbanist400,
-  },
   container: {
-    marginVertical: 10,
+    marginVertical: 7,
   },
   input: {
     fontFamily: CustomFont.Urbanist400,
@@ -169,7 +175,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 54,
     borderColor: colors.primary,
-    height: 48,
+    backgroundColor: colors.white,
+    paddingHorizontal: 16,
+    textAlignVertical: "center",
+    paddingVertical: Platform.select({ ios: 14.5 }),
   },
   disabledInputContentStyle: {},
   inputContent: {},
@@ -178,20 +187,21 @@ const styles = StyleSheet.create({
     lineHeight: 16.8,
     fontSize: 14,
     color: colors.primary,
+    marginBottom: 5,
   },
   iconEye: {
     width: 24,
     height: 24,
-    marginRight: 19,
+    marginRight: 5,
   },
   passwordButton: {
-    marginRight: 19,
+    marginRight: 20,
   },
   pressableButton: {
     position: "absolute",
     top: "50%",
     right: 12,
-    transform: [{ translateY: -19 }],
+    transform: [{ translateY: -12 }],
   },
   pressed: {
     opacity: 0.7,
