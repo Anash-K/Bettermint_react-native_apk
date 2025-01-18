@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/HedvigLettersSerif-Regular.ttf",
+      "sha1": "0b69575ef5f820cffc144ba81c9685809f92bf26"
+    },
+    {
+      "path": "src/assets/fonts/Urbanist-Bold.ttf",
+      "sha1": "4b1d8478efaf85885d9a28dc7ce3bf284954ad74"
+    },
+    {
+      "path": "src/assets/fonts/Urbanist-Light.ttf",
+      "sha1": "9a0e61b3651f244833a615c1bbe6bfafd1751d47"
+    },
+    {
+      "path": "src/assets/fonts/Urbanist-Medium.ttf",
+      "sha1": "9bb53879be3392a25662f7c64f0ce82efca29f14"
+    },
+    {
+      "path": "src/assets/fonts/Urbanist-Regular.ttf",
+      "sha1": "8f8e7875b240df7149e499e2abc4f48f13ccefd0"
+    },
+    {
+      "path": "src/assets/fonts/Urbanist-SemiBold.ttf",
+      "sha1": "268c9395bb18d26989b24b5249779318d1f95c22"
+    },
+    {
+      "path": "src/assets/fonts/customFonts.jsx",
+      "sha1": "f1cd62dbe71bdc90857230811fbe5cb20b7206c6"
+    }
+  ]
+}
