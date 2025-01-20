@@ -16,7 +16,7 @@ import React, { useCallback } from "react";
 import CustomButton from "../common/CustomButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "../navigator/Stack";
-import { CustomStyle } from "../constants/CustomStyles";
+import { useCustomStyle } from "../constants/CustomStyles";
 
 const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
   const handleChange = useCallback(() => {}, []);
@@ -25,16 +25,13 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
     navigation.navigate(PageName);
   }, []);
   const insets = useSafeAreaInsets();
+  const CustomStyle = useCustomStyle();
+  
   return (
     <ScrollView
       style={[
         styles.container,
-        {
-          marginBottom: Platform.select({
-            ios: insets.bottom,
-            android: insets.bottom + 20,
-          }),
-        },
+        CustomStyle.safeAreaMarginBottom
       ]}
       contentContainerStyle={styles.contentStyle}
       bounces={false}

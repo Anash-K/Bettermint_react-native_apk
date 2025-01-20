@@ -11,19 +11,20 @@ import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 import FastImage from "react-native-fast-image";
 import { CustomImages } from "../assets/CustomImages";
-import { CustomStyle } from "../constants/CustomStyles";
+import { useCustomStyle } from "../constants/CustomStyles";
 
 type EmailVerificationModal = {
   isVisible: boolean;
   closeModal: () => void;
-  OnConfirm:() => void;
+  OnConfirm: () => void;
 };
 
 const EmailVerificationModal: React.FC<EmailVerificationModal> = ({
   isVisible,
   closeModal,
-  OnConfirm
+  OnConfirm,
 }) => {
+  const CustomStyle = useCustomStyle();
   return (
     <Modal
       visible={isVisible}

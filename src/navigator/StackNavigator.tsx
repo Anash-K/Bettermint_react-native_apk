@@ -1,22 +1,28 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SignUp from "../screens/SignUp";
 import { StyleSheet } from "react-native";
-import Login from "../screens/Login";
 import React from "react";
-import ForgotPassword from "../screens/ForgotPassword";
-import Profile from "../screens/Profile";
 import { ScreenProps } from "./Stack";
+import ProvideYourMobileNumber from "../screens/ProvideYourMobileNumber";
+import TellUsALittleAboutYou from "../screens/TellUsALittleAboutYou";
 
 export type StackParams = {
-  Profile: undefined;
+  TellUsALittleAboutYou: undefined;
+  ProvideYourMobileNumber: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
 
-const MainStack: React.FC<ScreenProps<'MainStack'>> = () => {
+const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
   return (
     <Stack.Navigator screenOptions={{ contentStyle: styles.contentPagesStyle }}>
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen
+        name="TellUsALittleAboutYou"
+        component={TellUsALittleAboutYou}
+      />
+      <Stack.Screen
+        name="ProvideYourMobileNumber"
+        component={ProvideYourMobileNumber}
+      />
     </Stack.Navigator>
   );
 };

@@ -6,5 +6,7 @@ export const colors = {
     white:'#FFFFFF',
     error:'red',
     borderColor:'#EFF1F6',
-    black:'#000'
+    black:'#000',
+    appBackground:'#F2F7F6',
+    commonInputBorderColor:'rgba(28, 101, 124, 0.15)'
 };

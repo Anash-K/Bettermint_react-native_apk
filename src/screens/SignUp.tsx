@@ -20,7 +20,7 @@ import EmailVerificationModal from "../Modals/EmailVerificationModal";
 import { ScreenProps } from "../navigator/Stack";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/slices/authSlice";
-import { CustomStyle } from "../constants/CustomStyles";
+import { useCustomStyle } from "../constants/CustomStyles";
 
 type Inputs = {
   email: string;
@@ -39,6 +39,7 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
 
   const [isModal, setIsModal] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const CustomStyle = useCustomStyle();
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
@@ -62,12 +63,7 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
     <ScrollView
       style={[
         styles.container,
-        {
-          marginBottom: Platform.select({
-            ios: insets.bottom,
-            android: insets.bottom + 20,
-          }),
-        },
+        CustomStyle.safeAreaMarginBottom
       ]}
       contentContainerStyle={styles.contentStyle}
       bounces={false}
@@ -187,6 +183,7 @@ export default SignUp;
 const styles = StyleSheet.create({
   errorMessage: {
     fontSize: 11,
+    fontFamily: CustomFont.Urbanist400,
     color: colors.error,
   },
   loginButton: {

@@ -16,6 +16,8 @@ import {
 import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
+import FastImage from "react-native-fast-image";
+import SelectDropdown from "react-native-select-dropdown";
 
 interface CustomInputProps {
   value?: string;
@@ -35,6 +37,10 @@ interface CustomInputProps {
   customPressableStyle?: ViewStyle;
   customInputContentStyle?: ViewStyle;
   isDisabled?: boolean;
+  isDropDown?: boolean;
+  dropdownItems?: any[];
+  onFocusAction?:() => void;
+  onBlurAction?:() => void;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -55,12 +61,30 @@ const CustomInput: React.FC<CustomInputProps> = ({
   customPressableStyle,
   customInputContentStyle,
   isDisabled = false,
+  isDropDown,
+  dropdownItems,
+  onFocusAction,
+  onBlurAction
 }) => {
   const [isSecure, setIsSecure] = useState(true);
-  const [isFocused, setIsFocused] = useState(false);
+  const [textInputFocused, setTextInputFocused] = useState(false);
+  const [dropDownFocused, setDropDownFocused] = useState(false);
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+  const handleTextInputFocus = () => {
+    setTextInputFocused(true);
+    setDropDownFocused(false); // If TextInput is focused, Dropdown will not be focused
+  };
+
+  const handleDropDownFocus = () => {
+    setDropDownFocused(true);
+    setTextInputFocused(false); // If Dropdown is focused, TextInput will not be focused
+  };
+
+  const handleBlur = () => {
+    console.log("blur");
+    setTextInputFocused(false);
+    setDropDownFocused(false);
+  };
 
   const toggleSecurity = () => {
     setIsSecure(!isSecure);
@@ -73,25 +97,81 @@ const CustomInput: React.FC<CustomInputProps> = ({
         <View
           style={[
             styles.inputBox,
-            isFocused ? styles.focusInputBox : { borderColor: "transparent" },
+            textInputFocused || dropDownFocused
+              ? styles.focusInputBox
+              : { borderColor: "transparent" },
           ]}
         >
-          <TextInput
-            style={[
-              styles.input,
-              isPassword && { paddingRight: 50 },
-              inputStyle,
-            ]}
-            placeholder={placeholderText}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            secureTextEntry={isPassword && isSecure}
-            editable={!isDisabled}
-            multiline={false} // Ensure multiline is false to avoid line breaks
-            numberOfLines={1}
-            textAlign="left"
-            {...inputConfigurations}
-          />
+
+          {!isDropDown ? (
+            <TextInput
+              style={[
+                styles.input,
+                isPassword && { paddingRight: 50 },
+                textInputFocused && { borderColor: colors.primary },
+                inputStyle,
+              ]}
+              placeholder={placeholderText}
+              onFocus={onFocusAction ?? handleTextInputFocus}
+              onBlur={onBlurAction ?? handleBlur}
+              secureTextEntry={isPassword && isSecure}
+              editable={!isDisabled}
+              multiline={false}
+              numberOfLines={1}
+              textAlign="left"
+              {...inputConfigurations}
+            />
+          ) : (
+            <SelectDropdown
+              data={dropdownItems ? dropdownItems : []}
+              dropdownOverlayColor="transparent"
+              onSelect={(selectedItem, index) => {
+                console.log(selectedItem, index);
+              }}
+              renderButton={(selectedItem, isOpened) => {
+                return (
+                  <View style={[styles.dropDownBoxInnerContainer]}>
+                    <Text
+                      style={[
+                        styles.SelectInputText,
+                        !selectedItem?.title && styles.SelectInputTextEmpty,
+                      ]}
+                    >
+                      {selectedItem?.title ?? "Select your Gender"}
+                    </Text>
+                    <FastImage
+                      source={CustomImages.blackDropDownIcon}
+                      style={[
+                        styles.dropdownButtonArrowStyle,
+                        isOpened && { transform: [{ rotate: "180deg" }] },
+                      ]}
+                      resizeMode="contain"
+                    />
+                  </View>
+                );
+              }}
+              renderItem={(item, index, isSelected) => {
+                return (
+                  <View
+                    style={{
+                      ...styles.dropdownItemStyle,
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.dropdownItemTxtStyle,
+                        isSelected && styles.dropdownFocusItemTxtStyle,
+                      ]}
+                    >
+                      {item.title}
+                    </Text>
+                  </View>
+                );
+              }}
+              showsVerticalScrollIndicator={false}
+              dropdownStyle={styles.dropDown}
+            />
+          )}
 
           {isPassword && (
             <Pressable
@@ -116,7 +196,6 @@ const CustomInput: React.FC<CustomInputProps> = ({
               />
             </Pressable>
           )}
-
           {showIcon && (
             <Pressable
               onPress={handleIconAction}
@@ -142,6 +221,60 @@ const CustomInput: React.FC<CustomInputProps> = ({
 export default CustomInput;
 
 const styles = StyleSheet.create({
+  dropdownFocusItemTxtStyle: {
+    backgroundColor: colors.appBackground,
+    color: colors.primary,
+    fontFamily: CustomFont.Urbanist600,
+  },
+  SelectInputTextEmpty: {
+    color: colors.secondaryLight,
+    opacity: Platform.select({ ios: 0.5 }),
+  },
+  dropdownItemStyle: {},
+  dropdownItemTxtStyle: {
+    fontFamily: CustomFont.Urbanist400,
+    fontSize: 16,
+    lineHeight: 19.2,
+    color: colors.secondary,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 12,
+  },
+  dropdownButtonArrowStyle: {
+    width: 18,
+    height: 16,
+  },
+  SelectInputText: {
+    fontFamily: CustomFont.Urbanist400,
+    fontSize: 16,
+    lineHeight: 19.2,
+    color: colors.secondary,
+  },
+  dropDown: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: "#FFFFFF",
+    marginTop: 8,
+    borderColor: "rgba(28, 101, 124, 0.15)",
+    borderWidth: 1,
+    shadowColor: "transparent",
+  },
+  dropDownBoxInnerContainer: {
+    fontFamily: CustomFont.Urbanist400,
+    fontSize: 16,
+    lineHeight: 19.2,
+    color: colors.secondary,
+    borderWidth: 1,
+    borderRadius: 54,
+    borderColor: colors.commonInputBorderColor,
+    backgroundColor: colors.white,
+    paddingHorizontal: 16,
+    textAlignVertical: "center",
+    paddingVertical: 14.5,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   inputBox: {
     borderWidth: 4,
     borderRadius: 54,
@@ -174,7 +307,7 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     borderWidth: 1,
     borderRadius: 54,
-    borderColor: colors.primary,
+    borderColor: colors.commonInputBorderColor,
     backgroundColor: colors.white,
     paddingHorizontal: 16,
     textAlignVertical: "center",

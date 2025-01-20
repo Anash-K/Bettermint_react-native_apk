@@ -3,11 +3,12 @@ import { StyleSheet, Text, View } from "react-native";
 import { ScreenProps } from "../navigator/Stack";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
-import { CustomStyle } from "../constants/CustomStyles";
+import { useCustomStyle } from "../constants/CustomStyles";
 
 const ForgotPassword: React.FC<ScreenProps<"ForgotPassword">> = memo(() => {
   const handleChange = useCallback(() => {}, []);
   const handleForgotPassword = useCallback(() => {}, []);
+  const CustomStyle = useCustomStyle();
 
   return (
     <View style={styles.container}>

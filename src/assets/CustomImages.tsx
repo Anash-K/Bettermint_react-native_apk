@@ -4,4 +4,6 @@ export const CustomImages = {
   mailIcon: require("./Images/mailIcon.png"),
   logo: require("./Images/logo.png"),
   logoBackground:require("./Images/logoBackground.png"),
+  dropDownIcon:require("./Images/dropDownIcon.png"),
+  blackDropDownIcon:require("./Images/blackDropDownIcon.png"),
 };
