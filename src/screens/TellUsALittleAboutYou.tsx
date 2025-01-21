@@ -10,6 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import useTimeFormatter from "../utils/timeFormatter";
 
 interface Inputs {
   name: string;
@@ -34,13 +35,14 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
     watch,
     getValues,
     control,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const showDatePicker = useCallback(() => {
     setDatePickerVisibility(true);
-  }, []);
+  }, [isDatePickerVisible]);
 
   const hideDatePicker = useCallback(() => {
     setDatePickerVisibility(false);
@@ -48,6 +50,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
 
   const handleConfirm = useCallback((date: Date) => {
     console.warn("A date has been picked: ", date);
+    setValue("DOB", useTimeFormatter({ date: date }));
     hideDatePicker();
   }, []);
 
@@ -106,9 +109,9 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
               placeholderText="Enter DOB"
               onChange={onChange}
               value={value}
+              onFocusAction={showDatePicker}
               inputConfigurations={{
                 value: value,
-                onChangeText: onChange,
               }}
             />
           )}
@@ -177,6 +180,7 @@ export default TellUsALittleAboutYou;
 const styles = StyleSheet.create({
   title: {
     textAlign: "left",
+    fontFamily: CustomFont.Urbanist800,
   },
   subtitle: {
     marginTop: 8,
@@ -188,6 +192,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
+    marginBottom:20
   },
   errorMessage: {
     fontSize: 11,

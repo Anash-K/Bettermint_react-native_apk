@@ -10,6 +10,10 @@
       "sha1": "4b1d8478efaf85885d9a28dc7ce3bf284954ad74"
     },
     {
+      "path": "src/assets/fonts/Urbanist-ExtraBold.ttf",
+      "sha1": "8456433f5c419161b01f72c0db6d431132b5f74a"
+    },
+    {
       "path": "src/assets/fonts/Urbanist-Light.ttf",
       "sha1": "9a0e61b3651f244833a615c1bbe6bfafd1751d47"
     },
@@ -27,7 +31,11 @@
     },
     {
       "path": "src/assets/fonts/customFonts.jsx",
-      "sha1": "f1cd62dbe71bdc90857230811fbe5cb20b7206c6"
+      "sha1": "ad847d49b69766afd591001f89dcbbeb9e200003"
+    },
+    {
+      "path": "node_modules/react-native-international-phone-number/lib/assets/fonts/TwemojiMozilla.woff2",
+      "sha1": "3a2bb214a3ba69716cbc6a3177480aefb6b867e4"
     }
   ]
 }

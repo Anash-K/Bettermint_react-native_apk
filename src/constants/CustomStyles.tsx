@@ -27,5 +27,10 @@ export const useCustomStyle = () => {
         android: insets.bottom + 20,
       }),
     },
+    errorMessage: {
+      fontSize: 11,
+      fontFamily: CustomFont.Urbanist400,
+      color: colors.error,
+    } as TextStyle,
   };
 };

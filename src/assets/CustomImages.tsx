@@ -6,4 +6,5 @@ export const CustomImages = {
   logoBackground:require("./Images/logoBackground.png"),
   dropDownIcon:require("./Images/dropDownIcon.png"),
   blackDropDownIcon:require("./Images/blackDropDownIcon.png"),
+  arrowIcon:require("./Images/Arrow.png"),
 };

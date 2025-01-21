@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Image,
   Pressable,
@@ -18,6 +18,8 @@ import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 import FastImage from "react-native-fast-image";
 import SelectDropdown from "react-native-select-dropdown";
+// import PhoneInput from "react-native-phone-number-input";
+import PhoneInput, { ICountry } from "react-native-international-phone-number";
 
 interface CustomInputProps {
   value?: string;
@@ -39,8 +41,11 @@ interface CustomInputProps {
   isDisabled?: boolean;
   isDropDown?: boolean;
   dropdownItems?: any[];
-  onFocusAction?:() => void;
-  onBlurAction?:() => void;
+  onFocusAction?: () => void;
+  onBlurAction?: () => void;
+  isPhoneNumber?: boolean;
+  OnCountryChange?: (country: ICountry) => void;
+  selectedCountry?: any;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -64,31 +69,33 @@ const CustomInput: React.FC<CustomInputProps> = ({
   isDropDown,
   dropdownItems,
   onFocusAction,
-  onBlurAction
+  onBlurAction,
+  OnCountryChange,
+  selectedCountry,
 }) => {
   const [isSecure, setIsSecure] = useState(true);
   const [textInputFocused, setTextInputFocused] = useState(false);
   const [dropDownFocused, setDropDownFocused] = useState(false);
 
-  const handleTextInputFocus = () => {
+  const handleTextInputFocus = useCallback(() => {
     setTextInputFocused(true);
-    setDropDownFocused(false); // If TextInput is focused, Dropdown will not be focused
-  };
+    setDropDownFocused(false);
+  }, [textInputFocused, dropDownFocused]);
 
-  const handleDropDownFocus = () => {
+  const handleDropDownFocus = useCallback(() => {
     setDropDownFocused(true);
-    setTextInputFocused(false); // If Dropdown is focused, TextInput will not be focused
-  };
+    setTextInputFocused(false);
+  }, [textInputFocused, dropDownFocused]);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     console.log("blur");
     setTextInputFocused(false);
     setDropDownFocused(false);
-  };
+  }, [textInputFocused, dropDownFocused]);
 
-  const toggleSecurity = () => {
+  const toggleSecurity = useCallback(() => {
     setIsSecure(!isSecure);
-  };
+  }, [isSecure]);
 
   return (
     <View style={[styles.container, inputBoxStyle]}>
@@ -102,75 +109,106 @@ const CustomInput: React.FC<CustomInputProps> = ({
               : { borderColor: "transparent" },
           ]}
         >
-
-          {!isDropDown ? (
-            <TextInput
-              style={[
-                styles.input,
-                isPassword && { paddingRight: 50 },
-                textInputFocused && { borderColor: colors.primary },
-                inputStyle,
-              ]}
-              placeholder={placeholderText}
-              onFocus={onFocusAction ?? handleTextInputFocus}
-              onBlur={onBlurAction ?? handleBlur}
-              secureTextEntry={isPassword && isSecure}
-              editable={!isDisabled}
-              multiline={false}
-              numberOfLines={1}
-              textAlign="left"
-              {...inputConfigurations}
+          {isPhoneInput ? (
+            <PhoneInput
+              onChangePhoneNumber={onChange}
+              selectedCountry={selectedCountry}
+              onChangeSelectedCountry={OnCountryChange as any}
+              onFocus={handleTextInputFocus}
+              placeholder={placeholderText ?? 'Enter Phone Number'}
+              phoneInputStyles={{
+                container: [
+                  styles.phoneInputBox,
+                  textInputFocused && styles.focusBorder,
+                ],
+                flagContainer: styles.flagContainerStyle,
+                divider: { backgroundColor: "rgba(197, 200, 201, 0.25)" },
+                caret: styles.caretStyle,
+                callingCode: styles.callingCode,
+                input: [styles.callingCode, styles.inputPhoneText],
+                flag: styles.flagStyle,
+              }}
+              style={styles.inputTextPhone}
+              defaultValue="+91"
+              textInputProps={{
+                ...inputConfigurations, // Remove country code from the input value
+                keyboardType: "phone-pad", // Ensures numeric keypad
+              }}
             />
           ) : (
-            <SelectDropdown
-              data={dropdownItems ? dropdownItems : []}
-              dropdownOverlayColor="transparent"
-              onSelect={(selectedItem, index) => {
-                console.log(selectedItem, index);
-              }}
-              renderButton={(selectedItem, isOpened) => {
-                return (
-                  <View style={[styles.dropDownBoxInnerContainer]}>
-                    <Text
-                      style={[
-                        styles.SelectInputText,
-                        !selectedItem?.title && styles.SelectInputTextEmpty,
-                      ]}
-                    >
-                      {selectedItem?.title ?? "Select your Gender"}
-                    </Text>
-                    <FastImage
-                      source={CustomImages.blackDropDownIcon}
-                      style={[
-                        styles.dropdownButtonArrowStyle,
-                        isOpened && { transform: [{ rotate: "180deg" }] },
-                      ]}
-                      resizeMode="contain"
-                    />
-                  </View>
-                );
-              }}
-              renderItem={(item, index, isSelected) => {
-                return (
-                  <View
-                    style={{
-                      ...styles.dropdownItemStyle,
-                    }}
-                  >
-                    <Text
-                      style={[
-                        styles.dropdownItemTxtStyle,
-                        isSelected && styles.dropdownFocusItemTxtStyle,
-                      ]}
-                    >
-                      {item.title}
-                    </Text>
-                  </View>
-                );
-              }}
-              showsVerticalScrollIndicator={false}
-              dropdownStyle={styles.dropDown}
-            />
+            <>
+              {!isDropDown ? (
+                <TextInput
+                  style={[
+                    styles.input,
+                    isPassword && { paddingRight: 50 },
+                    textInputFocused && styles.focusBorder,
+                    inputStyle,
+                  ]}
+                  placeholder={placeholderText}
+                  onFocus={onFocusAction ?? handleTextInputFocus}
+                  onBlur={onBlurAction ?? handleBlur}
+                  secureTextEntry={isPassword && isSecure}
+                  editable={!isDisabled}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  multiline={false}
+                  numberOfLines={1}
+                  textAlign="left"
+                  {...inputConfigurations}
+                />
+              ) : (
+                <SelectDropdown
+                  data={dropdownItems ? dropdownItems : []}
+                  dropdownOverlayColor="transparent"
+                  onSelect={(selectedItem, index) => {
+                    console.log(selectedItem, index);
+                  }}
+                  renderButton={(selectedItem, isOpened) => {
+                    return (
+                      <View style={[styles.dropDownBoxInnerContainer]}>
+                        <Text
+                          style={[
+                            styles.SelectInputText,
+                            !selectedItem?.title && styles.SelectInputTextEmpty,
+                          ]}
+                        >
+                          {selectedItem?.title ?? "Select your Gender"}
+                        </Text>
+                        <FastImage
+                          source={CustomImages.blackDropDownIcon}
+                          style={[
+                            styles.dropdownButtonArrowStyle,
+                            isOpened && { transform: [{ rotate: "180deg" }] },
+                          ]}
+                          resizeMode="contain"
+                        />
+                      </View>
+                    );
+                  }}
+                  renderItem={(item, index, isSelected) => {
+                    return (
+                      <View
+                        style={{
+                          ...styles.dropdownItemStyle,
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.dropdownItemTxtStyle,
+                            isSelected && styles.dropdownFocusItemTxtStyle,
+                          ]}
+                        >
+                          {item.title}
+                        </Text>
+                      </View>
+                    );
+                  }}
+                  showsVerticalScrollIndicator={false}
+                  dropdownStyle={styles.dropDown}
+                />
+              )}
+            </>
           )}
 
           {isPassword && (
@@ -221,6 +259,60 @@ const CustomInput: React.FC<CustomInputProps> = ({
 export default CustomInput;
 
 const styles = StyleSheet.create({
+  flagStyle: {
+    // resizeMode: "cover",
+  },
+  inputPhoneText: {
+    padding: 0,
+    textAlign: "left",
+  },
+  callingCode: {
+    fontFamily: CustomFont.Urbanist400,
+    fontSize: 16,
+    lineHeight: 19.2,
+    color: colors.secondary,
+  },
+  caretStyle: {
+    color: "rgba(197, 200, 201, 1)",
+    width: 14,
+    height: 12,
+  },
+  flagContainerStyle: {
+    borderTopLeftRadius: 54,
+    borderBottomLeftRadius: 54,
+    backgroundColor: colors.white,
+  },
+  phoneInputBox: {
+    borderWidth: 1,
+    borderRadius: 54,
+    borderColor: colors.commonInputBorderColor,
+    backgroundColor: colors.white,
+  },
+  inputTextPhone: {
+    width: "100%",
+    fontFamily: CustomFont.Urbanist400,
+    fontSize: 16,
+    lineHeight: 19.2,
+    color: colors.secondary,
+    paddingHorizontal: 10,
+  },
+  focusBorder: { borderColor: colors.primary },
+  phoneInputContainer: {
+    borderWidth: 1,
+    borderRadius: 54,
+    borderColor: colors.commonInputBorderColor,
+    backgroundColor: colors.white,
+    width: "100%",
+  },
+  phoneTextContainer: {
+    padding: 0,
+    width: "100%",
+    backgroundColor: colors.white,
+    borderRadius: 54,
+  },
+  phoneTextInput: {
+    backgroundColor: "colors.white",
+  },
   dropdownFocusItemTxtStyle: {
     backgroundColor: colors.appBackground,
     color: colors.primary,
