@@ -61,7 +61,7 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
         <CustomButton
           buttonStyle={styles.loginButton}
           text="Login"
-          onPress={handlePress}
+          onPress={handleNav.bind(this, "SignUp")}
         />
         <CustomButton
           text="Forgot Password?"
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor:"#F2F7F6"
   },
   logo: {
     width: 64,

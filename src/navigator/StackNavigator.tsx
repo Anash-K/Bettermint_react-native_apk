@@ -8,16 +8,24 @@ import { colors } from "../constants/colors";
 import CustomButton from "../common/CustomButton";
 import { CustomImages } from "../assets/CustomImages";
 import WhatsYourHeight from "../screens/WhatsYourHeight";
+import WhatsYourWeight from "../screens/WhatsYourWeight";
+import WhatBestDescribe from "../screens/WhatBestDescribe";
+import AddYourPhoto from "../screens/AddYourPhoto";
+import CustomFont from "../assets/fonts/customFonts";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
   ProvideYourMobileNumber: undefined;
-  WhatsYourHeight:undefined;
+  WhatsYourHeight: undefined;
+  WhatsYourWeight: undefined;
+  WhatBestDescribe: undefined;
+  AddYourPhoto: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
 
 const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
+  const handlePress = () => {};
   return (
     <>
       <StatusBar barStyle={"dark-content"} />
@@ -51,10 +59,39 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
           }}
         />
         <Stack.Screen
-          name='WhatsYourHeight'
+          name="WhatsYourHeight"
           component={WhatsYourHeight}
           options={{
             headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name="WhatsYourWeight"
+          component={WhatsYourWeight}
+          options={{
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name="WhatBestDescribe"
+          component={WhatBestDescribe}
+          options={{
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name="AddYourPhoto"
+          component={AddYourPhoto}
+          options={{
+            headerTitle: "",
+            headerRight: () => (
+              <CustomButton
+                text="Skip"
+                buttonStyle={styles.skipButton}
+                textStyle={styles.skipText}
+                onPress={handlePress}
+              />
+            ),
           }}
         />
       </Stack.Navigator>
@@ -65,6 +102,16 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
 export default MainStack;
 
 const styles = StyleSheet.create({
+  skipText: {
+    color: colors.primary,
+    fontSize: 14,
+    lineHeight: 16.8,
+    fontFamily: CustomFont.Urbanist700,
+  },
+  skipButton: {
+    paddingVertical: 5.5,
+    backgroundColor: "#E4F0F0",
+  },
   backButtonStyle: {
     backgroundColor: "transparent",
     borderColor: colors.primary,

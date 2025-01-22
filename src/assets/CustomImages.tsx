@@ -7,4 +7,9 @@ export const CustomImages = {
   dropDownIcon:require("./Images/dropDownIcon.png"),
   blackDropDownIcon:require("./Images/blackDropDownIcon.png"),
   arrowIcon:require("./Images/Arrow.png"),
+  whiteDot:require("./Images/circledot.png"),
+  profilePic:require("./Images/profilePic.png"),
+  closeIcon:require("./Images/closeIcon.png"),
+  photoGallery:require("./Images/album.png"),
+  cameraIcon:require("./Images/camera.png"),
 };

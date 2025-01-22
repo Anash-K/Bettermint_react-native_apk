@@ -8,7 +8,7 @@ export const useCustomStyle = () => {
 
   return {
     title: {
-      fontFamily: CustomFont.Urbanist700,
+      fontFamily: CustomFont.Urbanist800,
       color: colors.primary,
       fontSize: 28,
       lineHeight: 33.6,

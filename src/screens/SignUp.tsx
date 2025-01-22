@@ -46,7 +46,9 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
     toggleEmailModal();
   };
   const handleChange = useCallback(() => {}, []);
-  const handlePress = useCallback(() => {}, []);
+  const handlePress = useCallback(() => {
+    navigation.navigate('Login')
+  }, []);
   const toggleEmailModal = useCallback(() => {
     setIsModal(!isModal);
   }, [isModal]);
@@ -231,6 +233,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor:"#F2F7F6"
   },
   logo: {
     width: 64,

@@ -17,10 +17,12 @@ const ProvideYourMobileNumber: React.FC<
 > = ({ navigation }) => {
   const {
     control,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
   const CustomStyle = useCustomStyle();
   const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   const handleSelectedCountry = useCallback((country: ICountry) => {
     setSelectedCountry(country);
@@ -30,6 +32,12 @@ const ProvideYourMobileNumber: React.FC<
   const handleNextNav = useCallback(() => {
     navigation.navigate("WhatsYourHeight");
   }, []);
+
+  const handleInputChange = useCallback((text: string) => {
+    console.log(text)
+    // Filter out non-numeric characters
+    setValue("phoneNumber", text.replace(/[^0-9]/g, ""));
+  }, [setValue]);
 
   
   return (
@@ -47,17 +55,25 @@ const ProvideYourMobileNumber: React.FC<
               value: 15,
               message: "Phone number cannot exceed 15 characters",
             },
+            pattern: {
+              value: /^[0-9]*$/,
+              message: "Only numeric values are allowed",
+            },
           }}
           render={({ field: { onChange, value } }) => (
             <CustomInput
               placeholderText="Enter phone number"
-              onChange={onChange}
+              onChange={(text) => {
+                // Remove non-numeric characters and limit input length
+                const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15);
+                console.log(text)
+                onChange(formattedText);
+              }}
               isPhoneInput={true}
               selectedCountry={selectedCountry}
               OnCountryChange={handleSelectedCountry}
               inputConfigurations={{
                 value: value,
-                onChangeText: onChange,
               }}
             />
           )}

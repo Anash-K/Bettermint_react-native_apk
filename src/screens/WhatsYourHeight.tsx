@@ -1,114 +1,196 @@
-import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  FlatList,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import ScaleRoller from "../utils/ScaleRoller";
 import { useCustomStyle } from "../constants/CustomStyles";
-import { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import CustomFont from "../assets/fonts/customFonts";
+import { colors } from "../constants/colors";
+import CustomButton from "../common/CustomButton";
+import DrawerButton from "../common/DrawerButton";
+import { ScreenProps } from "../navigator/Stack";
 
-const WhatsYourHeight = () => {
+const WhatsYourHeight: React.FC<ScreenProps<"WhatsYourHeight">> = ({
+  navigation,
+}) => {
   const customStyle = useCustomStyle();
 
-  const heightData = [];
-  for (let i = 50; i <= 250; i += 5) {
-    heightData.push({ key: `${i}` });
-  }
+  const heightData: { key: any }[] = Array.from({ length: 201 }, (_, i) => ({
+    key: `${50 + i}`,
+  }));
 
   const [selectedHeight, setSelectedHeight] = useState(null);
-  const flatListRef = useRef(null);
-  const [screenWidth, setScreenWidth] = useState(Dimensions.get("window").width); // Store the screen width
-  const [itemLayouts, setItemLayouts] = useState({}); // Store layout info of each item
+  const [activeDrawer, setActiveDrawer] = useState("cm");
+  const flatListRef = useRef<any>(null);
+  const screenWidth = Dimensions.get("screen").width;
+  const itemWidth = 80;
 
-  // Function to store layout information of each item
-  const handleLayout = (event, key) => {
-    const { x, width } = event.nativeEvent.layout;
-    setItemLayouts((prevLayouts) => ({
-      ...prevLayouts,
-      [key]: { x, width },
-    }));
-  };
-
-  // Function to calculate the center based on viewable items
-  const onViewableItemsChanged = useCallback(({ viewableItems }) => {
-    if (viewableItems.length > 0) {
-      // Calculate center by getting the middle of the screen
-      const centerOffset = screenWidth / 2;
-
-      // Find the closest item to the center of the screen
-      const centerItem = viewableItems.reduce((prev, current) => {
-        // Get the layout info for both items
-        const prevLayout = itemLayouts[prev.item.key] || {};
-        const currentLayout = itemLayouts[current.item.key] || {};
-
-        const prevDistance = Math.abs(
-          (prevLayout.x + prevLayout.width / 2) - centerOffset
-        );
-        const currentDistance = Math.abs(
-          (currentLayout.x + currentLayout.width / 2) - centerOffset
-        );
-
-        return currentDistance < prevDistance ? current : prev;
-      });
-
-      setSelectedHeight(centerItem.item.key); // Set the selected height to the key of the centered item
-      console.log(centerItem.item.key);
+  useEffect(() => {
+    if (flatListRef.current) {
+      setTimeout(() => {
+        flatListRef.current.scrollToOffset({
+          offset:
+            (heightData.length / 2) * itemWidth -
+            screenWidth / 2 +
+            itemWidth / 4,
+          animated: false,
+        });
+      }, 100);
     }
-  }, [screenWidth, itemLayouts]);
+  }, []);
+
+  const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
+    if (viewableItems.length > 0) {
+      const centerIndex = Math.round(
+        viewableItems[0].index + viewableItems.length / 2.2
+      );
+      setSelectedHeight(heightData[centerIndex]?.key);
+    }
+  }, []);
 
   const viewabilityConfig = {
-    viewAreaCoveragePercentThreshold: 50, // To consider the item as visible when at least 50% of it is visible
+    itemVisiblePercentThreshold: 50,
   };
 
+  const handlePress = useCallback((btnText: string) => {
+    setActiveDrawer(btnText);
+  }, []);
+
+  const handleNextNav = useCallback(() => {
+    navigation.navigate('WhatsYourWeight');
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={[customStyle.title, styles.title]}>What’s your height?</Text>
-
-     
-      <FlatList
-        ref={flatListRef}
-        data={heightData}
-        renderItem={({ item }) => (
-          <ScaleRoller
-            firstDigit={item.key}
-            selectedHeight={selectedHeight}
-            onLayout={(event) => handleLayout(event, item.key)} // Handle layout for each item
-          />
-        )}
-        keyExtractor={(item) => item.key}
-        contentContainerStyle={styles.contentRoller}
-        horizontal={true}
-        onViewableItemsChanged={onViewableItemsChanged} // Monitor visible items
-        viewabilityConfig={viewabilityConfig} // Set the viewability threshold
-        onLayout={() => setScreenWidth(Dimensions.get("window").width)} // Update screen width dynamically
-      />
-
-
-      {selectedHeight && (
-        <Text style={styles.selectedHeightText}>
-          Selected Height: {selectedHeight}
+    <ScrollView
+      nestedScrollEnabled={true}
+      style={[customStyle.safeAreaMarginBottom, styles.container]}
+      overScrollMode="never"
+      bounces={false}
+      contentContainerStyle={styles.contentStyle}
+    >
+      <View style={{ flex: 1 }}>
+        <Text style={[customStyle.title, styles.title]}>
+          What’s your height?
         </Text>
-      )}
-    </View>
+        <View style={styles.buttonBox}>
+          <DrawerButton
+            text="cm"
+            buttonStyle={styles.commonButtonStyle}
+            isFocus={activeDrawer == "cm"}
+            outBoxStyle={{ flex: 1 }}
+            onPress={handlePress.bind(this, "cm")}
+          />
+          <DrawerButton
+            text="ft, in"
+            outBoxStyle={{ flex: 1 }}
+            isFocus={activeDrawer == "ft, in"}
+            buttonStyle={styles.commonButtonStyle}
+            onPress={handlePress.bind(this, "ft, in")}
+          />
+        </View>
+
+        {selectedHeight && (
+          <View style={styles.selectedValueBox}>
+            <Text style={styles.selectedHeightText}>{selectedHeight}</Text>
+            <Text style={styles.unit}>{activeDrawer}</Text>
+          </View>
+        )}
+        <FlatList
+          ref={flatListRef}
+          data={heightData}
+          renderItem={({ item }) => (
+            <ScaleRoller
+              firstDigit={item.key}
+              selectedHeight={selectedHeight}
+            />
+          )}
+          keyExtractor={(item) => item.key}
+          contentContainerStyle={{
+            ...styles.contentRoller,
+            paddingHorizontal: screenWidth / 1 - itemWidth / 2,
+          }}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToAlignment="center"
+          snapToInterval={itemWidth}
+          decelerationRate="fast"
+          onViewableItemsChanged={onViewableItemsChanged}
+          viewabilityConfig={viewabilityConfig}
+          // pagingEnabled
+        />
+      </View>
+      <View style={styles.bottomBtn}>
+        <CustomButton
+          buttonStyle={styles.submitButton}
+          text="Continue"
+          onPress={handleNextNav}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
 export default WhatsYourHeight;
 
 const styles = StyleSheet.create({
+  contentStyle: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
+  },
+  bottomBtn: {
+    width: "100%",
+    paddingHorizontal: 16,
+  },
+  submitButton: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  commonButtonStyle: {
+    flex: 1,
+  },
+  buttonBox: {
+    flexDirection: "row",
+    backgroundColor: colors.white,
+    marginHorizontal: 16,
+    borderRadius: 54,
+    marginBottom: 68,
+  },
+  selectedValueBox: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "baseline",
+    columnGap: 4,
+    marginBottom: 48,
+  },
+  unit: {
+    fontFamily: CustomFont.Urbanist600,
+    fontSize: 36,
+    lineHeight: 44,
+    color: colors.secondaryLight,
+  },
   contentRoller: {
     flexDirection: "row",
   },
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    marginBottom: Platform.select({ ios: 50, android: 35 }),
   },
   title: {
     marginBottom: 48,
-    fontSize: 20,
-    fontWeight: "bold",
   },
   selectedHeightText: {
     marginTop: 20,
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 96,
+    lineHeight: 96,
+    fontFamily: CustomFont.Urbanist800,
+    color: colors.primary,
+    fontWeight: Platform.select({ ios: 800 }),
   },
 });

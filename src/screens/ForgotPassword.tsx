@@ -5,9 +5,11 @@ import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
 import { useCustomStyle } from "../constants/CustomStyles";
 
-const ForgotPassword: React.FC<ScreenProps<"ForgotPassword">> = memo(() => {
+const ForgotPassword: React.FC<ScreenProps<"ForgotPassword">> = memo(({navigation}) => {
   const handleChange = useCallback(() => {}, []);
-  const handleForgotPassword = useCallback(() => {}, []);
+  const handleForgotPassword = useCallback(() => {
+    navigation.navigate('Login');
+  }, []);
   const CustomStyle = useCustomStyle();
 
   return (
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor:"#F2F7F6"
   },
   title: {
     fontSize: 24,

@@ -115,7 +115,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
               selectedCountry={selectedCountry}
               onChangeSelectedCountry={OnCountryChange as any}
               onFocus={handleTextInputFocus}
-              placeholder={placeholderText ?? 'Enter Phone Number'}
+              placeholder={placeholderText ?? "Enter Phone Number"}
+              placeholderTextColor="rgba(102, 112, 115, 0.5)"
               phoneInputStyles={{
                 container: [
                   styles.phoneInputBox,
@@ -147,6 +148,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
                   ]}
                   placeholder={placeholderText}
                   onFocus={onFocusAction ?? handleTextInputFocus}
+                  placeholderTextColor={"rgba(102, 112, 115, 0.5)"}
                   onBlur={onBlurAction ?? handleBlur}
                   secureTextEntry={isPassword && isSecure}
                   editable={!isDisabled}
@@ -173,7 +175,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
                             !selectedItem?.title && styles.SelectInputTextEmpty,
                           ]}
                         >
-                          {selectedItem?.title ?? "Select your Gender"}
+                          {selectedItem?.title ?? "Select your gender"}
                         </Text>
                         <FastImage
                           source={CustomImages.blackDropDownIcon}
@@ -319,8 +321,7 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist600,
   },
   SelectInputTextEmpty: {
-    color: colors.secondaryLight,
-    opacity: Platform.select({ ios: 0.5 }),
+    color: "rgba(102, 112, 115, 0.5)",
   },
   dropdownItemStyle: {},
   dropdownItemTxtStyle: {
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
     borderRadius: 54,
   },
   focusInputBox: {
-    borderColor: "rgba(28, 101, 124, 0.2)",
+    borderColor: colors.primaryBlur,
   },
   openEyeStyle: {
     width: 19,

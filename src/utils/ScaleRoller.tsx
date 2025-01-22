@@ -16,13 +16,17 @@ const ScaleRoller = ({ firstDigit, selectedHeight }) => {
   return (
     <View style={styles.container}>
       <View style={styles.digitLine}>
-        <View
-          style={[
-            styles.bigLine,
-            firstDigit == selectedHeight && styles.focusHeight,
-          ]}
-        ></View>
-        <Text style={styles.digits}>{firstDigit}</Text>
+        <View style={[firstDigit == selectedHeight && styles.focusLineBox]}>
+          <View
+            style={[
+              styles.bigLine,
+              firstDigit == selectedHeight && styles.focusHeight,
+            ]}
+          ></View>
+        </View>
+        <Text style={styles.digits}>
+          {firstDigit != selectedHeight && firstDigit}
+        </Text>
       </View>
       {firstDigit != 250 &&
         heightData.map((item) => <SmallLine key={item.key} />)}
@@ -33,11 +37,16 @@ const ScaleRoller = ({ firstDigit, selectedHeight }) => {
 export default ScaleRoller;
 
 const styles = StyleSheet.create({
+  focusLineBox: {
+    borderWidth: 4,
+    borderColor: colors.primaryBlur,
+    borderRadius: 40,
+    marginHorizontal: 5,
+  },
   innerSmallContent: {
     flexDirection: "row",
   },
   digits: {
-    // position: "absolute",
   },
   digitLine: {
     rowGap: 16,
@@ -47,7 +56,8 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "flex-start",
+    alignItems: "center",
+    height: 200,
   },
   bigLine: {
     height: 42,
@@ -60,10 +70,12 @@ const styles = StyleSheet.create({
     width: 4,
     borderRadius: 4,
     backgroundColor: colors.rollerSmallLineColor,
-    marginTop: 9,
     marginHorizontal: 5,
+    marginBottom: 30,
   },
   focusHeight: {
     backgroundColor: "#58A3A4",
+    height: 118,
+    width: 12,
   },
 });

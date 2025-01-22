@@ -85,8 +85,8 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
           rules={{ required: "Email is required" }}
           render={({ field: { onChange, value } }) => (
             <CustomInput
-              label="Email"
-              placeholderText="Enter email"
+              label="Name"
+              placeholderText="Enter name"
               onChange={onChange}
               value={value}
               inputConfigurations={{
@@ -106,7 +106,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
           render={({ field: { value, onChange } }) => (
             <CustomInput
               label="DOB"
-              placeholderText="Enter DOB"
+              placeholderText="Enter dOB"
               onChange={onChange}
               value={value}
               onFocusAction={showDatePicker}
@@ -127,7 +127,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
           render={({ field: { value, onChange } }) => (
             <CustomInput
               label="Gender"
-              placeholderText="Enter Gender"
+              placeholderText="Enter gender"
               onChange={onChange}
               value={value}
               isDropDown={true}
@@ -150,7 +150,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
           render={({ field: { value, onChange } }) => (
             <CustomInput
               label="City"
-              placeholderText="Enter City"
+              placeholderText="Enter city"
               onChange={onChange}
               value={value}
               inputConfigurations={{
