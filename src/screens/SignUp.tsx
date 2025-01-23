@@ -57,7 +57,7 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
     toggleEmailModal();
     setTimeout(() => {
       dispatch(login("testing"));
-    }, 500);
+    }, 1000);
   }, []);
 
   const insets = useSafeAreaInsets();

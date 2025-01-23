@@ -3,6 +3,9 @@ import { StyleSheet, View } from "react-native";
 import BootSplash from "react-native-bootsplash";
 import RootScreen from "./src/navigator/RootScreen";
 import { NavigationContainer } from "@react-navigation/native";
+import { Loader } from "./src/Types/CommonTypes";
+
+export const AppLoaderRef = React.createRef<Loader>();
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -13,12 +16,12 @@ const App: React.FC = () => {
     return () => clearTimeout(timer); // Clean up on unmount
   }, []);
 
-  console.error = () => {};
+  // console.error = () => {};
   
   return (
     <View style={styles.container}>
       <NavigationContainer>
-        <RootScreen />
+        <RootScreen/>
       </NavigationContainer>
     </View>
   );

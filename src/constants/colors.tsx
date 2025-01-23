@@ -2,6 +2,7 @@ export const colors = {
     primary:'#1C657C',
     primaryLight:'#58A3A4',
     primaryBlur:'rgba(28, 101, 124, 0.2)',
+    lightBorderColor:'rgba(74, 171, 201, 0.25)',
     secondary:'#333839',
     secondaryLight:'#667073',
     white:'#FFFFFF',

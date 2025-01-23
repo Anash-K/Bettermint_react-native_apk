@@ -1,4 +1,11 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Keyboard,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import CustomButton from "../common/CustomButton";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,18 +48,25 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const showDatePicker = useCallback(() => {
-    setDatePickerVisibility(true);
+    setTimeout(() => {
+      // setDatePickerVisibility(true);
+    }, 500);
+    // setDatePickerVisibility(true);
   }, [isDatePickerVisible]);
 
   const hideDatePicker = useCallback(() => {
     setDatePickerVisibility(false);
-  }, []);
+    // Keyboard.dismiss();
+  }, [isDatePickerVisible]);
 
-  const handleConfirm = useCallback((date: Date) => {
-    console.warn("A date has been picked: ", date);
-    setValue("DOB", useTimeFormatter({ date: date }));
-    hideDatePicker();
-  }, []);
+  const handleConfirm = useCallback(
+    (date: Date) => {
+      console.warn("A date has been picked: ", date);
+      setValue("DOB", useTimeFormatter({ date: date }));
+      hideDatePicker();
+    },
+    [hideDatePicker]
+  );
 
   console.log(token);
 
@@ -66,7 +80,11 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
 
   return (
     <ScrollView
-      style={[styles.container, CustomStyle?.safeAreaMarginBottom]}
+      style={[
+        styles.container,
+        CustomStyle?.safeAreaMarginBottom,
+        CustomStyle.safeAreaMarginTop,
+      ]}
       contentContainerStyle={styles.innerContent}
     >
       <View style={styles.topContainer}>
@@ -192,7 +210,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    marginBottom:20
+    marginBottom: 20,
   },
   errorMessage: {
     fontSize: 11,

@@ -12,6 +12,7 @@ import WhatsYourWeight from "../screens/WhatsYourWeight";
 import WhatBestDescribe from "../screens/WhatBestDescribe";
 import AddYourPhoto from "../screens/AddYourPhoto";
 import CustomFont from "../assets/fonts/customFonts";
+import WhatsYourMeasurement from "../screens/WhatsYourMeasurement";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -20,6 +21,7 @@ export type StackParams = {
   WhatsYourWeight: undefined;
   WhatBestDescribe: undefined;
   AddYourPhoto: undefined;
+  WhatsYourMeasurement: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -49,6 +51,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
           component={TellUsALittleAboutYou}
           options={{
             headerTitle: "",
+            headerShown:false
           }}
         />
         <Stack.Screen
@@ -82,6 +85,21 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
         <Stack.Screen
           name="AddYourPhoto"
           component={AddYourPhoto}
+          options={{
+            headerTitle: "",
+            headerRight: () => (
+              <CustomButton
+                text="Skip"
+                buttonStyle={styles.skipButton}
+                textStyle={styles.skipText}
+                onPress={handlePress}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name='WhatsYourMeasurement'
+          component={WhatsYourMeasurement}
           options={{
             headerTitle: "",
             headerRight: () => (

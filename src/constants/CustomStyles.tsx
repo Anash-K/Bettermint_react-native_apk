@@ -27,10 +27,17 @@ export const useCustomStyle = () => {
         android: insets.bottom + 20,
       }),
     },
+    safeAreaMarginTop: {
+      marginTop: Platform.select({
+        ios: insets.top,
+        android: insets.top + 20,
+      }),
+    },
     errorMessage: {
       fontSize: 11,
       fontFamily: CustomFont.Urbanist400,
       color: colors.error,
+      marginLeft:10
     } as TextStyle,
   };
 };

@@ -1,91 +1,91 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
 import React, { useCallback, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 import CustomInput from "../common/CustomInput";
-import CustomFont from "../assets/fonts/customFonts";
 import { ICountry } from "react-native-international-phone-number";
 import CustomButton from "../common/CustomButton";
 import { ScreenProps } from "../navigator/Stack";
 
-interface Inputs {
-  phoneNumber: string;
-}
-
 const ProvideYourMobileNumber: React.FC<
   ScreenProps<"ProvideYourMobileNumber">
 > = ({ navigation }) => {
-  const {
-    control,
-    setValue,
-    formState: { errors },
-  } = useForm<Inputs>();
   const CustomStyle = useCustomStyle();
   const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(null);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [touched, setTouched] = useState(false); // Track if input has been touched
 
   const handleSelectedCountry = useCallback((country: ICountry) => {
     setSelectedCountry(country);
     console.log(country?.callingCode);
   }, []);
 
+  const handleInputChange = useCallback(
+    (text: string) => {
+      const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15);
+
+      if (formattedText.length > 15) {
+        setError("Phone number cannot exceed 15 characters");
+        return
+      } else if (!/^[0-9]*$/.test(formattedText)) {
+        setError("Only numeric values are allowed");
+        return
+      } else {
+        setError(null);
+      }
+      setTouched(true); // Set touched when user types
+
+      setPhoneNumber(text);
+      console.log(text);
+    },
+    [phoneNumber, touched, error]
+  );
+
   const handleNextNav = useCallback(() => {
-    navigation.navigate("WhatsYourHeight");
-  }, []);
+    console.log(/^[0-9]*$/.test(phoneNumber))
+    // Check if phone number is required
+    if (!phoneNumber) {
+      setError("Phone number is required");
+      setTouched(true); // Show error on submit attempt
+      return; // Return early to prevent navigation
+    }
 
-  const handleInputChange = useCallback((text: string) => {
-    console.log(text)
-    // Filter out non-numeric characters
-    setValue("phoneNumber", text.replace(/[^0-9]/g, ""));
-  }, [setValue]);
-
+    if (!error) {
+      // If all checks pass, navigate to the next screen
+      navigation.navigate("WhatsYourHeight");
+    }
+  }, [phoneNumber, setError, setTouched, navigation]);
   
+  console.log('phone', phoneNumber)
+
   return (
-    <View style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
-      <View style={{ flex: 1 }}>
-        <Text style={[CustomStyle.title, styles.title]}>
-          Please Provide Your Mobile Number
-        </Text>
-        <Controller
-          control={control}
-          name="phoneNumber"
-          rules={{
-            required: "Phone number is required",
-            maxLength: {
-              value: 15,
-              message: "Phone number cannot exceed 15 characters",
-            },
-            pattern: {
-              value: /^[0-9]*$/,
-              message: "Only numeric values are allowed",
-            },
-          }}
-          render={({ field: { onChange, value } }) => (
-            <CustomInput
-              placeholderText="Enter phone number"
-              onChange={(text) => {
-                // Remove non-numeric characters and limit input length
-                const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15);
-                console.log(text)
-                onChange(formattedText);
-              }}
-              isPhoneInput={true}
-              selectedCountry={selectedCountry}
-              OnCountryChange={handleSelectedCountry}
-              inputConfigurations={{
-                value: value,
-              }}
-            />
-          )}
-        />
-        {errors.phoneNumber && (
-          <Text style={CustomStyle.errorMessage}>
-            {errors.phoneNumber.message}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
+        <View style={{ flex: 1 }}>
+          <Text style={[CustomStyle.title, styles.title]}>
+            Please Provide Your Mobile Number
           </Text>
-        )}
+          <CustomInput
+            placeholderText="Enter phone number"
+            onChange={handleInputChange}
+            isPhoneInput={true}
+            value={phoneNumber}
+            selectedCountry={selectedCountry}
+            OnCountryChange={handleSelectedCountry}
+          />
+          {error && (
+            <Text style={CustomStyle.errorMessage}>{error}</Text>
+          )}
+        </View>
+        <CustomButton text="Continue" onPress={handleNextNav} />
       </View>
-      <CustomButton text="Continue" onPress={handleNextNav} />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -22,11 +22,16 @@ import {
 } from "react-native";
 
 import CustomButton from "../common/CustomButton";
-import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
+import {
+  check,
+  request,
+  PERMISSIONS,
+  RESULTS,
+  checkMultiple,
+} from "react-native-permissions";
 import CustomInput from "../common/CustomInput";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ImagePicker from "react-native-image-crop-picker";
-//   import PermissionModal from '../modals/PermissionModal';
 import { useDispatch, useSelector } from "react-redux";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import { ScreenProps } from "../navigator/Stack";
@@ -35,13 +40,13 @@ import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 import { useCustomStyle } from "../constants/CustomStyles";
-//   import {getFileNameFromUri, getMimeTypeFromUri} from '../utils/MimeTypePicker';
-//   import {AppLoaderRef} from '../../App';
-//   import {CustomToaster} from '../utils/AlertNotification';
-//   import {updateProfile} from '../store/reducers/AuthReducer';
-//   import {Text} from 'react-native-paper';
-//   import Loader from '../utils/Loader';
-//   import CustomImageHandler from '../utils/CustomImageHandler';
+import { ErrorHandler } from "../utils/ErrorHandler";
+import { AppLoaderRef } from "../../App";
+import PermissionModal from "../common/PermissionModal";
+import {
+  getFileNameFromUri,
+  getMimeTypeFromUri,
+} from "../utils/MimeTypePicker";
 
 const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   navigation,
@@ -74,42 +79,69 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   const handleConfirm = () => {};
 
   const handleNextNav = useCallback(() => {
-    //   navigation.navigate('');
+      navigation.navigate('WhatsYourMeasurement');
   }, [navigation]);
 
   // Request and check for camera permission when the component mounts
-  const checkAndRequestPermission = useCallback(async () => {
-    //   const cameraPermission =
-    //     Platform.OS === 'ios'
-    //       ? PERMISSIONS.IOS.CAMERA
-    //       : PERMISSIONS.ANDROID.CAMERA;
-    //   try {
-    //     const status = await check(cameraPermission);
-    //     if (status === RESULTS.GRANTED) {
-    //       return;
-    //     }
-    //     if (status === RESULTS.DENIED) {
-    //       const requestStatus = await request(cameraPermission);
-    //       if (requestStatus !== RESULTS.GRANTED) {
-    //       }
-    //     } else if (status === RESULTS.BLOCKED) {
-    //       setPermissionError('Permission Needed to Access Camera');
-    //       setPermissionModalVisible(true);
-    //     }
-    //   } catch (error) {
-    //     // ErrorHandler(error);
-    //   }
+  const checkCameraPermission = useCallback(async () => {
+    const cameraPermission =
+      Platform.OS === "ios"
+        ? PERMISSIONS.IOS.CAMERA
+        : PERMISSIONS.ANDROID.CAMERA;
+    try {
+      const status = await check(cameraPermission);
+      console.log(status);
+      if (status === "granted") {
+        return;
+      }
+      if (status === "denied") {
+        const requestStatus = await request(cameraPermission);
+        return;
+      } else if (status === "blocked") {
+        setPermissionError("Permission Needed to Access Camera");
+        setPermissionModalVisible(true);
+      }
+    } catch (error) {
+      ErrorHandler(error);
+    }
+  }, []);
+
+  const checkGalleryPermission = useCallback(async () => {
+    const galleryPermission =
+      Platform.OS === "ios"
+        ? PERMISSIONS.IOS.PHOTO_LIBRARY
+        : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
+    try {
+      const status = await check(galleryPermission);
+      console.log(status, "status");
+      if (status === "granted") {
+        return;
+      }
+      if (status === "denied") {
+        const requestStatus = await request(galleryPermission);
+        if (requestStatus !== RESULTS.GRANTED) {
+        }
+      } else if (status === "blocked") {
+        setPermissionError("Permission Needed to Access Album");
+        setPermissionModalVisible(true);
+      }
+    } catch (error) {
+      ErrorHandler(error);
+    }
   }, []);
 
   useEffect(() => {
-    //   checkAndRequestPermission();
-  }, [checkAndRequestPermission]);
+    checkCameraPermission();
+    if (Platform.OS === "ios") {
+      checkGalleryPermission();
+    }
+  }, [checkCameraPermission, checkGalleryPermission]);
 
   const handleGalleryModal = useCallback(() => {
     setModalVisible(false);
     InteractionManager.runAfterInteractions(() => {
       setTimeout(() => {
-        //   handleGallery();
+        handleGallery();
       }, 700);
     });
   }, []);
@@ -118,57 +150,60 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
     setModalVisible(false);
     InteractionManager.runAfterInteractions(() => {
       setTimeout(() => {
-        //   handleCamera();
+        handleCamera();
       }, 700);
     });
   }, []);
 
   const handleCamera = useCallback(async (isClose?: Boolean) => {
-    checkAndRequestPermission();
+    checkCameraPermission();
 
-    //   try {
-    //     let response = await ImagePicker.openCamera({
-    //       mediaType: 'photo',
-    //       width: 300,
-    //       height: 300,
-    //       quality: 1,
-    //       includeBase64: true,
-    //       cropping: true,
-    //     });
+    try {
+      let response = await ImagePicker.openCamera({
+        mediaType: "photo",
+        width: 300,
+        height: 300,
+        quality: 1,
+        includeBase64: true,
+        cropping: true,
+      });
 
-    //     // Process the image if the path exists
-    //     if (response.path) {
-    //     //   getMimeTypeFromUri(response.path);
+      // Process the image if the path exists
+      if (response.path) {
+        getMimeTypeFromUri(response.path);
 
-    //       setProfileImage(response.path);
-    //     }
-    //   } catch (error) {
-    //     console.error('Camera error:', error);
-    //   } finally {
-    //     // AppLoaderRef.current?.stop();
-    //   }
-    // }, []);
+        setProfileImage(response.path);
+      }
+    } catch (error) {
+      console.error("Camera error:", error);
+    } finally {
+      AppLoaderRef.current?.stop();
+    }
+  }, []);
 
-    // const handleGallery = useCallback(async (isClose?: Boolean) => {
-    //   checkAndRequestPermission();
-    //   try {
-    //     let response = await ImagePicker.openPicker({
-    //       mediaType: 'photo',
-    //       width: 300,
-    //       height: 300,
-    //       quality: 1,
-    //       includeBase64: true,
-    //       cropping: true,
-    //     });
+  const handleGallery = useCallback(async (isClose?: Boolean) => {
+    if (Platform.OS === "ios") {
+      checkGalleryPermission();
+    }
 
-    //     if (response.path) {
-    //       setProfileImage(response.path);
-    //     }
-    //   } catch (error) {
-    //     console.error('Gallery error:', error);
-    //   } finally {
-    //     // AppLoaderRef.current?.stop();
-    //   }
+    try {
+      let response = await ImagePicker.openPicker({
+        mediaType: "photo",
+        width: 300,
+        height: 300,
+        quality: 1,
+        includeBase64: true,
+        cropping: true,
+      });
+
+      if (response.path) {
+        setProfileImage(response.path);
+      }
+    } catch (error) {
+      console.error("Gallery error:", error);
+    } finally {
+      AppLoaderRef.current?.stop();
+    }
   }, []);
 
   const handleChangeName = useCallback(() => {}, []);
@@ -200,14 +235,14 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
 
     buttonRef.current = true;
 
-    //   AppLoaderRef.current?.start();
+    AppLoaderRef.current?.start();
 
     let ImageType = "";
     let ImageName = "";
 
     if (profileImage) {
-      // ImageType = getMimeTypeFromUri(profileImage);
-      // ImageName = getFileNameFromUri(profileImage);
+      ImageType = getMimeTypeFromUri(profileImage);
+      ImageName = getFileNameFromUri(profileImage);
     }
 
     //   const data = {
@@ -243,10 +278,10 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
       //   });
       // }
     } catch (error) {
-      // ErrorHandler(error);
+      ErrorHandler(error);
     } finally {
       buttonRef.current = false;
-      // AppLoaderRef.current?.stop();
+      AppLoaderRef.current?.stop();
     }
   }, [profileImage]);
 
@@ -264,17 +299,13 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
         >
           <View style={{ flexGrow: 1 }}>
             <Text style={[CustomStyle.title]}>Add your photo</Text>
-            <Pressable style={styles.imageBox} onPress={toggleModal}>
-              {/* <CustomImageHandler
-                  sourceImage={profileImage}
-                  placeholderImage={CustomImages.profilePic}
-                  imageStyle={styles.profilePicture}
-                /> */}
-
-              <Image
-                source={CustomImages.profilePic}
-                style={styles.profilePicture}
+            <View style={styles.imageBox}>
+              <CustomImageHandler
+                sourceImage={profileImage}
+                placeholderImage={CustomImages.profilePic}
+                imageStyle={styles.profilePicture}
               />
+              {/* 
 
               {/* <View style={styles.ActionIconBox}>
                 <Image
@@ -286,17 +317,28 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
                   style={styles.picAction}
                 />
               </View> */}
-            </Pressable>
+            </View>
           </View>
-
-          <CustomButton text="Upload photo" onPress={handleSubmit} />
+          {profileImage ? (
+            <View>
+              <CustomButton
+                text="Try again"
+                buttonStyle={styles.tryAgainBtn}
+                textStyle={styles.tryAgainText}
+                onPress={toggleModal}
+              />
+              <CustomButton text="Looks perfect" onPress={handleNextNav} />
+            </View>
+          ) : (
+            <CustomButton text="Upload photo" onPress={toggleModal} />
+          )}
 
           {/* Modal for photo selection */}
-          {/* <PermissionModal
-              isModalVisible={isPermissionModalVisible}
-              toggleModal={togglePermissionModal}
-              contentText={permissionError}
-            /> */}
+          <PermissionModal
+            isModalVisible={isPermissionModalVisible}
+            toggleModal={togglePermissionModal}
+            contentText={permissionError}
+          />
           {isModalVisible ? (
             <Modal
               visible={isModalVisible}
@@ -353,6 +395,12 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
 export default AddYourPhoto;
 
 const styles = StyleSheet.create({
+  tryAgainBtn: {
+    backgroundColor: "transparent",
+    borderColor: colors.primary,
+    borderWidth: 1,
+    marginBottom: 12,
+  },
   modalIconStyle: { width: 25, height: 25 },
   modalBackGround: {
     backgroundColor: colors.white,
@@ -388,7 +436,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   tryAgainText: {
-    color: "rgba(250, 250, 250, 1)",
+    color: colors.primary,
   },
   container: {
     flex: 1,
@@ -411,10 +459,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   profilePicture: {
-    width: 150,
-    height: 150,
+    width: 154,
+    height: 154,
     alignSelf: "center",
-    borderRadius: 125 / 2,
+    borderRadius: 154,
+    borderWidth: 4,
+    borderColor: colors.lightBorderColor,
   },
   imageBox: {
     marginTop: 48,

@@ -19,7 +19,7 @@ const RootScreen: React.FC<RootStackParams> = () => {
 
   return (
     <React.Fragment>
-      {/* <StatusBar barStyle={'default'} /> */}
+      <StatusBar barStyle={'default'} backgroundColor={"#F2F7F6"} />
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

@@ -57,7 +57,7 @@ const CustomImageHandler: React.FC<CustomImageHandler> = ({
         <ActivityIndicator style={styles.loader} size="small" color="#20C997" />
       )}
       <FastImage
-        source={[imageUri] as any} // Use imageUri state for source
+        source={imageUri as any} // Use imageUri state for source
         onError={handleError}
         onLoadEnd={handleLoadEnd}
         style={[styles.profilePic, imageStyle as FastImageStyle]}

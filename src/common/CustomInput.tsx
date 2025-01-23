@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import {
   Image,
   Pressable,
@@ -48,7 +48,7 @@ interface CustomInputProps {
   selectedCountry?: any;
 }
 
-const CustomInput: React.FC<CustomInputProps> = ({
+const CustomInput: React.FC<CustomInputProps> = memo(({
   value,
   inputConfigurations,
   labelStyle,
@@ -76,6 +76,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   const [isSecure, setIsSecure] = useState(true);
   const [textInputFocused, setTextInputFocused] = useState(false);
   const [dropDownFocused, setDropDownFocused] = useState(false);
+
 
   const handleTextInputFocus = useCallback(() => {
     setTextInputFocused(true);
@@ -113,9 +114,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
             <PhoneInput
               onChangePhoneNumber={onChange}
               selectedCountry={selectedCountry}
+              value={value}
               onChangeSelectedCountry={OnCountryChange as any}
               onFocus={handleTextInputFocus}
               placeholder={placeholderText ?? "Enter Phone Number"}
+              
               placeholderTextColor="rgba(102, 112, 115, 0.5)"
               phoneInputStyles={{
                 container: [
@@ -256,7 +259,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
       </View>
     </View>
   );
-};
+});
 
 export default CustomInput;
 
@@ -291,7 +294,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   inputTextPhone: {
-    width: "100%",
+    flex:1,
     fontFamily: CustomFont.Urbanist400,
     fontSize: 16,
     lineHeight: 19.2,
