@@ -15,10 +15,14 @@ import { colors } from "../constants/colors";
 import CustomButton from "../common/CustomButton";
 import DrawerButton from "../common/DrawerButton";
 import { ScreenProps } from "../navigator/Stack";
+import { useSelector } from "react-redux";
+
+const { width, height } = Dimensions.get("screen");
 
 const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
   navigation,
 }) => {
+  const gender = useSelector((state: any) => state.auth);
   const customStyle = useCustomStyle();
 
   const heightData: { key: any }[] = Array.from({ length: 201 }, (_, i) => ({
@@ -63,8 +67,10 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
   }, []);
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate("WhatsYourWeight");
+    navigation.navigate('DoYouHaveDiseases');
   }, []);
+
+  console.log(width, "screen width");
 
   return (
     <ScrollView
@@ -76,11 +82,11 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
     >
       <View style={{ flex: 1 }}>
         <Text style={[customStyle.title, styles.title]}>
-          What’s your height?
+          What’s your measurement?
         </Text>
         <View style={styles.buttonBox}>
           <DrawerButton
-            text="Chest"
+            text={gender == "Male" ? "Chest" : "Bust"}
             buttonStyle={styles.commonButtonStyle}
             isFocus={activeDrawer == "Chest"}
             outBoxStyle={{ flex: 1 }}
@@ -112,7 +118,7 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
         {selectedHeight && (
           <View style={styles.selectedValueBox}>
             <Text style={styles.selectedHeightText}>{selectedHeight}</Text>
-            <Text style={styles.unit}>{activeDrawer}</Text>
+            <Text style={styles.unit}>in</Text>
           </View>
         )}
         <FlatList
@@ -168,6 +174,7 @@ const styles = StyleSheet.create({
   },
   commonButtonStyle: {
     flex: 1,
+    // width:'33%'
   },
   buttonBox: {
     flexDirection: "row",
@@ -175,6 +182,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderRadius: 54,
     marginBottom: 68,
+    flexWrap: "wrap",
   },
   selectedValueBox: {
     flexDirection: "row",
@@ -198,6 +206,9 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 48,
+    maxWidth:343,
+    marginHorizontal:'auto',
+    marginTop:21
   },
   selectedHeightText: {
     marginTop: 20,

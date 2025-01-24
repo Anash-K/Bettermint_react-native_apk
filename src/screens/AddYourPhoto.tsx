@@ -79,7 +79,7 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   const handleConfirm = () => {};
 
   const handleNextNav = useCallback(() => {
-      navigation.navigate('WhatsYourMeasurement');
+    navigation.navigate("WhatsYourMeasurement");
   }, [navigation]);
 
   // Request and check for camera permission when the component mounts
@@ -95,7 +95,12 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
         return;
       }
       if (status === "denied") {
-        const requestStatus = await request(cameraPermission);
+        if (Platform.OS == "ios") {
+          const requestStatus = await request(cameraPermission);
+        } else {
+          setPermissionError("Permission Needed to Access Camera");
+          setPermissionModalVisible(true);
+        }
         return;
       } else if (status === "blocked") {
         setPermissionError("Permission Needed to Access Camera");

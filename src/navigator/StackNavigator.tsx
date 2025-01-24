@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar, StyleSheet } from "react-native";
-import React from "react";
+import React, { useCallback } from "react";
 import { ScreenProps } from "./Stack";
 import ProvideYourMobileNumber from "../screens/ProvideYourMobileNumber";
 import TellUsALittleAboutYou from "../screens/TellUsALittleAboutYou";
@@ -13,6 +13,12 @@ import WhatBestDescribe from "../screens/WhatBestDescribe";
 import AddYourPhoto from "../screens/AddYourPhoto";
 import CustomFont from "../assets/fonts/customFonts";
 import WhatsYourMeasurement from "../screens/WhatsYourMeasurement";
+import { useNavigation } from "@react-navigation/native";
+import CustomHeader from "../common/CustomHeader";
+import Guide from "../screens/Guide";
+import DoYouHaveDiseases from "../screens/DoYouHaveDiseases";
+import DoYouHaveFamilyHistory from "../screens/DoYouHaveFamilyHistory";
+import PleaseShareYourMeasurement from "../screens/PleaseShareYourMeasurement";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -22,12 +28,17 @@ export type StackParams = {
   WhatBestDescribe: undefined;
   AddYourPhoto: undefined;
   WhatsYourMeasurement: undefined;
+  Guide: undefined;
+  DoYouHaveDiseases: undefined;
+  DoYouHaveFamilyHistory: undefined;
+  PleaseShareYourMeasurement: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
 
-const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
-  const handlePress = () => {};
+const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
+  const nav = useNavigation();
+  const handlePress = useCallback(() => {}, []);
   return (
     <>
       <StatusBar barStyle={"dark-content"} />
@@ -35,6 +46,8 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
         screenOptions={({ navigation }) => ({
           contentStyle: styles.contentPagesStyle,
           headerStyle: styles.CommonHeaderStyle,
+          headerTitleStyle: styles.headerTitleStyle,
+          headerTitleAlign: "left",
           headerShadowVisible: false,
           headerLeft: () => (
             <CustomButton
@@ -51,7 +64,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
           component={TellUsALittleAboutYou}
           options={{
             headerTitle: "",
-            headerShown:false
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -85,32 +98,133 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
         <Stack.Screen
           name="AddYourPhoto"
           component={AddYourPhoto}
-          options={{
+          options={({ navigation }) => ({
             headerTitle: "",
             headerRight: () => (
               <CustomButton
                 text="Skip"
                 buttonStyle={styles.skipButton}
                 textStyle={styles.skipText}
-                onPress={handlePress}
+                onPress={() => navigation.navigate("WhatsYourMeasurement")}
               />
             ),
-          }}
+          })}
         />
         <Stack.Screen
-          name='WhatsYourMeasurement'
+          name="WhatsYourMeasurement"
           component={WhatsYourMeasurement}
-          options={{
+          options={({ navigation }) => ({
             headerTitle: "",
-            headerRight: () => (
-              <CustomButton
-                text="Skip"
-                buttonStyle={styles.skipButton}
-                textStyle={styles.skipText}
-                onPress={handlePress}
+            header: () => (
+              <CustomHeader
+                title="Self-Assessment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+                rightComponent={
+                  <CustomButton
+                    icon={CustomImages.refreshIcon}
+                    buttonStyle={styles.btnRefreshIconStyle}
+                    iconStyle={styles.refreshIconStyle}
+                    onPress={() => navigation.navigate("Guide")}
+                  />
+                }
               />
             ),
-          }}
+          })}
+        />
+        <Stack.Screen
+          name="Guide"
+          component={Guide}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Guide"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="DoYouHaveDiseases"
+          component={DoYouHaveDiseases}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Self-Assessment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="DoYouHaveFamilyHistory"
+          component={DoYouHaveFamilyHistory}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Self-Assessment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="PleaseShareYourMeasurement"
+          component={PleaseShareYourMeasurement}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Self-Assessment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+                rightComponent={
+                  <CustomButton
+                    text="Skip"
+                    buttonStyle={styles.skipButton}
+                    textStyle={styles.skipText}
+                    onPress={() => navigation.navigate('DoYouHaveFamilyHistory')}
+                  />
+                }
+              />
+            ),
+          })}
         />
       </Stack.Navigator>
     </>
@@ -120,6 +234,21 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = () => {
 export default MainStack;
 
 const styles = StyleSheet.create({
+  headerTitleStyle: {
+    fontFamily: CustomFont.Urbanist700,
+    fontSize: 20,
+    lineHeight: 24,
+    color: colors.primary,
+    textAlign: "left",
+  },
+  refreshIconStyle: {
+    width: 24,
+    height: 24,
+  },
+  btnRefreshIconStyle: {
+    padding: 5,
+    backgroundColor: "transparent",
+  },
   skipText: {
     color: colors.primary,
     fontSize: 14,
@@ -143,7 +272,6 @@ const styles = StyleSheet.create({
     shadowColor: "transparent",
     borderWidth: 0,
     shadowOpacity: 0,
-    paddingTop: 10,
   },
   backArrowIcon: {
     transform: [{ rotate: "90deg" }],

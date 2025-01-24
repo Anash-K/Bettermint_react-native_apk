@@ -42,19 +42,17 @@ const ProvideYourMobileNumber: React.FC<
       setTouched(true); // Set touched when user types
 
       setPhoneNumber(text);
-      console.log(text);
     },
     [phoneNumber, touched, error]
   );
 
   const handleNextNav = useCallback(() => {
-    console.log(/^[0-9]*$/.test(phoneNumber))
     // Check if phone number is required
-    if (!phoneNumber) {
-      setError("Phone number is required");
-      setTouched(true); // Show error on submit attempt
-      return; // Return early to prevent navigation
-    }
+    // if (!phoneNumber) {
+    //   setError("Phone number is required");
+    //   setTouched(true); // Show error on submit attempt
+    //   return; // Return early to prevent navigation
+    // }
 
     if (!error) {
       // If all checks pass, navigate to the next screen

@@ -9,6 +9,7 @@ import {
   ImageSourcePropType,
   ImageStyle,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
@@ -27,6 +28,8 @@ interface DrawerButtonProps {
   customIcon?: React.ReactNode
 }
 
+const { width , height } = Dimensions.get('screen');
+
 const DrawerButton: React.FC<DrawerButtonProps> = ({
   text,
   onPress,
@@ -40,6 +43,7 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
   customIcon,
   customIconPosition = "left",
 }) => {
+  console.log('width real ',width)
   return (
     <TouchableOpacity
       style={[
@@ -53,6 +57,7 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
         style={[
           styles.button,
           isFocus && { backgroundColor: colors.primaryLight },
+          width <= 360 && styles.responsiveButton,
           buttonStyle,
         ]}
       >
@@ -81,6 +86,9 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
 };
 
 const styles = StyleSheet.create({
+  responsiveButton:{
+    padding:6
+  },
   outerBorderBox: {
     borderWidth: 4,
     borderColor: "transparent",

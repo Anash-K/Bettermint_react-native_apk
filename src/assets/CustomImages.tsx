@@ -12,4 +12,8 @@ export const CustomImages = {
   closeIcon:require("./Images/closeIcon.png"),
   photoGallery:require("./Images/album.png"),
   cameraIcon:require("./Images/camera.png"),
+  refreshIcon:require("./Images/Icon-Refresh.png"),
+  maleBody:require("./Images/maleBody.png"),
+  femaleBody:require("./Images/femaleBody.png"),
+  multiSelect:require("./Images/multiSelect.png"),
 };

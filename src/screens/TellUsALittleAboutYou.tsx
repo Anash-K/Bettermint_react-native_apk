@@ -10,7 +10,7 @@ import CustomButton from "../common/CustomButton";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScreenProps } from "../navigator/Stack";
-import { logout } from "../redux/slices/authSlice";
+import { gender, logout } from "../redux/slices/authSlice";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomInput from "../common/CustomInput";
 import { Controller, useForm } from "react-hook-form";
@@ -21,7 +21,7 @@ import useTimeFormatter from "../utils/timeFormatter";
 
 interface Inputs {
   name: string;
-  DOB: string;
+  DOB: string | null;
   Gender: string;
   City: string;
 }
@@ -43,40 +43,41 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
     getValues,
     control,
     setValue,
+    setError,
     formState: { errors },
   } = useForm<Inputs>();
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const showDatePicker = useCallback(() => {
-    setTimeout(() => {
-      // setDatePickerVisibility(true);
-    }, 500);
-    // setDatePickerVisibility(true);
+    setDatePickerVisibility(true);
   }, [isDatePickerVisible]);
 
   const hideDatePicker = useCallback(() => {
     setDatePickerVisibility(false);
-    // Keyboard.dismiss();
   }, [isDatePickerVisible]);
 
   const handleConfirm = useCallback(
     (date: Date) => {
-      console.warn("A date has been picked: ", date);
-      setValue("DOB", useTimeFormatter({ date: date }));
+      let SomeDate = useTimeFormatter({ date: date });
+      setValue('DOB',SomeDate );
+      setError('DOB',"");
       hideDatePicker();
     },
     [hideDatePicker]
   );
 
-  console.log(token);
-
   const dispatch = useDispatch();
   const CustomStyle = useCustomStyle();
 
-  const handleLogout = useCallback(() => {
-    // dispatch(logout());
+  const onSubmit = useCallback((data: any) => {
+    dispatch(gender(data.Gender));
     navigation.navigate("ProvideYourMobileNumber");
   }, []);
+
+  const handleGenderChange = useCallback((gender:any) =>{
+    setValue('Gender',gender.title);
+    setError('Gender',"");
+  },[]);
 
   return (
     <ScrollView
@@ -129,7 +130,8 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
               value={value}
               onFocusAction={showDatePicker}
               inputConfigurations={{
-                value: value,
+                value:value,
+                onChange:onChange
               }}
             />
           )}
@@ -142,18 +144,14 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
           control={control}
           name="Gender"
           rules={{ required: "Gender is required" }}
-          render={({ field: { value, onChange } }) => (
+          render={({ field: { value } }) => (
             <CustomInput
               label="Gender"
               placeholderText="Enter gender"
-              onChange={onChange}
+              onChange={handleGenderChange}
               value={value}
               isDropDown={true}
               dropdownItems={dropdownItems}
-              inputConfigurations={{
-                value: value,
-                onChangeText: onChange,
-              }}
             />
           )}
         />
@@ -182,7 +180,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
           <Text style={styles.errorMessage}>{errors?.City?.message}</Text>
         )}
       </View>
-      <CustomButton text="Continue" onPress={handleLogout} />
+      <CustomButton text="Continue" onPress={handleSubmit(onSubmit)} />
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
