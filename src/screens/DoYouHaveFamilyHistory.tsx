@@ -41,7 +41,7 @@ const DoYouHaveFamilyHistory: React.FC<
   };
 
   const handleNextNav = useCallback(() => {
-    // navigation.navigate("");
+    navigation.navigate('SmallBriefBettermint');
   }, []);
 
   return (

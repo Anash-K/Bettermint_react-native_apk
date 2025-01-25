@@ -47,6 +47,7 @@ import {
   getFileNameFromUri,
   getMimeTypeFromUri,
 } from "../utils/MimeTypePicker";
+import { handlePermission } from "../common/HandlePermission";
 
 const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   navigation,
@@ -84,31 +85,52 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
 
   // Request and check for camera permission when the component mounts
   const checkCameraPermission = useCallback(async () => {
+    return;
     const cameraPermission =
       Platform.OS === "ios"
         ? PERMISSIONS.IOS.CAMERA
         : PERMISSIONS.ANDROID.CAMERA;
-    try {
-      const status = await check(cameraPermission);
-      console.log(status);
-      if (status === "granted") {
-        return;
-      }
-      if (status === "denied") {
-        if (Platform.OS == "ios") {
-          const requestStatus = await request(cameraPermission);
-        } else {
-          setPermissionError("Permission Needed to Access Camera");
-          setPermissionModalVisible(true);
-        }
-        return;
-      } else if (status === "blocked") {
+
+    handlePermission(
+      [
+        Platform.OS === "ios"
+          ? PERMISSIONS.IOS.CAMERA
+          : PERMISSIONS.ANDROID.CAMERA,
+      ],
+      "Camera"
+    )
+      .then((result) => {
+        console.log(result, "result");
+        console.log("Camera permission granted");
+      })
+      .catch((error) => {
+        console.log(error, "error");
         setPermissionError("Permission Needed to Access Camera");
         setPermissionModalVisible(true);
-      }
-    } catch (error) {
-      ErrorHandler(error);
-    }
+      });
+    // try {
+
+    // const status = await check(cameraPermission);
+    // console.log(status);
+    // if (status === "granted") {
+    //   return;
+    // }
+    // if (status === "denied") {
+    //   const requestStatus = await request(cameraPermission);
+    //   if (requestStatus !== "granted") {
+
+    //   } else {
+    //     setPermissionError("Permission Needed to Access Camera");
+    //     setPermissionModalVisible(true);
+    //   }
+    //   return;
+    // } else if (status === "blocked") {
+    //   setPermissionError("Permission Needed to Access Camera");
+    //   setPermissionModalVisible(true);
+    // }
+    // } catch (error) {
+    //   ErrorHandler(error);
+    // }
   }, []);
 
   const checkGalleryPermission = useCallback(async () => {
@@ -116,29 +138,42 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
       Platform.OS === "ios"
         ? PERMISSIONS.IOS.PHOTO_LIBRARY
         : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
-    try {
-      const status = await check(galleryPermission);
-      console.log(status, "status");
-      if (status === "granted") {
-        return;
-      }
-      if (status === "denied") {
-        const requestStatus = await request(galleryPermission);
-        if (requestStatus !== RESULTS.GRANTED) {
-        }
-      } else if (status === "blocked") {
-        setPermissionError("Permission Needed to Access Album");
+
+    handlePermission([galleryPermission], "gallery")
+      .then((result) => {
+        console.log(result, "result");
+        console.log("gallery permission granted");
+      })
+      .catch((error) => {
+        console.log(error, "error");
+        setPermissionError("Permission Needed to Access Gallery");
         setPermissionModalVisible(true);
-      }
-    } catch (error) {
-      ErrorHandler(error);
-    }
+        return;
+      });
+
+    // try {
+    // const status = await check(galleryPermission);
+    // console.log(status, "status");
+    // if (status === "granted") {
+    //   return;
+    // }
+    // if (status === "denied") {
+    //   const requestStatus = await request(galleryPermission);
+    //   if (requestStatus !== RESULTS.GRANTED) {
+    //   }
+    // } else if (status === "blocked") {
+    //   setPermissionError("Permission Needed to Access Album");
+    //   setPermissionModalVisible(true);
+    // }
+    // } catch (error) {
+    //   ErrorHandler(error);
+    // }
   }, []);
 
   useEffect(() => {
-    checkCameraPermission();
+    // checkCameraPermission();
     if (Platform.OS === "ios") {
-      checkGalleryPermission();
+      // checkGalleryPermission();
     }
   }, [checkCameraPermission, checkGalleryPermission]);
 
@@ -161,7 +196,25 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   }, []);
 
   const handleCamera = useCallback(async (isClose?: Boolean) => {
-    checkCameraPermission();
+
+    handlePermission(
+      [
+        Platform.OS === "ios"
+          ? PERMISSIONS.IOS.CAMERA
+          : PERMISSIONS.ANDROID.CAMERA,
+      ],
+      "Camera"
+    )
+      .then((result) => {
+        console.log(result, "result");
+        console.log("Camera permission granted");
+      })
+      .catch((error) => {
+        console.log(error, "error");
+        setPermissionError("Permission Needed to Access Camera");
+        setPermissionModalVisible(true);
+        return;
+      });
 
     try {
       let response = await ImagePicker.openCamera({
@@ -188,7 +241,22 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
 
   const handleGallery = useCallback(async (isClose?: Boolean) => {
     if (Platform.OS === "ios") {
-      checkGalleryPermission();
+      const galleryPermission =
+      Platform.OS === "ios"
+        ? PERMISSIONS.IOS.PHOTO_LIBRARY
+        : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
+
+    handlePermission([galleryPermission], "gallery")
+      .then((result) => {
+        console.log(result, "result");
+        console.log("gallery permission granted");
+      })
+      .catch((error) => {
+        console.log(error, "error");
+        setPermissionError("Permission Needed to Access Gallery");
+        setPermissionModalVisible(true);
+        return;
+      });
     }
 
     try {
@@ -304,24 +372,14 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
         >
           <View style={{ flexGrow: 1 }}>
             <Text style={[CustomStyle.title]}>Add your photo</Text>
-            <View style={styles.imageBox}>
-              <CustomImageHandler
-                sourceImage={profileImage}
-                placeholderImage={CustomImages.profilePic}
-                imageStyle={styles.profilePicture}
-              />
-              {/* 
-
-              {/* <View style={styles.ActionIconBox}>
-                <Image
-                  source={
-                    profileImage
-                      ? CustomImages.profilePic
-                      : CustomImages.blackDropDownIcon
-                  }
-                  style={styles.picAction}
+            <View style={styles.imageBoxContainer}>
+              <View style={styles.imageBox}>
+                <CustomImageHandler
+                  sourceImage={profileImage}
+                  placeholderImage={CustomImages.profilePic}
+                  imageStyle={styles.profilePicture}
                 />
-              </View> */}
+              </View>
             </View>
           </View>
           {profileImage ? (
@@ -400,13 +458,24 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
 export default AddYourPhoto;
 
 const styles = StyleSheet.create({
+  imageBoxContainer: {
+    borderWidth: 4,
+    borderColor: colors.lightBorderColor,
+    alignSelf: "center",
+    marginTop: 48,
+    marginBottom: 22,
+    borderRadius: 200,
+  },
   tryAgainBtn: {
     backgroundColor: "transparent",
     borderColor: colors.primary,
     borderWidth: 1,
     marginBottom: 12,
   },
-  modalIconStyle: { width: 25, height: 25 },
+  modalIconStyle: {
+    width: 25,
+    height: 25,
+  },
   modalBackGround: {
     backgroundColor: colors.white,
     borderRadius: 20,
@@ -464,19 +533,16 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   profilePicture: {
-    width: 154,
-    height: 154,
+    width: 150,
+    height: 150,
     alignSelf: "center",
-    borderRadius: 154,
-    borderWidth: 4,
-    borderColor: colors.lightBorderColor,
   },
   imageBox: {
-    marginTop: 48,
-    marginBottom: 22,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
+    borderRadius: 125,
+    overflow: "hidden",
   },
   closeIcon: {
     width: 16,

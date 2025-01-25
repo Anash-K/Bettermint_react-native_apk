@@ -16,4 +16,5 @@ export const CustomImages = {
   maleBody:require("./Images/maleBody.png"),
   femaleBody:require("./Images/femaleBody.png"),
   multiSelect:require("./Images/multiSelect.png"),
+  movementIcon:require("./Images/movementImage.png"),
 };

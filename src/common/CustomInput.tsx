@@ -22,7 +22,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import PhoneInput, { ICountry } from "react-native-international-phone-number";
 
 interface CustomInputProps {
-  value?: string | null | undefined;
+  value?: string | null ;
   inputConfigurations?: TextInputProps;
   labelStyle?: TextStyle;
   inputBoxStyle?: ViewStyle;
@@ -114,7 +114,7 @@ const CustomInput: React.FC<CustomInputProps> = memo(({
             <PhoneInput
               onChangePhoneNumber={onChange}
               selectedCountry={selectedCountry}
-              value={value}
+              value={value ?? ""}
               onChangeSelectedCountry={OnCountryChange as any}
               onFocus={handleTextInputFocus}
               placeholder={placeholderText ?? "Enter Phone Number"}
@@ -133,10 +133,7 @@ const CustomInput: React.FC<CustomInputProps> = memo(({
               }}
               style={styles.inputTextPhone}
               defaultValue="+91"
-              textInputProps={{
-                ...inputConfigurations, // Remove country code from the input value
-                keyboardType: "phone-pad", // Ensures numeric keypad
-              }}
+              keyboardType="phone-pad"
             />
           ) : (
             <>

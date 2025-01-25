@@ -24,11 +24,12 @@ interface DrawerButtonProps {
   iconStyle?: ImageStyle | ""; // Custom icon style
   isFocus?: boolean;
   outBoxStyle?: ViewStyle;
-  customIconPosition?:"left" | "right";
-  customIcon?: React.ReactNode
+  customIconPosition?: "left" | "right";
+  customIcon?: React.ReactNode;
+  isRadioButton?:boolean;
 }
 
-const { width , height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get("screen");
 
 const DrawerButton: React.FC<DrawerButtonProps> = ({
   text,
@@ -42,8 +43,10 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
   outBoxStyle,
   customIcon,
   customIconPosition = "left",
+  isRadioButton,
+  
 }) => {
-  console.log('width real ',width)
+  console.log("width real ", width);
   return (
     <TouchableOpacity
       style={[
@@ -57,13 +60,11 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
         style={[
           styles.button,
           isFocus && { backgroundColor: colors.primaryLight },
-          width <= 360 && styles.responsiveButton,
+          (width <= 400 && isRadioButton) && styles.responsiveButton,
           buttonStyle,
         ]}
       >
-        {customIcon && customIconPosition === "left" && (
-          customIcon
-        )}
+        {customIcon && customIconPosition === "left" && customIcon}
 
         {icon && iconPosition === "left" && (
           <Image source={icon} style={[styles.icon, iconStyle]} />
@@ -77,17 +78,15 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
         {icon && iconPosition === "right" && (
           <Image source={icon} style={[styles.icon, iconStyle]} />
         )}
-        {customIcon && customIconPosition === "right" && (
-          customIcon
-        )}
+        {customIcon && customIconPosition === "right" && customIcon}
       </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  responsiveButton:{
-    padding:6
+  responsiveButton: {
+    padding: 6,
   },
   outerBorderBox: {
     borderWidth: 4,
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 18,
     fontFamily: CustomFont.Urbanist600,
-    marginHorizontal: 5,
+    // marginHorizontal: 16,
     lineHeight: 21.6,
   },
   icon: {

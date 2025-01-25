@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import DrawerButton from "../common/DrawerButton";
 import React, { useCallback, useState } from "react";
 import WhiteDot from "../common/WhiteDotBtn";
@@ -12,29 +12,41 @@ import { ScreenProps } from "../navigator/Stack";
 import { useSelector } from "react-redux";
 
 type DiseaseState = {
-  "Diabetes / Prediabetes": boolean;
-  Cholesterol: boolean;
-  "Blood Pressure": boolean;
+  "Brisk Walking": boolean;
+  Swimming: boolean;
+  Cycling: boolean;
   Thyroid: boolean;
-  "Fatty Liver": boolean;
-  "PCOD / PCOS"?: boolean;
+  "Yoga at home": boolean;
+  Gym: boolean;
+  Dance: boolean;
+  "Functional training at home": boolean;
+  "Functional training in a class": boolean;
+  Kickboxing: boolean;
+  MMA: boolean;
+  //   "PCOD / PCOS"?: boolean;
 };
 
-const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
+const WhatFormOfWorkout: React.FC<ScreenProps<"WhatFormOfWorkout">> = ({
   navigation,
 }) => {
   const { gender } = useSelector((state: any) => state.auth);
   const CustomStyle = useCustomStyle();
   const initialState: DiseaseState = {
-    "Diabetes / Prediabetes": false,
-    Cholesterol: false,
-    "Blood Pressure": false,
+    "Brisk Walking": false,
+    Swimming: true,
+    Cycling: false,
     Thyroid: false,
-    "Fatty Liver": false,
+    "Yoga at home": false,
+    Gym: true,
+    Dance: false,
+    "Functional training at home": false,
+    "Functional training in a class": false,
+    Kickboxing: false,
+    MMA: false,
   };
 
   if (gender !== "Male") {
-    initialState["PCOD / PCOS"] = false;
+    // initialState["PCOD / PCOS"] = false;
   }
 
   const [selectedDiseases, setSelectedDiseases] =
@@ -48,7 +60,7 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
   };
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate("PleaseShareYourMeasurement");
+    // navigation.navigate("");
   }, []);
 
   return (
@@ -60,7 +72,7 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
     >
       <View style={{ flex: 1 }}>
         <Text style={CustomStyle.title}>
-          Do you have any of these diseases.
+          What form of workout do you usually do?
         </Text>
         <View style={styles.multiSelectBox}>
           <FastImage
@@ -88,15 +100,22 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
             />
           ))}
         </View>
-        <CustomButton text="Continue" onPress={handleNextNav} />
+        <CustomButton
+          text="Continue"
+          onPress={handleNextNav}
+          buttonStyle={styles.button}
+        />
       </View>
     </ScrollView>
   );
 };
 
-export default DoYouHaveDiseases;
+export default WhatFormOfWorkout;
 
 const styles = StyleSheet.create({
+  button: {
+    marginBottom: Platform.select({ios:10, android: 45 }),
+  },
   contentStyle: {
     flexGrow: 1,
   },
@@ -118,9 +137,8 @@ const styles = StyleSheet.create({
   },
   radioButtonBox: {
     rowGap: 9,
-    marginTop: 48,
+    marginVertical: 48,
     flex: 1,
-    marginBottom: 20,
   },
   btnText: {
     fontSize: 16,

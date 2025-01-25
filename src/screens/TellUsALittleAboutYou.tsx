@@ -59,8 +59,8 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
   const handleConfirm = useCallback(
     (date: Date) => {
       let SomeDate = useTimeFormatter({ date: date });
-      setValue('DOB',SomeDate );
-      setError('DOB',"");
+      setValue("DOB", SomeDate);
+      setError("DOB", { type: "manual", message: "" });
       hideDatePicker();
     },
     [hideDatePicker]
@@ -74,10 +74,10 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
     navigation.navigate("ProvideYourMobileNumber");
   }, []);
 
-  const handleGenderChange = useCallback((gender:any) =>{
-    setValue('Gender',gender.title);
-    setError('Gender',"");
-  },[]);
+  const handleGenderChange = useCallback((gender: any) => {
+    setValue("Gender", gender.title);
+    setError("Gender", { type: "manual", message: "" });
+  }, []);
 
   return (
     <ScrollView
@@ -130,8 +130,8 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
               value={value}
               onFocusAction={showDatePicker}
               inputConfigurations={{
-                value:value,
-                onChange:onChange
+                value: value ?? "",
+                onChange: onChange,
               }}
             />
           )}

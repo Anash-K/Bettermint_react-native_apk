@@ -19,6 +19,10 @@ import Guide from "../screens/Guide";
 import DoYouHaveDiseases from "../screens/DoYouHaveDiseases";
 import DoYouHaveFamilyHistory from "../screens/DoYouHaveFamilyHistory";
 import PleaseShareYourMeasurement from "../screens/PleaseShareYourMeasurement";
+import SmallBriefBettermint from "../screens/SmallBriefBetttermint";
+import MovementAssesment from "../screens/MovementAssesment";
+import DoYouWorkOut from "../screens/DoYouWorkOut";
+import WhatFormOfWorkout from "../screens/WhatFormOfWorkout";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -32,6 +36,10 @@ export type StackParams = {
   DoYouHaveDiseases: undefined;
   DoYouHaveFamilyHistory: undefined;
   PleaseShareYourMeasurement: undefined;
+  SmallBriefBettermint: undefined;
+  MovementAssesment: undefined;
+  DoYouWorkOut: undefined;
+  WhatFormOfWorkout:undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -219,7 +227,76 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
                     text="Skip"
                     buttonStyle={styles.skipButton}
                     textStyle={styles.skipText}
-                    onPress={() => navigation.navigate('DoYouHaveFamilyHistory')}
+                    onPress={() =>
+                      navigation.navigate("DoYouHaveFamilyHistory")
+                    }
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="SmallBriefBettermint"
+          component={SmallBriefBettermint}
+          options={({ navigation }) => ({
+            headerTitle: "",
+          })}
+        />
+        <Stack.Screen
+          name="MovementAssesment"
+          component={MovementAssesment}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Movement Assesment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="DoYouWorkOut"
+          component={DoYouWorkOut}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Movement Assesment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="WhatFormOfWorkout"
+          component={WhatFormOfWorkout}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Movement Assesment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
                   />
                 }
               />

@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import CustomFont from '../assets/fonts/customFonts';
+import { colors } from '../constants/colors';
 
 interface PermissionModal {
   isModalVisible: boolean;
@@ -33,13 +34,15 @@ const PermissionModal: React.FC<PermissionModal> = memo(
               <View style={styles.modalContent}>
                 <View
                   style={{
-                    backgroundColor: '#18171C',
+                    backgroundColor: colors.white,
+                    borderColor:colors.primaryBlur,
+                    borderWidth:2,
                     borderRadius: 15,
                     margin: 24,
                     paddingHorizontal: 16,
                   }}>
                   <View
-                    style={{borderColor: '#1D1E23', borderBottomWidth: 1.5}}>
+                    style={{borderColor: colors.primaryBlur, borderBottomWidth: 1.5}}>
                     <Text style={styles.modalTitle}>{contentText}</Text>
                   </View>
                   {/* {ActionText && (
@@ -70,7 +73,7 @@ export default PermissionModal;
 const styles = StyleSheet.create({
   button: {
     paddingVertical: 16,
-    borderTopColor: '#232329',
+    borderTopColor: colors.primaryBlur,
     borderTopWidth: 1,
   },
   buttonText: {
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist500,
     fontSize: 20,
     lineHeight: 24,
-    color: 'rgba(250, 250, 250, 1)',
+    color: colors.primary,
     margin: 16,
     letterSpacing: 0.5,
     textAlign: 'center',

@@ -19,14 +19,14 @@ import { useSelector } from "react-redux";
 
 const { width, height } = Dimensions.get("screen");
 
-const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
+const MovementAssesment: React.FC<ScreenProps<"MovementAssesment">> = ({
   navigation,
 }) => {
   const gender = useSelector((state: any) => state.auth);
   const customStyle = useCustomStyle();
 
-  const heightData: { key: any }[] = Array.from({ length: 201 }, (_, i) => ({
-    key: `${50 + i}`,
+  const heightData: { key: any }[] = Array.from({ length: 250 }, (_, i) => ({
+    key: `${1 + i}`,
   }));
 
   const [selectedHeight, setSelectedHeight] = useState(null);
@@ -67,7 +67,7 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
   }, []);
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate('DoYouHaveDiseases');
+    navigation.navigate('DoYouWorkOut');
   }, []);
 
   console.log(width, "screen width");
@@ -75,54 +75,20 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
   return (
     <ScrollView
       nestedScrollEnabled={true}
-      style={[customStyle.safeAreaMarginBottom, styles.container]}
+      style={[styles.container]}
       overScrollMode="never"
       bounces={false}
+      showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.contentStyle}
     >
       <View style={{ flex: 1 }}>
         <Text style={[customStyle.title, styles.title]}>
-          What’s your measurement?
+          How many steps do you do in a day on an average?
         </Text>
-        <View style={styles.buttonBox}>
-          <DrawerButton
-            text={gender == "Male" ? "Chest" : "Bust"}
-            buttonStyle={styles.commonButtonStyle}
-            isFocus={activeDrawer == "Chest"}
-            outBoxStyle={{ flex: 1 }}
-            onPress={handlePress.bind(this, "Chest")}
-            isRadioButton={true}
-          />
-          <DrawerButton
-            text="Waist"
-            outBoxStyle={{ flex: 1 }}
-            isFocus={activeDrawer == "Waist"}
-            buttonStyle={styles.commonButtonStyle}
-            onPress={handlePress.bind(this, "Waist")}
-            isRadioButton={true}
-          />
-          <DrawerButton
-            text="Hip"
-            outBoxStyle={{ flex: 1 }}
-            isFocus={activeDrawer == "Hip"}
-            buttonStyle={styles.commonButtonStyle}
-            onPress={handlePress.bind(this, "Hip")}
-            isRadioButton={true}
-          />
-          <DrawerButton
-            text="Thigh"
-            outBoxStyle={{ flex: 1 }}
-            isFocus={activeDrawer == "Thigh"}
-            buttonStyle={styles.commonButtonStyle}
-            onPress={handlePress.bind(this, "Thigh")}
-            isRadioButton={true}
-          />
-        </View>
 
         {selectedHeight && (
           <View style={styles.selectedValueBox}>
-            <Text style={styles.selectedHeightText}>{selectedHeight}</Text>
-            <Text style={styles.unit}>in</Text>
+            <Text style={styles.selectedHeightText}>{selectedHeight}K</Text>
           </View>
         )}
         <FlatList
@@ -146,7 +112,6 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
           decelerationRate="fast"
           onViewableItemsChanged={onViewableItemsChanged}
           viewabilityConfig={viewabilityConfig}
-          // pagingEnabled
         />
       </View>
       <View style={styles.bottomBtn}>
@@ -160,7 +125,7 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
   );
 };
 
-export default WhatsYourMeasurement;
+export default MovementAssesment;
 
 const styles = StyleSheet.create({
   contentStyle: {
@@ -206,13 +171,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginBottom: Platform.select({ ios: 50, android: 35 }),
+    marginBottom:Platform.select({android:35,ios:45})
   },
   title: {
     marginBottom: 48,
-    maxWidth:343,
-    marginHorizontal:'auto',
-    marginTop:21
+    maxWidth: 343,
+    marginHorizontal: "auto",
+    marginTop: 21,
   },
   selectedHeightText: {
     marginTop: 20,

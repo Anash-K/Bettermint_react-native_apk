@@ -1,4 +1,13 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import DrawerButton from "../common/DrawerButton";
 import React, { useCallback, useState } from "react";
 import WhiteDot from "../common/WhiteDotBtn";
@@ -12,6 +21,8 @@ import { ScreenProps } from "../navigator/Stack";
 import { Controller, useForm } from "react-hook-form";
 import CustomInput from "../common/CustomInput";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import useTimeFormatter from "../utils/timeFormatter";
 
 interface Inputs {
   "Fasting blood sugar/glucose (mg / DL)": string;
@@ -33,151 +44,147 @@ const PleaseShareYourMeasurement: React.FC<
     "Avg BP": "32",
     "Date of report": "25 Dec, 2024",
   };
+
   const {
     register,
     handleSubmit,
-    watch,
-    getValues,
     control,
     setValue,
+    setError,
     formState: { errors },
-  } = useForm<Inputs>({ defaultValues: initialValues });
+  } = useForm<Inputs>({
+    defaultValues: initialValues,
+  });
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const showDatePicker = useCallback(() => {
+    setDatePickerVisibility(true);
+  }, [isDatePickerVisible]);
+
+  const hideDatePicker = useCallback(() => {
+    setDatePickerVisibility(false);
+  }, [isDatePickerVisible]);
+
+  const handleConfirm = useCallback(
+    (date: Date) => {
+      let SomeDate = useTimeFormatter({ date: date });
+      setValue("Date of report", SomeDate);
+      setError("Date of report", { type: "manual", message: "" });
+      hideDatePicker();
+    },
+    [hideDatePicker]
+  );
 
   const CustomStyle = useCustomStyle();
-
-  const handlePress = useCallback(() => {}, []);
+  const Insets = useSafeAreaInsets();
 
   const handleNextNav = useCallback(() => {
     navigation.navigate("DoYouHaveFamilyHistory");
-  }, []);
+  }, [navigation]);
 
-  const Insets = useSafeAreaInsets();
+  const inputFields = [
+    {
+      name: "Fasting blood sugar/glucose (mg / DL)",
+      label: "Fasting blood sugar/glucose (mg / DL)",
+      placeholder: "Enter Fasting blood sugar/glucose (mg / DL)",
+    },
+    {
+      name: "Total Cholesterol (mg / DL)",
+      label: "Total Cholesterol (mg / DL)",
+      placeholder: "Enter Total Cholesterol (mg / DL)",
+    },
+    {
+      name: "HDL Chol (mg / DL)",
+      label: "HDL Chol (mg / DL)",
+      placeholder: "Enter HDL Chol (mg / DL)",
+    },
+    {
+      name: "LDL Chol (mg / DL)",
+      label: "LDL Chol (mg / DL)",
+      placeholder: "Enter LDL Chol (mg / DL)",
+    },
+    { name: "Avg BP", label: "Avg BP", placeholder: "Enter Avg BP" },
+  ];
 
   return (
-    <ScrollView
-      style={[styles.container, CustomStyle.safeAreaMarginBottom]}
-      contentContainerStyle={styles.contentStyle}
-      showsVerticalScrollIndicator={false}
-      bounces={false}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <View style={[{ flex: 1, marginBottom: 15 }]}>
-        <Text style={[CustomStyle.title, styles.title]}>
-          Please share your last measurement for the following
-        </Text>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <ScrollView
+          style={[styles.container, CustomStyle.safeAreaMarginBottom]}
+          contentContainerStyle={styles.contentStyle}
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+        >
+          <View style={styles.innerContainer}>
+            <Text style={[CustomStyle.title, styles.title]}>
+              Please share your last measurement for the following
+            </Text>
 
-        <View style={styles.radioButtonBox}>
-          {/* Register inputs using Controller */}
-          <Controller
-            control={control}
-            name="Fasting blood sugar/glucose (mg / DL)"
-            render={({ field: { onChange, value } }) => (
-              <CustomInput
-                label="Fasting blood sugar/glucose (mg / DL)"
-                placeholderText="Enter Fasting blood sugar/glucose (mg / DL)"
-                onChange={onChange}
-                value={value}
-                inputConfigurations={{
-                  value: value,
-                  onChangeText: onChange,
-                }}
-              />
-            )}
-          />
+            <View style={styles.radioButtonBox}>
+              {inputFields.map(({ name, label, placeholder }) => (
+                <Controller
+                  key={name}
+                  control={control}
+                  name={name as any}
+                  render={({ field: { onChange, value } }) => (
+                    <CustomInput
+                      label={label}
+                      placeholderText={placeholder}
+                      onChange={onChange}
+                      value={value}
+                      inputConfigurations={{
+                        value: value,
+                        onChangeText: onChange,
+                        keyboardType: "number-pad",
+                      }}
+                    />
+                  )}
+                />
+              ))}
 
-          <Controller
-            control={control}
-            name="Total Cholesterol (mg / DL)"
-            render={({ field: { value, onChange } }) => (
-              <CustomInput
-                label="Total Cholesterol (mg / DL)"
-                placeholderText="Enter Total Cholesterol (mg / DL)"
-                onChange={onChange}
-                value={value}
-                inputConfigurations={{
-                  value: value,
-                  onChangeText: onChange,
-                }}
+              <Controller
+                control={control}
+                name="Date of report"
+                render={({ field: { value, onChange } }) => (
+                  <CustomInput
+                    label="Date of report"
+                    placeholderText="Enter Date of report"
+                    onChange={onChange}
+                    value={value}
+                    onFocusAction={showDatePicker}
+                    inputConfigurations={{
+                      value: value ?? "",
+                      onChange: onChange,
+                    }}
+                  />
+                )}
               />
-            )}
-          />
+            </View>
 
-          <Controller
-            control={control}
-            name="HDL Chol (mg / DL)"
-            render={({ field: { value, onChange } }) => (
-              <CustomInput
-                label="HDL Chol (mg / DL)"
-                placeholderText="Enter HDL Chol (mg / DL)"
-                onChange={onChange}
-                value={value}
-                inputConfigurations={{
-                  value: value,
-                  onChangeText: onChange,
-                }}
-              />
-            )}
+            <CustomButton text="Continue" onPress={handleNextNav} />
+          </View>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
           />
-
-          <Controller
-            control={control}
-            name="LDL Chol (mg / DL)"
-            render={({ field: { value, onChange } }) => (
-              <CustomInput
-                label="LDL Chol (mg / DL)"
-                placeholderText="Enter LDL Chol (mg / DL)"
-                onChange={onChange}
-                value={value}
-                inputConfigurations={{
-                  value: value,
-                  onChangeText: onChange,
-                }}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="Avg BP"
-            render={({ field: { value, onChange } }) => (
-              <CustomInput
-                label="Avg BP"
-                placeholderText="Enter Avg BP"
-                onChange={onChange}
-                value={value}
-                inputConfigurations={{
-                  value: value,
-                  onChangeText: onChange,
-                }}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="Date of report"
-            render={({ field: { value, onChange } }) => (
-              <CustomInput
-                label="Date of report"
-                placeholderText="Enter Date of report"
-                onChange={onChange}
-                value={value}
-                inputConfigurations={{
-                  value: value,
-                  onChangeText: onChange,
-                }}
-              />
-            )}
-          />
-        </View>
-        <CustomButton text="Continue" onPress={handleNextNav} />
-      </View>
-    </ScrollView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 export default PleaseShareYourMeasurement;
 
 const styles = StyleSheet.create({
+  innerContainer: {
+    flex: 1,
+    marginBottom: Platform.select({ ios: 15, android: 30 }),
+  },
   title: {
     maxWidth: 343,
     marginHorizontal: "auto",
