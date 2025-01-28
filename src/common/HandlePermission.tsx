@@ -1,35 +1,24 @@
+import { check, request } from "react-native-permissions";
+import { ErrorHandler } from "../utils/ErrorHandler";
 
-import RNPermissions, {Permission} from 'react-native-permissions';
-import {StyleSheet} from 'react-native';
-import {ALERT_TYPE, Dialog} from 'react-native-alert-notification';
-import CheckPermission from './PermissionRequest';
-import PermissionModal from './PermissionModal';
-
-
-export const handlePermission = (
-  permissions: Permission[],
-  permissionName: string,
-): Promise<boolean> => {
-    return new Promise<boolean>(async (resolve, reject) => {
-    const result = await CheckPermission(permissions, permissionName);
-
-    if (result) {
-      resolve(true);
+export const CheckPermission = async ({ permission }: any) => {
+  try {
+    const status = await check(permission);
+    console.log(status, "status");
+    if (status === "granted") {
+      return true;
     } else {
-      reject(new Error('permission rejected'));
-      const openSettingHandler = async () => {
-        await RNPermissions.openSettings();
-      };
-
+      return false;
     }
-  });
+  } catch (error) {
+    ErrorHandler(error);
+  }
 };
 
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 22,
-  },
-  body: {
-    fontSize: 18,
-  },
-});
+export const RequestPermission = async ({ permission }: any) => {
+  try {
+     await request(permission);
+  } catch (error) {
+    throw error;
+  }
+};

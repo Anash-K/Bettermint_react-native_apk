@@ -47,7 +47,11 @@ import {
   getFileNameFromUri,
   getMimeTypeFromUri,
 } from "../utils/MimeTypePicker";
-import { handlePermission } from "../common/HandlePermission";
+import {
+  CheckPermission,
+  handlePermission,
+  RequestPermission,
+} from "../common/HandlePermission";
 
 const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   navigation,
@@ -71,11 +75,17 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
     setModalVisible((prev) => !prev);
   }, []);
 
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const initialPermission = {
+    camera: false,
+    gallery: false,
+  };
 
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [isPermissionModalVisible, setPermissionModalVisible] = useState(false);
   const lastSubmittedImageRef = useRef<string | null>(null);
   const lastSubmittedNameRef = useRef<string | null>(null);
+  const [requestedPermission, setRequestPermission] =
+    useState(initialPermission);
 
   const handleConfirm = () => {};
 
@@ -83,14 +93,10 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
     navigation.navigate("WhatsYourMeasurement");
   }, [navigation]);
 
+  const cameraPermission =
+    Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
   // Request and check for camera permission when the component mounts
   const checkCameraPermission = useCallback(async () => {
-    return;
-    const cameraPermission =
-      Platform.OS === "ios"
-        ? PERMISSIONS.IOS.CAMERA
-        : PERMISSIONS.ANDROID.CAMERA;
-
     handlePermission(
       [
         Platform.OS === "ios"
@@ -108,6 +114,7 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
         setPermissionError("Permission Needed to Access Camera");
         setPermissionModalVisible(true);
       });
+
     // try {
 
     // const status = await check(cameraPermission);
@@ -133,12 +140,12 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
     // }
   }, []);
 
-  const checkGalleryPermission = useCallback(async () => {
-    const galleryPermission =
-      Platform.OS === "ios"
-        ? PERMISSIONS.IOS.PHOTO_LIBRARY
-        : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
+  const galleryPermission =
+    Platform.OS === "ios"
+      ? PERMISSIONS.IOS.PHOTO_LIBRARY
+      : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
 
+  const checkGalleryPermission = useCallback(async () => {
     handlePermission([galleryPermission], "gallery")
       .then((result) => {
         console.log(result, "result");
@@ -152,30 +159,28 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
       });
 
     // try {
-    // const status = await check(galleryPermission);
-    // console.log(status, "status");
-    // if (status === "granted") {
-    //   return;
-    // }
-    // if (status === "denied") {
-    //   const requestStatus = await request(galleryPermission);
-    //   if (requestStatus !== RESULTS.GRANTED) {
+    //   const status = await check(galleryPermission);
+    //   console.log(status, "status");
+    //   if (status === "granted") {
+    //     return;
     //   }
-    // } else if (status === "blocked") {
-    //   setPermissionError("Permission Needed to Access Album");
-    //   setPermissionModalVisible(true);
-    // }
+    //   if (status === "denied") {
+    //     const requestStatus = await request(galleryPermission);
+    //     if (requestStatus !== RESULTS.GRANTED) {
+    //     }
+    //   } else if (status === "blocked") {
+    //     setPermissionError("Permission Needed to Access Album");
+    //     setPermissionModalVisible(true);
+    //   }
     // } catch (error) {
     //   ErrorHandler(error);
     // }
   }, []);
 
   useEffect(() => {
-    // checkCameraPermission();
-    if (Platform.OS === "ios") {
-      // checkGalleryPermission();
-    }
-  }, [checkCameraPermission, checkGalleryPermission]);
+    // RequestPermission({ permission: cameraPermission });
+    // RequestPermission({ permission: galleryPermission });
+  }, []);
 
   const handleGalleryModal = useCallback(() => {
     setModalVisible(false);
@@ -196,25 +201,14 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   }, []);
 
   const handleCamera = useCallback(async (isClose?: Boolean) => {
-
-    handlePermission(
-      [
-        Platform.OS === "ios"
-          ? PERMISSIONS.IOS.CAMERA
-          : PERMISSIONS.ANDROID.CAMERA,
-      ],
-      "Camera"
-    )
-      .then((result) => {
-        console.log(result, "result");
-        console.log("Camera permission granted");
-      })
-      .catch((error) => {
-        console.log(error, "error");
-        setPermissionError("Permission Needed to Access Camera");
-        setPermissionModalVisible(true);
-        return;
-      });
+    const res = await CheckPermission({ permission: cameraPermission });
+    console.log(res, "permission");
+    if (!res) {
+      setPermissionError("Permission Needed to Access Camera");
+      setPermissionModalVisible(true);
+      return;
+    }
+    // checkCameraPermission();
 
     try {
       let response = await ImagePicker.openCamera({
@@ -240,23 +234,25 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   }, []);
 
   const handleGallery = useCallback(async (isClose?: Boolean) => {
-    if (Platform.OS === "ios") {
-      const galleryPermission =
-      Platform.OS === "ios"
-        ? PERMISSIONS.IOS.PHOTO_LIBRARY
-        : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES;
+    // handlePermission([galleryPermission], "gallery")
+    //   .then((result) => {
+    //     console.log(result, "result");
+    //     console.log("gallery permission granted");
+    //   })
+    //   .catch((error) => {
+    //     console.log(error, "error");
+    //     setPermissionError("Permission Needed to Access Gallery");
+    //     setPermissionModalVisible(true);
+    //     return;
+    //   });
+    // }
 
-    handlePermission([galleryPermission], "gallery")
-      .then((result) => {
-        console.log(result, "result");
-        console.log("gallery permission granted");
-      })
-      .catch((error) => {
-        console.log(error, "error");
-        setPermissionError("Permission Needed to Access Gallery");
-        setPermissionModalVisible(true);
-        return;
-      });
+    const res = await CheckPermission({ permission: galleryPermission });
+    console.log(res, "permission");
+    if (!res) {
+      setPermissionError("Permission Needed to Access Gallery");
+      setPermissionModalVisible(true);
+      return;
     }
 
     try {

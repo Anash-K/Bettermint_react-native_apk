@@ -46,7 +46,6 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
   isRadioButton,
   
 }) => {
-  console.log("width real ", width);
   return (
     <TouchableOpacity
       style={[

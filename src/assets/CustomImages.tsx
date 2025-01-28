@@ -17,4 +17,9 @@ export const CustomImages = {
   femaleBody:require("./Images/femaleBody.png"),
   multiSelect:require("./Images/multiSelect.png"),
   movementIcon:require("./Images/movementImage.png"),
+  smallCircleSteps:require("./Images/smallCircle.png"),
+  beginnerSteps:require("./Images/biginnerStep.png"),
+  intermediateSteps:require("./Images/intermidiateStep.png"),
+  advanceSteps:require("./Images/advaceStep.png"),
+
 };

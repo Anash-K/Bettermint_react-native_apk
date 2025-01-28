@@ -39,5 +39,11 @@ export const useCustomStyle = () => {
       color: colors.error,
       marginLeft:10
     } as TextStyle,
+    contentParaStyle:{
+      fontSize: 16,
+      lineHeight:19.2,
+      fontFamily:CustomFont.Urbanist500,
+      marginBottom:16,
+    } as TextStyle
   };
 };

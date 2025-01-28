@@ -9,7 +9,8 @@ import FastImage from "react-native-fast-image";
 import { CustomImages } from "../assets/CustomImages";
 import CustomButton from "../common/CustomButton";
 import { ScreenProps } from "../navigator/Stack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 
 type DiseaseState = {
   "Brisk Walking": boolean;
@@ -30,6 +31,7 @@ const WhatFormOfWorkout: React.FC<ScreenProps<"WhatFormOfWorkout">> = ({
   navigation,
 }) => {
   const { gender } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch();
   const CustomStyle = useCustomStyle();
   const initialState: DiseaseState = {
     "Brisk Walking": false,
@@ -49,19 +51,27 @@ const WhatFormOfWorkout: React.FC<ScreenProps<"WhatFormOfWorkout">> = ({
     // initialState["PCOD / PCOS"] = false;
   }
 
-  const [selectedDiseases, setSelectedDiseases] =
+  const [numberOfWorkoutForm, setNumberOfWorkoutForm] =
     useState<DiseaseState>(initialState);
 
   const handlePress = (disease: keyof DiseaseState) => {
-    setSelectedDiseases((prevState) => ({
+    setNumberOfWorkoutForm((prevState) => ({
       ...prevState,
       [disease]: !prevState[disease], // Toggle the selected disease
     }));
   };
 
   const handleNextNav = useCallback(() => {
-    // navigation.navigate("");
-  }, []);
+    const knownWorkoutForm = Object.values(numberOfWorkoutForm).filter(
+      (item) => {
+        return item == true;
+      }
+    ).length;
+    dispatch(
+      setFieldAction({ field: "numberOfWorkout", value: knownWorkoutForm })
+    );
+    navigation.navigate("YouAreBeginner");
+  }, [numberOfWorkoutForm,dispatch]);
 
   return (
     <ScrollView
@@ -91,12 +101,12 @@ const WhatFormOfWorkout: React.FC<ScreenProps<"WhatFormOfWorkout">> = ({
               textStyle={styles.btnText}
               customIcon={
                 <WhiteDot
-                  isFocus={!!selectedDiseases[disease as keyof DiseaseState]}
+                  isFocus={!!numberOfWorkoutForm[disease as keyof DiseaseState]}
                 />
               }
               onPress={() => handlePress(disease as keyof DiseaseState)}
               customIconPosition="right"
-              isFocus={selectedDiseases[disease as keyof DiseaseState]}
+              isFocus={numberOfWorkoutForm[disease as keyof DiseaseState]}
             />
           ))}
         </View>
@@ -114,7 +124,7 @@ export default WhatFormOfWorkout;
 
 const styles = StyleSheet.create({
   button: {
-    marginBottom: Platform.select({ios:10, android: 45 }),
+    marginBottom: Platform.select({ ios: 10, android: 45 }),
   },
   contentStyle: {
     flexGrow: 1,

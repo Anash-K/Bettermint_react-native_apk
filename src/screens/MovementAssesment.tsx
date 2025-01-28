@@ -15,7 +15,8 @@ import { colors } from "../constants/colors";
 import CustomButton from "../common/CustomButton";
 import DrawerButton from "../common/DrawerButton";
 import { ScreenProps } from "../navigator/Stack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -23,13 +24,14 @@ const MovementAssesment: React.FC<ScreenProps<"MovementAssesment">> = ({
   navigation,
 }) => {
   const gender = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch();
   const customStyle = useCustomStyle();
 
   const heightData: { key: any }[] = Array.from({ length: 250 }, (_, i) => ({
     key: `${1 + i}`,
   }));
 
-  const [selectedHeight, setSelectedHeight] = useState(null);
+  const [selectedHeight, setSelectedHeight] = useState<number | null>(null);
   const [activeDrawer, setActiveDrawer] = useState("Chest");
   const flatListRef = useRef<any>(null);
   const screenWidth = Dimensions.get("screen").width;
@@ -67,10 +69,10 @@ const MovementAssesment: React.FC<ScreenProps<"MovementAssesment">> = ({
   }, []);
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate('DoYouWorkOut');
-  }, []);
+    dispatch(setFieldAction({ field: "steps", value: selectedHeight ?? 0 }));
+    navigation.navigate("DoYouWorkOut");
+  }, [dispatch, selectedHeight, navigation]);
 
-  console.log(width, "screen width");
 
   return (
     <ScrollView
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginBottom:Platform.select({android:35,ios:45})
+    marginBottom: Platform.select({ android: 35, ios: 45 }),
   },
   title: {
     marginBottom: 48,

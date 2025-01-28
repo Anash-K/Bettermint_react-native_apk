@@ -23,6 +23,8 @@ import SmallBriefBettermint from "../screens/SmallBriefBetttermint";
 import MovementAssesment from "../screens/MovementAssesment";
 import DoYouWorkOut from "../screens/DoYouWorkOut";
 import WhatFormOfWorkout from "../screens/WhatFormOfWorkout";
+import YouAreBeginner from "../screens/YouAreBeginner";
+import NutritionAssessmentDetails from "../screens/NutritionAssessmentDetails";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -40,6 +42,8 @@ export type StackParams = {
   MovementAssesment: undefined;
   DoYouWorkOut: undefined;
   WhatFormOfWorkout:undefined;
+  YouAreBeginner:undefined;
+  NutritionAssessmentDetails:undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -66,6 +70,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             />
           ),
         })}
+        initialRouteName='MovementAssesment'
       >
         <Stack.Screen
           name="TellUsALittleAboutYou"
@@ -291,6 +296,46 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             header: () => (
               <CustomHeader
                 title="Movement Assesment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name='YouAreBeginner'
+          component={YouAreBeginner}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Movement Assesment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name='NutritionAssessmentDetails'
+          component={NutritionAssessmentDetails}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Nutrition Assessment"
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}
