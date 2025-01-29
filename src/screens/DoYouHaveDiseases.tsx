@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     rowGap: 9,
     marginTop: 48,
     flex: 1,
-    marginBottom: 20,
+    marginBottom: 48,
   },
   btnText: {
     fontSize: 16,

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import BootSplash from "react-native-bootsplash";
 import RootScreen from "./src/navigator/RootScreen";
 import { NavigationContainer } from "@react-navigation/native";
@@ -7,7 +7,18 @@ import { Loader } from "./src/Types/CommonTypes";
 
 export const AppLoaderRef = React.createRef<Loader>();
 
+export const setDefaultFontScaling = () => {
+  (Text as any).defaultProps = (Text as any).defaultProps || {};
+  (Text as any).defaultProps.allowFontScaling = false;
+
+  (TextInput as any).defaultProps = (TextInput as any).defaultProps || {};
+  (TextInput as any).defaultProps.allowFontScaling = false;
+};
+
 const App: React.FC = () => {
+  useEffect(() => {
+    setDefaultFontScaling();
+  }, []);
   useEffect(() => {
     const timer = setTimeout(() => {
       BootSplash.hide();
@@ -17,11 +28,11 @@ const App: React.FC = () => {
   }, []);
 
   // console.error = () => {};
-  
+
   return (
     <View style={styles.container}>
       <NavigationContainer>
-        <RootScreen/>
+        <RootScreen />
       </NavigationContainer>
     </View>
   );

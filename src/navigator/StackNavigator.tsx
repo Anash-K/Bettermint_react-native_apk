@@ -25,6 +25,8 @@ import DoYouWorkOut from "../screens/DoYouWorkOut";
 import WhatFormOfWorkout from "../screens/WhatFormOfWorkout";
 import YouAreBeginner from "../screens/YouAreBeginner";
 import NutritionAssessmentDetails from "../screens/NutritionAssessmentDetails";
+import AddingColorfullVeggies from "../screens/AddingColorfullVeggies";
+import WhatKingOfFoodYouEat from "../screens/WhatKingOfFood";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -44,6 +46,8 @@ export type StackParams = {
   WhatFormOfWorkout:undefined;
   YouAreBeginner:undefined;
   NutritionAssessmentDetails:undefined;
+  AddingColorfullVeggies:undefined;
+  WhatKingOfFoodYouEat:undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -331,6 +335,46 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
         <Stack.Screen
           name='NutritionAssessmentDetails'
           component={NutritionAssessmentDetails}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Nutrition Assessment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name='AddingColorfullVeggies'
+          component={AddingColorfullVeggies}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Nutrition Assessment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name='WhatKingOfFoodYouEat'
+          component={WhatKingOfFoodYouEat}
           options={({ navigation }) => ({
             headerTitle: "",
             header: () => (

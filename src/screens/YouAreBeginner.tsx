@@ -68,6 +68,7 @@ const YouAreBeginner: React.FC<ScreenProps<"YouAreBeginner">> = ({
     <ScrollView
       style={[styles.container, CustomStyle.safeAreaMarginBottom]}
       showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ flexGrow: 1 }}
     >
       <Text style={[CustomStyle.title, styles.title]}>
@@ -77,7 +78,7 @@ const YouAreBeginner: React.FC<ScreenProps<"YouAreBeginner">> = ({
         <View style={styles.lottieContainer}>
           <LottieView
             ref={animationRef}
-            source={require("../Lottie/ssssss.json")}
+            source={require("../Lottie/WellbeingAdvanced.json")}
             autoPlay
             loop={false} // Play only once
             style={styles.lottieStyle}
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     marginHorizontal: 16,
-    marginBottom: Platform.select({ ios: 10, android: 20 }),
+    marginBottom: Platform.select({ ios: 15, android: 15 }),
   },
   container: {
     flex: 1,

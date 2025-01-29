@@ -1,4 +1,4 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import DrawerButton from "../common/DrawerButton";
 import React, { useCallback, useState } from "react";
 import WhiteDot from "../common/WhiteDotBtn";
@@ -9,69 +9,44 @@ import FastImage from "react-native-fast-image";
 import { CustomImages } from "../assets/CustomImages";
 import CustomButton from "../common/CustomButton";
 import { ScreenProps } from "../navigator/Stack";
-import { useDispatch, useSelector } from "react-redux";
-import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
+import { useSelector } from "react-redux";
 
-type DiseaseState = {
-  "Brisk Walking": boolean;
-  Swimming: boolean;
-  Cycling: boolean;
-  Thyroid: boolean;
-  "Yoga at home": boolean;
-  Gym: boolean;
-  Dance: boolean;
-  "Functional training at home": boolean;
-  "Functional training in a class": boolean;
-  Kickboxing: boolean;
-  MMA: boolean;
-  //   "PCOD / PCOS"?: boolean;
+type FoodYouEatState = {
+  "I eat my veggies": boolean;
+  "I eat my protein": boolean;
+  "I have my fiber": boolean;
+  "I’m not really eating a balanced meal": boolean;
 };
 
-const WhatFormOfWorkout: React.FC<ScreenProps<"WhatFormOfWorkout">> = ({
+const WhatKingOfFoodYouEat: React.FC<ScreenProps<"WhatKingOfFoodYouEat">> = ({
   navigation,
 }) => {
   const { gender } = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch();
   const CustomStyle = useCustomStyle();
-  const initialState: DiseaseState = {
-    "Brisk Walking": false,
-    Swimming: true,
-    Cycling: false,
-    Thyroid: false,
-    "Yoga at home": false,
-    Gym: true,
-    Dance: false,
-    "Functional training at home": false,
-    "Functional training in a class": false,
-    Kickboxing: false,
-    MMA: false,
+  const initialState: FoodYouEatState = {
+    "I eat my veggies": false,
+    "I eat my protein": false,
+    "I have my fiber": false,
+    "I’m not really eating a balanced meal": false,
   };
 
   if (gender !== "Male") {
     // initialState["PCOD / PCOS"] = false;
   }
 
-  const [numberOfWorkoutForm, setNumberOfWorkoutForm] =
-    useState<DiseaseState>(initialState);
+  const [selectedDiseases, setSelectedDiseases] =
+    useState<FoodYouEatState>(initialState);
 
-  const handlePress = (disease: keyof DiseaseState) => {
-    setNumberOfWorkoutForm((prevState) => ({
+  const handlePress = (disease: keyof FoodYouEatState) => {
+    setSelectedDiseases((prevState) => ({
       ...prevState,
       [disease]: !prevState[disease], // Toggle the selected disease
     }));
   };
 
   const handleNextNav = useCallback(() => {
-    const knownWorkoutForm = Object.values(numberOfWorkoutForm).filter(
-      (item) => {
-        return item == true;
-      }
-    ).length;
-    dispatch(
-      setFieldAction({ field: "numberOfWorkout", value: knownWorkoutForm })
-    );
-    navigation.navigate("YouAreBeginner");
-  }, [numberOfWorkoutForm,dispatch]);
+    navigation.navigate("PleaseShareYourMeasurement");
+  }, []);
 
   return (
     <ScrollView
@@ -82,7 +57,7 @@ const WhatFormOfWorkout: React.FC<ScreenProps<"WhatFormOfWorkout">> = ({
     >
       <View style={{ flex: 1 }}>
         <Text style={CustomStyle.title}>
-          What form of workout do you usually do?
+          What kind of food do you usually eat?
         </Text>
         <View style={styles.multiSelectBox}>
           <FastImage
@@ -93,6 +68,10 @@ const WhatFormOfWorkout: React.FC<ScreenProps<"WhatFormOfWorkout">> = ({
         </View>
 
         <View style={styles.radioButtonBox}>
+          <View style={styles.checkBox}>
+            <Text>Simple, homely meals</Text>
+            <WhiteDot isFocus={false} />
+          </View>
           {Object.keys(initialState).map((disease) => (
             <DrawerButton
               key={disease}
@@ -101,30 +80,36 @@ const WhatFormOfWorkout: React.FC<ScreenProps<"WhatFormOfWorkout">> = ({
               textStyle={styles.btnText}
               customIcon={
                 <WhiteDot
-                  isFocus={!!numberOfWorkoutForm[disease as keyof DiseaseState]}
+                  isFocus={!!selectedDiseases[disease as keyof FoodYouEatState]}
                 />
               }
-              onPress={() => handlePress(disease as keyof DiseaseState)}
+              onPress={() => handlePress(disease as keyof FoodYouEatState)}
               customIconPosition="right"
-              isFocus={numberOfWorkoutForm[disease as keyof DiseaseState]}
+              isFocus={selectedDiseases[disease as keyof FoodYouEatState]}
             />
           ))}
         </View>
-        <CustomButton
-          text="Continue"
-          onPress={handleNextNav}
-          buttonStyle={styles.button}
-        />
+        <CustomButton text="Continue" onPress={handleNextNav} />
       </View>
     </ScrollView>
   );
 };
 
-export default WhatFormOfWorkout;
+export default WhatKingOfFoodYouEat;
 
 const styles = StyleSheet.create({
-  button: {
-    marginBottom: Platform.select({ ios: 15, android: 40 }),
+  checkBox: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    backgroundColor:'#fff',
+  },
+  ringBorder: {
+    borderColor: colors.primary,
+    borderWidth: 2,
+    width: 20,
+    height: 20,
+    borderRadius: 50,
   },
   contentStyle: {
     flexGrow: 1,
@@ -147,8 +132,9 @@ const styles = StyleSheet.create({
   },
   radioButtonBox: {
     rowGap: 9,
-    marginVertical: 48,
+    marginTop: 48,
     flex: 1,
+    marginBottom: 48,
   },
   btnText: {
     fontSize: 16,

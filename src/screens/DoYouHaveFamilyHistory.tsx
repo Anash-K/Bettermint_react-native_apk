@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   radioButtonBox: {
     rowGap: 9,
     marginTop: 48,
+    marginBottom:48,
     flex: 1,
   },
   btnText: {

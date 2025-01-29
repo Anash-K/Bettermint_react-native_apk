@@ -80,7 +80,7 @@ const CustomOptionsComponent = ({
   );
 };
 
-const CustomSelector: React.FC<CustomSelectorProps> = ({
+const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
   question,
   options = [],
   onSelect,
@@ -115,7 +115,19 @@ const CustomSelector: React.FC<CustomSelectorProps> = ({
         {question ?? "Question?"}
       </Text>
       <View style={[styles.optionsContainer, optionContainer]}>
-        <FlatList
+        {generatedOptions.map((item, index) => (
+          <CustomOptionsComponent
+            key={index}
+            customOptions={CustomOptions?.startingNumber}
+            optionStyle={optionStyle}
+            outerBorderBoxStyle={outerBorderBoxStyle}
+            selectedOption={selectedOption}
+            buttonStyle={buttonStyle}
+            onSelect={onSelect}
+            item={item}
+          />
+        ))}
+        {/* <FlatList
           data={generatedOptions}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={[styles.optionsContainer, optionContainer]}
@@ -133,13 +145,13 @@ const CustomSelector: React.FC<CustomSelectorProps> = ({
               item={item}
             />
           )}
-        />
+        /> */}
       </View>
     </View>
   );
 };
 
-export default CustomSelector;
+export default CustomTextOptionSelector;
 
 const styles = StyleSheet.create({
   textOption: {
@@ -153,7 +165,7 @@ const styles = StyleSheet.create({
   },
   buttonFocus: { backgroundColor: "#58A3A4" },
   focusBox: {
-    borderColor: colors.borderColor,
+    borderColor: 'rgba(88, 163, 164, 0.25)',
   },
   outerBox: {
     borderColor: "transparent",
@@ -183,9 +195,11 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    columnGap: 8,
+    justifyContent: "center",
+    flexWrap: "wrap",
+    columnGap: 6,
     paddingHorizontal: 8,
+    rowGap: 6,
   },
   option: {
     flexDirection: "row",

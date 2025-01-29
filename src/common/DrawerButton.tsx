@@ -44,7 +44,6 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
   customIcon,
   customIconPosition = "left",
   isRadioButton,
-  
 }) => {
   return (
     <TouchableOpacity
