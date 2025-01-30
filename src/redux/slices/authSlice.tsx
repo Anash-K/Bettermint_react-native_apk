@@ -23,7 +23,7 @@ const authSlice = createSlice({
     logout(state) {
       state.token = null;
     },
-    gender(state, action: PayloadAction<string>) {
+    setGender(state, action: PayloadAction<string>) {
       state.gender = action.payload;
       console.log(action.payload);
     },
@@ -31,5 +31,5 @@ const authSlice = createSlice({
 });
 
 // Export actions and reducer
-export const { login, logout, gender } = authSlice.actions;
+export const { login, logout, setGender } = authSlice.actions;
 export default authSlice.reducer;

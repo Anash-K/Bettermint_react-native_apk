@@ -19,14 +19,14 @@ interface DrawerButtonProps {
   onPress: () => void;
   icon?: ImageSourcePropType; // For handling images (local or remote)
   iconPosition?: "left" | "right"; // Icon position
-  buttonStyle?: ViewStyle; // Custom button style
-  textStyle?: TextStyle; // Custom text style
-  iconStyle?: ImageStyle | ""; // Custom icon style
+  buttonStyle?: ViewStyle | ViewStyle[]; // Custom button style
+  textStyle?: TextStyle | TextStyle[]; // Custom text style
+  iconStyle?: ImageStyle | ImageStyle[] | ""; // Custom icon style
   isFocus?: boolean;
-  outBoxStyle?: ViewStyle;
+  outBoxStyle?: ViewStyle | ViewStyle[];
   customIconPosition?: "left" | "right";
   customIcon?: React.ReactNode;
-  isRadioButton?:boolean;
+  isRadioButton?: boolean;
 }
 
 const { width, height } = Dimensions.get("screen");
@@ -58,7 +58,7 @@ const DrawerButton: React.FC<DrawerButtonProps> = ({
         style={[
           styles.button,
           isFocus && { backgroundColor: colors.primaryLight },
-          (width <= 400 && isRadioButton) && styles.responsiveButton,
+          width <= 400 && isRadioButton && styles.responsiveButton,
           buttonStyle,
         ]}
       >
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     padding: 13,
     backgroundColor: colors.white,
     borderRadius: 48,
+    columnGap: 16,
   },
   text: {
     color: colors.primary,
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist600,
     // marginHorizontal: 16,
     lineHeight: 21.6,
+    flex: 1,
   },
   icon: {
     width: 20,

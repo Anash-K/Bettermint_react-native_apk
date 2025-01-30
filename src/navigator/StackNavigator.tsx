@@ -27,6 +27,7 @@ import YouAreBeginner from "../screens/YouAreBeginner";
 import NutritionAssessmentDetails from "../screens/NutritionAssessmentDetails";
 import AddingColorfullVeggies from "../screens/AddingColorfullVeggies";
 import WhatKingOfFoodYouEat from "../screens/WhatKingOfFood";
+import HowDoYouGenerallyFeel from "../screens/HowDoYouGenerallyFeel";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -48,6 +49,7 @@ export type StackParams = {
   NutritionAssessmentDetails:undefined;
   AddingColorfullVeggies:undefined;
   WhatKingOfFoodYouEat:undefined;
+  HowDoYouGenerallyFeel:undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -74,7 +76,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             />
           ),
         })}
-        initialRouteName='MovementAssesment'
+        initialRouteName='AddingColorfullVeggies'
       >
         <Stack.Screen
           name="TellUsALittleAboutYou"
@@ -375,6 +377,26 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
         <Stack.Screen
           name='WhatKingOfFoodYouEat'
           component={WhatKingOfFoodYouEat}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Nutrition Assessment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+         <Stack.Screen
+          name='HowDoYouGenerallyFeel'
+          component={HowDoYouGenerallyFeel}
           options={({ navigation }) => ({
             headerTitle: "",
             header: () => (

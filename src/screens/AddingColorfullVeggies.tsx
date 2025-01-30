@@ -45,7 +45,7 @@ const AddingColorfullVeggies: React.FC<ScreenProps<'AddingColorfullVeggies'>> = 
   };
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate('WhatKingOfFoodYouEat');
+    navigation.navigate('BottomTabStack');
   }, []);
 
   return (

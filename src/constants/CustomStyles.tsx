@@ -2,6 +2,7 @@ import { Platform, TextStyle } from "react-native";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "./colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 
 export const useCustomStyle = () => {
   const insets = useSafeAreaInsets();

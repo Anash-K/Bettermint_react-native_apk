@@ -18,9 +18,9 @@ interface CustomButtonProps {
   onPress: () => void;
   icon?: ImageSourcePropType; // For handling images (local or remote)
   iconPosition?: "left" | "right"; // Icon position
-  buttonStyle?: ViewStyle; // Custom button style
-  textStyle?: TextStyle; // Custom text style
-  iconStyle?: ImageStyle | ""; // Custom icon style
+  buttonStyle?: ViewStyle | ViewStyle[]; // Custom button style
+  textStyle?: TextStyle | TextStyle[]; // Custom text style
+  iconStyle?:ImageStyle | ImageStyle[] | ""; // Custom icon style
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
