@@ -5,10 +5,45 @@ import { colors } from "../constants/colors";
 import TabLogo from "../constants/TabLogo";
 import * as Progress from "react-native-progress";
 import CustomFont from "../assets/fonts/customFonts";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { ScreenProps } from "../navigator/Stack";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
+import { ProgressChart } from "react-native-chart-kit";
+import { Svg, Text as SvgText } from "react-native-svg";
+import { useFocusEffect } from "@react-navigation/native";
+import { AnimatedCircularProgress } from "react-native-circular-progress";
+import EmojiOrImageCard from "../common/EmojiCard";
+import LinearProgressBar from "../common/LinearProgressBar";
+
+interface initialValues {
+  week: number;
+  month: number;
+}
 
 const HomeScreen: React.FC<ScreenProps<"Home">> = () => {
+  const { steps, numberOfWorkout } = useSelector(
+    (state: RootState) => state.userDetails
+  );
+  const initialValues: initialValues = {
+    week: 90,
+    month: 75,
+  };
+  const [fill, setFill] = useState<initialValues>(initialValues);
+
+  const data = {
+    data: [0.5], // 70% progress (Ensure values are between 0 and 1)
+  };
+
+  const chartConfig = {
+    backgroundGradientFrom: "white", // Remove background
+    backgroundGradientTo: "white", // Remove background
+    color: (opacity = 0.5) => `rgba(102, 112, 115, ${opacity})`, // Chart color
+    strokeWidth: 2,
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false,
+  };
+
   return (
     <View style={styles.container}>
       <TabLogo />
@@ -29,21 +64,24 @@ const HomeScreen: React.FC<ScreenProps<"Home">> = () => {
                 <Text style={styles.scoreNumber}>/2800</Text>
               </View>
             </View>
-            <Progress.Bar
-              progress={0.4}
-              animated={true}
-              color={colors.primary}
-              unfilledColor={colors.commonInputBorderColor}
-              borderColor="transparent"
-              width={null} // Takes full width inside a flex container
-              borderRadius={12}
-            />
+            <View style={{ borderRadius: 100 }}>
+              <Progress.Bar
+                progress={0.4}
+                animated={true}
+                color={colors.primary}
+                unfilledColor={colors.commonInputBorderColor}
+                borderColor="transparent"
+                width={null} // Takes full width inside a flex container
+                borderRadius={50}
+              />
+            </View>
           </View>
         </View>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <View style={styles.topBoxes}>
+            {/* Begginer Box */}
             <View style={styles.beginnerBox}>
               <View style={styles.beginnerBoxHeader}>
                 <FastImage source={CustomImages.star} style={styles.starIcon} />
@@ -51,25 +89,135 @@ const HomeScreen: React.FC<ScreenProps<"Home">> = () => {
               </View>
 
               <View style={styles.LottieBox}>
-                <FastImage
-                  source={CustomImages.SleepBeginner}
-                  style={styles.SleepStyle}
-                />
-                <FastImage
-                  source={CustomImages.MovementBeginner}
-                  style={styles.MovementStyle}
-                />
-                <FastImage
-                  source={CustomImages.NutritionBeginner}
-                  style={styles.NutritionStyle}
-                />
-                <FastImage
-                  source={CustomImages.WellbeingBeginner}
-                  style={styles.WellBeingStyle}
-                />
+                <View>
+                  <Text style={[styles.sleepText, styles.titleLottieText]}>
+                    Sleep
+                  </Text>
+                  <FastImage
+                    source={CustomImages.SleepBeginner}
+                    style={styles.SleepStyle}
+                  />
+                </View>
+                <View>
+                  <Text style={[styles.movementText, styles.titleLottieText]}>
+                    Movement
+                  </Text>
+                  <FastImage
+                    source={CustomImages.MovementBeginner}
+                    style={styles.MovementStyle}
+                  />
+                </View>
+                <View>
+                  <Text style={[styles.wellbeingText, styles.titleLottieText]}>
+                    Wellbeing
+                  </Text>
+                  <FastImage
+                    source={CustomImages.WellbeingBeginner}
+                    style={styles.WellBeingStyle}
+                  />
+                </View>
+                <View>
+                  <Text style={[styles.nourishText, styles.titleLottieText]}>
+                    Nourish
+                  </Text>
+
+                  <FastImage
+                    source={CustomImages.NutritionBeginner}
+                    style={styles.NutritionStyle}
+                  />
+                </View>
               </View>
             </View>
-            <View style={styles.habitMastery}></View>
+
+            {/* Habit Mastery Box */}
+            <View style={styles.habitMastery}>
+              <Text style={[styles.progressText, styles.habitTitle]}>
+                Habit Mastery
+              </Text>
+              <View style={styles.habitBox}>
+                <AnimatedCircularProgress
+                  size={75}
+                  width={8}
+                  fill={fill.week}
+                  tintColor={colors.secondaryLight}
+                  backgroundColor={colors.progressBarBackground}
+                  lineCap="round"
+                  rotation={0}
+                >
+                  {(fill) => <Text style={styles.progressText}>{fill}%</Text>}
+                </AnimatedCircularProgress>
+                <Text style={[styles.progressText, styles.progressTitle]}>
+                  Week
+                </Text>
+              </View>
+              <View style={[styles.habitBox, styles.habitBottomBox]}>
+                <AnimatedCircularProgress
+                  size={75}
+                  width={8}
+                  fill={fill.month}
+                  tintColor={colors.secondaryLight}
+                  backgroundColor={colors.progressBarBackground}
+                  lineCap="round"
+                  rotation={0}
+                >
+                  {(fill) => <Text style={styles.progressText}>{fill}%</Text>}
+                </AnimatedCircularProgress>
+                <Text style={[styles.progressText, styles.progressTitle]}>
+                  Month
+                </Text>
+              </View>
+            </View>
+          </View>
+          <Text style={styles.toDoTitle}>To do list</Text>
+          <View style={styles.todoList}>
+            <EmojiOrImageCard
+              title="Workout"
+              cardStyle={styles.workoutCard}
+              iconSrc={CustomImages.workout}
+              src={CustomImages.smileBold}
+            />
+            <EmojiOrImageCard
+              title="Stress"
+              cardStyle={styles.stressCard}
+              iconSrc={CustomImages.smileBold}
+              src={CustomImages.smileBold}
+            />
+            <EmojiOrImageCard
+              title="Stress"
+              iconSrc={CustomImages.smileBold}
+              src={CustomImages.smileBold}
+              isCompleted={true}
+            />
+          </View>
+          <LinearProgressBar
+            iconSrc={CustomImages.homeFuel}
+            title={"Home Fuel"}
+            content={"Outside meals this week"}
+            score={2}
+            totalPoints={4}
+          />
+          <Text style={styles.toDoTitle}>You have 1 new lesson</Text>
+          <View style={styles.brainContainer}>
+            <FastImage
+              source={CustomImages.brain}
+              style={styles.brainIcon}
+              resizeMode="contain"
+            />
+            <View style={styles.brainRightPart}>
+              <Text style={styles.brainTitle}>
+                Impact of repetitions on building habits
+              </Text>
+              <View style={styles.brainLowerPart}>
+                <Text style={styles.videoLength}>5 mins</Text>
+                <View style={styles.playIconBox}>
+                  <FastImage
+                    source={CustomImages.play}
+                    style={styles.playIconStyle}
+                    resizeMode="contain"
+                  />
+                </View>
+              </View>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -80,13 +228,134 @@ const HomeScreen: React.FC<ScreenProps<"Home">> = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  stressCard: {
+    backgroundColor: colors.lottieBlue,
+  },
+  workoutCard: {
+    backgroundColor: colors.lottiePink,
+  },
+  videoLength: {
+    fontSize: 16,
+    lineHeight: 19.2,
+    fontFamily: CustomFont.Urbanist600,
+    color: "#626D6F",
+  },
+  brainTitle: {
+    fontSize: 18,
+    lineHeight: 21.6,
+    fontFamily: CustomFont.Urbanist700,
+    color: colors.secondary,
+  },
+  brainLowerPart: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 16,
+  },
+  brainRightPart: {
+    flex: 1,
+  },
+  brainContainer: {
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 16,
+    flexDirection: "row",
+    columnGap: 16,
+  },
+  playIconBox: {
+    width: 32,
+    height: 32,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.primaryBlur,
+    borderRadius: 28,
+  },
+  playIconStyle: {
+    width: 13,
+    height: 16,
+    marginLeft: 2,
+  },
+  brainIcon: {
+    width: 48,
+    height: 48,
+  },
+  todoList: {
+    flexDirection: "row",
+    columnGap: 12,
+    justifyContent: "center",
+    marginBottom: 32,
+  },
+  habitBottomBox: {
+    borderTopColor: "#F2F6F7",
+    borderTopWidth: 1,
+    paddingTop: 16,
+    marginTop: 16,
+  },
+  habitBox: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  habitTitle: {
+    color: colors.primary,
+    marginBottom: 20,
+  },
+  progressTitle: {
+    marginTop: 8,
+  },
+  progressText: {
+    fontSize: 14,
+    fontFamily: CustomFont.Urbanist700,
+    color: colors.secondaryLight,
+    lineHeight: 16.8,
+    textAlign: "center",
+  },
+  toDoTitle: {
+    fontSize: 16,
+    lineHeight: 19.2,
+    fontFamily: CustomFont.Urbanist700,
+    color: colors.secondary,
+    paddingTop: 32,
+    marginBottom: 16,
+  },
+  nourishText: {
+    bottom: 13,
+    right: -7,
+    transform: [{ rotateZ: "-46deg" }],
+    color: colors.lottieGreen,
+  },
+  wellbeingText: {
+    bottom: 10,
+    left: -15,
+    transform: [{ rotateZ: "45deg" }],
+    color: colors.lottieYellow,
+  },
+  titleLottieText: {
+    fontSize: 14,
+    lineHeight: 16.8,
+    fontFamily: CustomFont.Urbanist700,
+    position: "absolute",
+  },
+  sleepText: {
+    top: 10,
+    left: -5,
+    transform: [{ rotateZ: "-45deg" }],
+    color: colors.lottieBlue,
+  },
+  movementText: {
+    top: 10,
+    right: -17,
+    transform: [{ rotateZ: "45deg" }],
+    color: colors.lottiePink,
+  },
   contentContainer: {
     padding: 16,
+    marginBottom: 32,
   },
   habitMastery: {
     backgroundColor: colors.white,
     borderRadius: 20,
-    flex: 4,
+    padding: 16,
+    paddingHorizontal: 10,
   },
   topBoxes: {
     flexDirection: "row",
@@ -95,8 +364,9 @@ const styles = StyleSheet.create({
   LottieBox: {
     flexDirection: "row",
     flexWrap: "wrap",
-    width: 180,
-    height: 180,
+    width: 190,
+    height: 190,
+    gap: 7,
   },
   SleepStyle: {
     width: 180 / 2,
@@ -109,12 +379,10 @@ const styles = StyleSheet.create({
   WellBeingStyle: {
     width: 180 / 2,
     height: 180 / 2,
-    transform: [{ rotateY: "180deg" }],
   },
   NutritionStyle: {
     width: 180 / 2,
     height: 180 / 2,
-    transform: [{ rotateY: "180deg" }],
   },
   beginnerBoxTitle: {
     fontSize: 16,
@@ -126,7 +394,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     columnGap: 8,
-    marginBottom: 20,
+    marginBottom: 40,
+    alignItems: "center",
   },
   starIcon: {
     width: 16,
@@ -134,7 +403,7 @@ const styles = StyleSheet.create({
   },
   beginnerBox: {
     backgroundColor: colors.white,
-    flex: 6,
+    flex: 1,
     borderRadius: 20,
     paddingTop: 16,
     paddingHorizontal: 20,
