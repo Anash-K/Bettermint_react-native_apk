@@ -1,9 +1,10 @@
 import React, { memo, useCallback } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { ScreenProps } from "../navigator/Stack";
-import CustomInput from "../common/CustomInput";
-import CustomButton from "../common/CustomButton";
-import { useCustomStyle } from "../constants/CustomStyles";
+import { ScreenProps } from "../../navigator/Stack";
+import { useCustomStyle } from "../../constants/CustomStyles";
+import CustomInput from "../../common/CustomInput";
+import CustomButton from "../../common/CustomButton";
+
 
 const ForgotPassword: React.FC<ScreenProps<"ForgotPassword">> = memo(({navigation}) => {
   const handleChange = useCallback(() => {}, []);

@@ -1,27 +1,31 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { CustomImages } from "../assets/CustomImages";
-import { colors } from "../constants/colors";
-import TabLogo from "../constants/TabLogo";
+
 import * as Progress from "react-native-progress";
-import CustomFont from "../assets/fonts/customFonts";
+
 import React, { useRef, useState } from "react";
-import { ScreenProps } from "../navigator/Stack";
+
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/rootReducer";
+
 import { ProgressChart } from "react-native-chart-kit";
 import { Svg, Text as SvgText } from "react-native-svg";
 import { useFocusEffect } from "@react-navigation/native";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import EmojiOrImageCard from "../common/EmojiCard";
-import LinearProgressBar from "../common/LinearProgressBar";
+import TabLogo from "../../constants/TabLogo";
+import { CustomImages } from "../../assets/CustomImages";
+import { colors } from "../../constants/colors";
+import EmojiOrImageCard from "../../common/EmojiCard";
+import LinearProgressBar from "../../common/LinearProgressBar";
+import CustomFont from "../../assets/fonts/customFonts";
+import { RootState } from "../../redux/rootReducer";
+import { ScreenProps } from "../../navigator/Stack";
 
 interface initialValues {
   week: number;
   month: number;
 }
 
-const HomeScreen: React.FC<ScreenProps<"Home">> = () => {
+const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
   const { steps, numberOfWorkout } = useSelector(
     (state: RootState) => state.userDetails
   );
@@ -46,7 +50,8 @@ const HomeScreen: React.FC<ScreenProps<"Home">> = () => {
 
   return (
     <View style={styles.container}>
-      <TabLogo />
+      <StatusBar barStyle={'light-content'} backgroundColor={colors.primary}/>
+      <TabLogo isLogo={true} />
       <View style={styles.innerContainer}>
         <View style={styles.topHeader}>
           <View style={styles.bankImageBox}>
@@ -225,7 +230,7 @@ const HomeScreen: React.FC<ScreenProps<"Home">> = () => {
   );
 };
 
-export default HomeScreen;
+export default HomeTab;
 
 const styles = StyleSheet.create({
   stressCard: {
@@ -271,8 +276,8 @@ const styles = StyleSheet.create({
     borderRadius: 28,
   },
   playIconStyle: {
-    width: 13,
-    height: 16,
+    width: 15,
+    height: 20,
     marginLeft: 2,
   },
   brainIcon: {

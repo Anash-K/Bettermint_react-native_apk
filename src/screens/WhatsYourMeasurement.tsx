@@ -92,7 +92,6 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
             outBoxStyle={{ flex: 1 }}
             onPress={handlePress.bind(this, "Chest")}
             isRadioButton={true}
-            textStyle={styles.textStyle}
           />
           <DrawerButton
             text="Waist"
@@ -101,7 +100,6 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
             buttonStyle={styles.commonButtonStyle}
             onPress={handlePress.bind(this, "Waist")}
             isRadioButton={true}
-            textStyle={styles.textStyle}
           />
           <DrawerButton
             text="Hip"
@@ -110,7 +108,6 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
             buttonStyle={styles.commonButtonStyle}
             onPress={handlePress.bind(this, "Hip")}
             isRadioButton={true}
-            textStyle={styles.textStyle}
           />
           <DrawerButton
             text="Thigh"
@@ -119,7 +116,6 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
             buttonStyle={styles.commonButtonStyle}
             onPress={handlePress.bind(this, "Thigh")}
             isRadioButton={true}
-            textStyle={styles.textStyle}
           />
         </View>
 
@@ -167,9 +163,6 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
 export default WhatsYourMeasurement;
 
 const styles = StyleSheet.create({
-  textStyle:{
-    textAlign:'center'
-  },
   contentStyle: {
     justifyContent: "center",
     alignItems: "center",

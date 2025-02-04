@@ -54,4 +54,16 @@ export const CustomImages = {
   brain:require("./Images/brain.png"),
   play:require("./Images/Play.png"),
   tick:require("./Images/Tick.png"),
+  add:require("./Images/Add.png"),
+  sleep:require("./Images/sleep.png"),
+  drop:require("./Images/drop.png"),
+  yellowSmile:require("./Images/yellowSmile.png"),
+  normalSmile:require("./Images/normal.png"),
+  strength:require("./Images/Strength.png"),
+  levelupPink:require("./Images/LevelUpDayPink.png"),
+  cycle:require("./Images/cycle.png"),
+  steps:require("./Images/Steps.png"),
+  pinkTick:require("./Images/pinkcheck.png"),
+  redSpoon:require("./Images/redspoon.png"),
+  calenderTextRing:require("./Images/calenderTextRing.png")
 };

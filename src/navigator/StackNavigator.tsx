@@ -28,6 +28,11 @@ import NutritionAssessmentDetails from "../screens/NutritionAssessmentDetails";
 import AddingColorfullVeggies from "../screens/AddingColorfullVeggies";
 import WhatKingOfFoodYouEat from "../screens/WhatKingOfFood";
 import HowDoYouGenerallyFeel from "../screens/HowDoYouGenerallyFeel";
+import LogStress from "../screens/LogStress";
+import BottomTabStack from "./BottomTabNavigator";
+import LogEmotion from "../screens/LogEmotion";
+import WhatsOneGoodThing from "../screens/WhatsOneGoodThing";
+import LogFocus from "../screens/LogFocus";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -44,12 +49,17 @@ export type StackParams = {
   SmallBriefBettermint: undefined;
   MovementAssesment: undefined;
   DoYouWorkOut: undefined;
-  WhatFormOfWorkout:undefined;
-  YouAreBeginner:undefined;
-  NutritionAssessmentDetails:undefined;
-  AddingColorfullVeggies:undefined;
-  WhatKingOfFoodYouEat:undefined;
-  HowDoYouGenerallyFeel:undefined;
+  WhatFormOfWorkout: undefined;
+  YouAreBeginner: undefined;
+  NutritionAssessmentDetails: undefined;
+  AddingColorfullVeggies: undefined;
+  WhatKingOfFoodYouEat: undefined;
+  HowDoYouGenerallyFeel: undefined;
+  LogStress: undefined;
+  BottomTabStack: undefined;
+  LogEmotion: undefined;
+  WhatsOneGoodThing: undefined;
+  LogFocus: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -76,7 +86,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             />
           ),
         })}
-        initialRouteName='AddingColorfullVeggies'
+        initialRouteName="AddingColorfullVeggies"
       >
         <Stack.Screen
           name="TellUsALittleAboutYou"
@@ -128,6 +138,13 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
               />
             ),
           })}
+        />
+        <Stack.Screen
+          name="BottomTabStack"
+          component={BottomTabStack}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="WhatsYourMeasurement"
@@ -315,7 +332,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           })}
         />
         <Stack.Screen
-          name='YouAreBeginner'
+          name="YouAreBeginner"
           component={YouAreBeginner}
           options={({ navigation }) => ({
             headerTitle: "",
@@ -335,7 +352,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           })}
         />
         <Stack.Screen
-          name='NutritionAssessmentDetails'
+          name="NutritionAssessmentDetails"
           component={NutritionAssessmentDetails}
           options={({ navigation }) => ({
             headerTitle: "",
@@ -355,7 +372,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           })}
         />
         <Stack.Screen
-          name='AddingColorfullVeggies'
+          name="AddingColorfullVeggies"
           component={AddingColorfullVeggies}
           options={({ navigation }) => ({
             headerTitle: "",
@@ -375,7 +392,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           })}
         />
         <Stack.Screen
-          name='WhatKingOfFoodYouEat'
+          name="WhatKingOfFoodYouEat"
           component={WhatKingOfFoodYouEat}
           options={({ navigation }) => ({
             headerTitle: "",
@@ -394,14 +411,94 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             ),
           })}
         />
-         <Stack.Screen
-          name='HowDoYouGenerallyFeel'
+        <Stack.Screen
+          name="HowDoYouGenerallyFeel"
           component={HowDoYouGenerallyFeel}
           options={({ navigation }) => ({
             headerTitle: "",
             header: () => (
               <CustomHeader
                 title="Nutrition Assessment"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogStress"
+          component={LogStress}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Stress"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogEmotion"
+          component={LogEmotion}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Emotion"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="WhatsOneGoodThing"
+          component={WhatsOneGoodThing}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Journal"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogFocus"
+          component={LogFocus}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Focus"
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}

@@ -19,5 +19,8 @@ export const colors = {
   lottieGreen: "#3BC580",
   progressBarBackground:'#F7F4F2',
   tabBarInActive:'#C5C8C9',
-  
-};
+  tabIconBackground:'#F0F7FA',
+  bottomTabBorderColor:'#DAE4E7',
+  grayLight:'#B2B9BB',
+  secondaryWhite:'#EDF4F4'
+} as const;

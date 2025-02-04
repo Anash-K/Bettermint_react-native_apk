@@ -30,7 +30,7 @@ const RootScreen: React.FC<RootStackParams> = () => {
         ) : (
           <>
             <Stack.Screen name="MainStack" component={MainStack} />
-            <Stack.Screen name="BottomTabStack" component={BottomTabStack} />
+
           </>
         )}
       </Stack.Navigator>

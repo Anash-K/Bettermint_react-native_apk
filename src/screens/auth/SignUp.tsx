@@ -8,19 +8,19 @@ import {
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
-import { CustomImages } from "../assets/CustomImages";
-import CustomFont from "../assets/fonts/customFonts";
-import { colors } from "../constants/colors";
-import CustomInput from "../common/CustomInput";
 import React, { useCallback, useState } from "react";
-import CustomButton from "../common/CustomButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import EmailVerificationModal from "../Modals/EmailVerificationModal";
-import { ScreenProps } from "../navigator/Stack";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/slices/authSlice";
-import { useCustomStyle } from "../constants/CustomStyles";
+import { ScreenProps } from "../../navigator/Stack";
+import { useCustomStyle } from "../../constants/CustomStyles";
+import { login } from "../../redux/slices/authSlice";
+import { CustomImages } from "../../assets/CustomImages";
+import CustomInput from "../../common/CustomInput";
+import CustomButton from "../../common/CustomButton";
+import EmailVerificationModal from "../../Modals/EmailVerificationModal";
+import CustomFont from "../../assets/fonts/customFonts";
+import { colors } from "../../constants/colors";
 
 type Inputs = {
   email: string;
@@ -47,7 +47,7 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
   };
   const handleChange = useCallback(() => {}, []);
   const handlePress = useCallback(() => {
-    navigation.navigate('Login')
+    navigation.navigate("Login");
   }, []);
   const toggleEmailModal = useCallback(() => {
     setIsModal(!isModal);
@@ -63,10 +63,7 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   return (
     <ScrollView
-      style={[
-        styles.container,
-        CustomStyle.safeAreaMarginBottom
-      ]}
+      style={[styles.container, CustomStyle.safeAreaMarginBottom]}
       contentContainerStyle={styles.contentStyle}
       bounces={false}
     >
@@ -233,7 +230,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor:"#F2F7F6"
+    backgroundColor: "#F2F7F6",
   },
   logo: {
     width: 64,

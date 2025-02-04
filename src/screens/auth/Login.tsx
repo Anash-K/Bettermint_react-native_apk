@@ -1,6 +1,5 @@
 import {
   ImageBackground,
-  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -8,15 +7,15 @@ import {
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
-import { CustomImages } from "../assets/CustomImages";
-import CustomFont from "../assets/fonts/customFonts";
-import { colors } from "../constants/colors";
-import CustomInput from "../common/CustomInput";
 import React, { useCallback } from "react";
-import CustomButton from "../common/CustomButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScreenProps } from "../navigator/Stack";
-import { useCustomStyle } from "../constants/CustomStyles";
+import { ScreenProps } from "../../navigator/Stack";
+import { useCustomStyle } from "../../constants/CustomStyles";
+import CustomInput from "../../common/CustomInput";
+import { CustomImages } from "../../assets/CustomImages";
+import CustomButton from "../../common/CustomButton";
+import { colors } from "../../constants/colors";
+import CustomFont from "../../assets/fonts/customFonts";
 
 const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
   const handleChange = useCallback(() => {}, []);
@@ -26,13 +25,10 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
   }, []);
   const insets = useSafeAreaInsets();
   const CustomStyle = useCustomStyle();
-  
+
   return (
     <ScrollView
-      style={[
-        styles.container,
-        CustomStyle.safeAreaMarginBottom
-      ]}
+      style={[styles.container, CustomStyle.safeAreaMarginBottom]}
       contentContainerStyle={styles.contentStyle}
       bounces={false}
     >
@@ -132,7 +128,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor:"#F2F7F6"
+    backgroundColor: "#F2F7F6",
   },
   logo: {
     width: 64,

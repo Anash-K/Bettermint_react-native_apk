@@ -10,7 +10,7 @@ import CustomButton from "../common/CustomButton";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScreenProps } from "../navigator/Stack";
-import { logout, gender } from "../redux/slices/authSlice";
+import { gender, logout } from "../redux/slices/authSlice";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomInput from "../common/CustomInput";
 import { Controller, useForm } from "react-hook-form";

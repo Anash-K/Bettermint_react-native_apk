@@ -10,12 +10,6 @@ interface handleOptionSelectType {
   text: string;
 }
 
-interface initialStateType {
-  ofterYouEat: string;
-  youOrderFood: string;
-  litersOfWaterDrink: string;
-}
-
 const NutritionAssessmentDetails: React.FC<
   ScreenProps<"NutritionAssessmentDetails">
 > = ({ navigation }) => {
@@ -33,13 +27,12 @@ const NutritionAssessmentDetails: React.FC<
 
   const timeBeforeBed = ["1", "1.5", "2", "2.5", "3", "3.5", "4"];
 
-  const initialState: initialStateType = {
+  const initialState = {
     ofterYouEat: "0",
     youOrderFood: "0",
     litersOfWaterDrink: "0",
   };
-  const [nutritionInfo, setNutritionInfo] =
-    useState<initialStateType>(initialState);
+  const [nutritionInfo, setNutritionInfo] = useState(initialState);
   const [selectedOption, setSelectedOption] = useState({});
   const CustomStyle = useCustomStyle();
 
@@ -54,15 +47,8 @@ const NutritionAssessmentDetails: React.FC<
   );
 
   const handlePress = useCallback(() => {
-    const ofterYouEatValue = parseInt(nutritionInfo.ofterYouEat, 10);
-    const youOrderFoodValue = parseInt(nutritionInfo.youOrderFood, 10);
-
-    if (ofterYouEatValue + youOrderFoodValue < 3) {
-      navigation.navigate("AddingColorfullVeggies");
-    } else if (ofterYouEatValue + youOrderFoodValue >= 3) {
-      navigation.navigate("WhatKingOfFoodYouEat");
-    }
-  }, [nutritionInfo, navigation]);
+    navigation.navigate("AddingColorfullVeggies");
+  }, []);
 
   return (
     <ScrollView style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
