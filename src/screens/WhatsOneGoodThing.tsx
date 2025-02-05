@@ -11,6 +11,7 @@ const WhatsOneGoodThing: React.FC<ScreenProps<"WhatsOneGoodThing">> = ({
   navigation,
 }) => {
   const CustomStyle = useCustomStyle();
+  
 
   const handleNextNav = useCallback(() => {
     navigation.navigate("LogFocus");
