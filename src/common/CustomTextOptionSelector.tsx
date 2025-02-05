@@ -7,9 +7,11 @@ import {
   ViewStyle,
   TextStyle,
   FlatList,
+  Platform,
 } from "react-native";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
+import { useCustomStyle } from "../constants/CustomStyles";
 
 interface CustomOptions {
   startingNumber: number;
@@ -94,6 +96,7 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
   CustomOptions,
 }) => {
   let generatedOptions: string[] = [];
+  const CustomStyle = useCustomStyle();
 
   if (
     CustomOptions?.startingNumber !== undefined &&
@@ -110,7 +113,7 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
     generatedOptions = options;
   }
   return (
-    <View style={[styles.card, outerCardStyle]}>
+    <View style={[styles.card, CustomStyle.CommonCardShadow, outerCardStyle]}>
       <Text style={[styles.question, questionStyle]}>
         {question ?? "Question?"}
       </Text>
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
   },
   buttonFocus: { backgroundColor: "#58A3A4" },
   focusBox: {
-    borderColor: 'rgba(88, 163, 164, 0.25)',
+    borderColor: "rgba(88, 163, 164, 0.25)",
   },
   outerBox: {
     borderColor: "transparent",
@@ -175,11 +178,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
     margin: 8,
     marginHorizontal: 16,
     paddingVertical: 24,

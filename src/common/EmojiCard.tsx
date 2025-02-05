@@ -12,6 +12,7 @@ import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
 import React from "react";
 import { colors } from "../constants/colors";
+import { useCustomStyle } from "../constants/CustomStyles";
 
 interface EmojiOrImageCard {
   title: string;
@@ -36,8 +37,9 @@ const EmojiOrImageCard: React.FC<EmojiOrImageCard> = ({
   customImageStyle,
   isCompleted,
 }) => {
+  const CustomStyle = useCustomStyle();
   return (
-    <View style={[styles.container, cardStyle]}>
+    <View style={[styles.container, CustomStyle.CommonCardShadow, cardStyle]}>
       <View style={[styles.header, headerStyle]}>
         <FastImage
           style={[styles.iconStyle, CustomIconStyle as any]}
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 82,
     justifyContent: "center",
     alignItems: "center",
-    alignSelf:'center'
+    alignSelf: "center",
   },
   header: {
     flexDirection: "row",
@@ -105,18 +107,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flex: 1,
     justifyContent: "center",
-
-    // Shadow for iOS
-    shadowColor: "#000", // Black shadow
-    shadowOffset: {
-      width: 0,
-      height: 9, // Vertical shadow offset
-    },
-    shadowOpacity: 0.15, // Shadow transparency
-    shadowRadius: 10, // Blur radius
-
-    // Elevation for Android
-    elevation: 10, // Higher value gives a more pronounced shadow
   },
 
   ImageStyle: {

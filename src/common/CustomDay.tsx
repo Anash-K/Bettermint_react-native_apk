@@ -39,7 +39,7 @@ const CustomDay: React.FC<CustomDayProps> = ({
             source={image}
             style={[styles.icon, levelup && styles.levelup]}
             resizeMode="contain"
-            tintColor={themeColor ?? ""}
+            tintColor={levelup ? "" : (themeColor ?? '')}
           />
         ) : text ? (
           <ImageBackground

@@ -147,7 +147,7 @@ const CustomInput: React.FC<CustomInputProps> = memo(({
                   ]}
                   placeholder={placeholderText}
                   onFocus={onFocusAction ?? handleTextInputFocus}
-                  placeholderTextColor={"rgba(102, 112, 115, 0.5)"}
+                  placeholderTextColor={colors.gray}
                   onBlur={onBlurAction ?? handleBlur}
                   secureTextEntry={isPassword && isSecure}
                   editable={!isDisabled}

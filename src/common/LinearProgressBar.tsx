@@ -3,6 +3,7 @@ import FastImage from "react-native-fast-image";
 import { colors } from "../constants/colors";
 import React from "react";
 import { useCustomStyle } from "../constants/CustomStyles";
+import CustomFont from "../assets/fonts/customFonts";
 
 interface LinearProgressBarProps {
   iconSrc: ImageSourcePropType; // Type for the image source (FastImage)
@@ -87,13 +88,25 @@ const styles = StyleSheet.create({
   },
   title: {
     flex: 1,
+    fontFamily: CustomFont.Urbanist700,
+    lineHeight: 16.8,
+    fontSize: 14,
+    textAlign: "left",
+    color: colors.white,
   },
   scoreText: {
     color: colors.lottieGreen,
+    fontFamily: CustomFont.Urbanist700,
+    lineHeight: 16.8,
+    fontSize: 14,
   },
   content: {
     marginTop: 8,
     marginBottom: 16,
+    fontFamily: CustomFont.Urbanist500,
+    lineHeight: 19.2,
+    fontSize: 16,
+    color: colors.white,
   },
   progressBar: {
     flexDirection: "row",

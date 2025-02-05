@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: 16,
-    flex: 1,
+    flexGrow: 1,
+    maxWidth:'90%'
   },
 });

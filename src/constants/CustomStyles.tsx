@@ -1,4 +1,4 @@
-import { Platform, TextStyle } from "react-native";
+import { Platform, TextStyle, ViewStyle } from "react-native";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "./colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -37,13 +37,20 @@ export const useCustomStyle = () => {
       fontSize: 11,
       fontFamily: CustomFont.Urbanist400,
       color: colors.error,
-      marginLeft:10
+      marginLeft: 10,
     } as TextStyle,
-    contentParaStyle:{
+    contentParaStyle: {
       fontSize: 16,
-      lineHeight:19.2,
-      fontFamily:CustomFont.Urbanist500,
-      marginBottom:16,
-    } as TextStyle
+      lineHeight: 19.2,
+      fontFamily: CustomFont.Urbanist500,
+      marginBottom: 16,
+    } as TextStyle,
+    CommonCardShadow: {
+      shadowColor: colors.gray,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 10,
+    } as ViewStyle,
   };
 };

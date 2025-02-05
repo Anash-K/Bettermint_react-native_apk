@@ -1,14 +1,17 @@
 import React, { useCallback, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ScreenProps } from "../navigator/Stack";
 import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomEmotionSelector from "../common/CustomEmotionSelector";
+import { CustomImages } from "../assets/CustomImages";
 
 interface EmotionOption {
   id: number;
   src: any; // Can be `require` statement or image path
+  type: string;
+  active: any;
 }
 
 interface TextOption {
@@ -17,11 +20,31 @@ interface TextOption {
 }
 
 export const EmotionArray: EmotionOption[] = [
-  { id: 1, src: require("../assets/Images/smile.png") },
-  { id: 2, src: require("../assets/Images/sad.png") },
-  { id: 3, src: require("../assets/Images/normal.png") },
-  { id: 4, src: require("../assets/Images/happy.png") },
-  { id: 5, src: require("../assets/Images/confuse.png") },
+  {
+    id: 1,
+    src: CustomImages.confuseLinear,
+    type: "confuse",
+    active: CustomImages.confuse,
+  },
+  { id: 2, src: CustomImages.sadLinear, type: "sad", active: CustomImages.sad },
+  {
+    id: 3,
+    src: CustomImages.normalLinear,
+    type: "normal",
+    active: CustomImages.normalSmile,
+  },
+  {
+    id: 4,
+    src: CustomImages.smileLinear,
+    type: "smile",
+    active: CustomImages.smile,
+  },
+  {
+    id: 5,
+    src: CustomImages.happyLiner,
+    type: "happy",
+    active: CustomImages.happy,
+  },
 ];
 
 const LogEmotion: React.FC<ScreenProps<"LogEmotion">> = ({ navigation }) => {
@@ -115,5 +138,6 @@ const styles = StyleSheet.create({
   buttonStyle: {
     marginHorizontal: 16,
     marginTop: 32,
+    marginBottom: Platform.select({ ios: 20, android: 15 }),
   },
 });

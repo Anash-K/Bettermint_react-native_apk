@@ -64,7 +64,7 @@ const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
             <StatusBar barStyle={'light-content'} backgroundColor={colors.primary}/>
       <TabLogo
         Boxstyle={[
-          { height: Platform.select({ ios: top + 51, android: top + 61 }) },
+          { height: Platform.select({ ios: top + 70, android: top + 70 }) },
         ]}
         titleStyle={styles.headerTitle}
         title="Log"
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   headerStyle: {},
   container: {
     flex: 1,
+    backgroundColor: colors.appBackground,
   },
   content: {
     flex: 1,

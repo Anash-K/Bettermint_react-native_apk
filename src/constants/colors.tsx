@@ -2,6 +2,7 @@ export const colors = {
   primary: "#1C657C",
   primaryLight: "#58A3A4",
   primaryBlur: "#1c657c33",
+  primaryShadow:'#1c657c0d',
   lightBorderColor: "#4aabc940",
   secondary: "#333839",
   secondaryLight: "#667073",
@@ -21,6 +22,12 @@ export const colors = {
   tabBarInActive:'#C5C8C9',
   tabIconBackground:'#F0F7FA',
   bottomTabBorderColor:'#DAE4E7',
-  grayLight:'#B2B9BB',
-  secondaryWhite:'#EDF4F4'
+  grayLight: '#B2B9BB',
+  secondaryWhite: '#EDF4F4',
+  gray: "#66707380", // This has an 80% opacity
+  grayTertiary: '#D6DAD9', // Corrected spelling  
+  unitColor:'#4AABC9',
+  silverGray:'#E3EBE9',
+  menuTabBackground:'#E4F0F0'
+  
 } as const;

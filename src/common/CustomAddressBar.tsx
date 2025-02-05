@@ -18,13 +18,13 @@ const CustomAddressBar: React.FC<CustomAddressBarType> = memo(({ height }) => {
     setIsFocus(false);
   }, []);
   return (
-    <View style={[styles.outerBox, isFocus && styles.focusBox]}>
+    <View style={[styles.outerBox,, isFocus && styles.focusBox]}>
       <TextInput
         style={[styles.textInput, { height: height ?? 160 }]}
         onFocus={handleFocus}
         onBlur={handleBlur}
         placeholder="Write here..."
-        placeholderTextColor={colors.secondaryLight}
+        placeholderTextColor={colors.gray}
         multiline={true}
       />
     </View>

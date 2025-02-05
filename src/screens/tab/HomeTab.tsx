@@ -1,15 +1,8 @@
 import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-
 import * as Progress from "react-native-progress";
-
-import React, { useRef, useState } from "react";
-
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
-
-import { ProgressChart } from "react-native-chart-kit";
-import { Svg, Text as SvgText } from "react-native-svg";
-import { useFocusEffect } from "@react-navigation/native";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import TabLogo from "../../constants/TabLogo";
 import { CustomImages } from "../../assets/CustomImages";
@@ -83,7 +76,9 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
           </View>
         </View>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollableContainer}
+      contentContainerStyle={styles.innerScroallableContainer}
+       showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <View style={styles.topBoxes}>
             {/* Begginer Box */}
@@ -233,6 +228,12 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
 export default HomeTab;
 
 const styles = StyleSheet.create({
+  innerScroallableContainer:{
+
+  },
+  scrollableContainer:{
+    flex:1
+  },
   stressCard: {
     backgroundColor: colors.lottieBlue,
   },
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 16,
-    marginBottom: 32,
+    marginBottom: 100,
   },
   habitMastery: {
     backgroundColor: colors.white,
@@ -372,6 +373,7 @@ const styles = StyleSheet.create({
     width: 190,
     height: 190,
     gap: 7,
+    margin:'auto'
   },
   SleepStyle: {
     width: 180 / 2,
@@ -466,6 +468,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: colors.appBackground,
   },
   imageStyle: {
     width: 187,

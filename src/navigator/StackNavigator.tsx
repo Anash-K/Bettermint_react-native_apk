@@ -33,6 +33,7 @@ import BottomTabStack from "./BottomTabNavigator";
 import LogEmotion from "../screens/LogEmotion";
 import WhatsOneGoodThing from "../screens/WhatsOneGoodThing";
 import LogFocus from "../screens/LogFocus";
+import FreeSubscription from "../screens/FreeSubscription";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -60,6 +61,7 @@ export type StackParams = {
   LogEmotion: undefined;
   WhatsOneGoodThing: undefined;
   LogFocus: undefined;
+  FreeSubscription:undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -86,7 +88,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             />
           ),
         })}
-        initialRouteName="AddingColorfullVeggies"
+        // initialRouteName='BottomTabStack'
       >
         <Stack.Screen
           name="TellUsALittleAboutYou"
@@ -499,6 +501,26 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             header: () => (
               <CustomHeader
                 title="Log Focus"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name='FreeSubscription'
+          component={FreeSubscription}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+              title=""
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ScreenProps } from "../navigator/Stack";
 import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
@@ -46,7 +46,8 @@ const LogStress: React.FC<ScreenProps<"LogStress">> = ({ navigation }) => {
   return (
     <ScrollView
       style={[styles.container, CustomStyle.safeAreaMarginBottom]}
-      contentContainerStyle={styles.contentStyle}
+      contentContainerStyle={[styles.contentStyle]}
+      showsVerticalScrollIndicator={false}
     >
       <View style={styles.content}>
         <CustomEmotionSelector
@@ -112,5 +113,6 @@ const styles = StyleSheet.create({
   buttonStyle: {
     marginHorizontal: 16,
     marginTop: 32,
+    marginBottom: Platform.select({ ios: 20, android: 15 }),
   },
 });

@@ -5,7 +5,7 @@ import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
 import { ScreenProps } from "../navigator/Stack";
 import { useCustomStyle } from "../constants/CustomStyles";
-interface handleOptionSelectType {
+export interface handleOptionSelectType {
   fieldName: string;
   text: string;
 }

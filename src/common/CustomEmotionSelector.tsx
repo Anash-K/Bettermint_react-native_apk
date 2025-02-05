@@ -5,16 +5,20 @@ import {
   StyleSheet,
   Text,
   TextStyle,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
+import { useCustomStyle } from "../constants/CustomStyles";
 
 // Define the type for the options array item (each option in the list)
 interface EmotionOption {
   id: number;
   src: any; // `require` or image URI, so `any` is appropriate here
+  type: string;
+  active: string;
 }
 
 // Define the props for the CustomEmotionSelector component
@@ -43,27 +47,32 @@ const CustomEmotionSelector: React.FC<CustomSelectorProps> = ({
   buttonStyle,
   optionStyle,
 }) => {
+  const CustomStyle = useCustomStyle();
+  console.log(selectedOption);
   return (
-    <View style={[styles.card, outerCardStyle]}>
+    <View style={[styles.card, CustomStyle.CommonCardShadow, outerCardStyle]}>
       <Text style={[styles.question, questionStyle]}>
         {question ?? "Question?"}
       </Text>
       <View style={[styles.optionsContainer, optionContainer]}>
-          {options.map((item) => (
-            <View key={item.id} style={styles.optionItem}>
-              <Image
-                source={item.src}
-                style={styles.imageStyle}
-              />
-            </View>
-          ))}
+        {options.map((item: EmotionOption) => (
+          <TouchableOpacity
+            key={item.id}
+            style={styles.optionItem}
+            onPress={() => onSelect(item.id)}
+          >
+            <Image
+              source={selectedOption == item.id ? item.active : item.src}
+              style={styles.imageStyle}
+            />
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
 };
 
 export default CustomEmotionSelector;
-
 
 const styles = StyleSheet.create({
   scrollViewContent: {
@@ -73,8 +82,8 @@ const styles = StyleSheet.create({
     alignItems: "center", // center the items
   },
   imageStyle: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
   },
   textOption: {
     width: "auto",
@@ -97,11 +106,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
     margin: 8,
     marginHorizontal: 16,
     paddingVertical: 24,
@@ -121,7 +125,7 @@ const styles = StyleSheet.create({
     columnGap: 20,
     paddingHorizontal: 8,
     rowGap: 6,
-    alignItems:'center',
+    alignItems: "center",
   },
   option: {
     flexDirection: "row",

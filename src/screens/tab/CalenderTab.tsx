@@ -1,17 +1,33 @@
-import { Text, View, StyleSheet, ScrollView, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Platform,
+} from "react-native";
 import TabLogo from "../../constants/TabLogo";
-import { Calendar, LocaleConfig } from "react-native-calendars";
+import {
+  Calendar,
+  CalendarContext,
+  CalendarProvider,
+  ExpandableCalendar,
+  LocaleConfig,
+} from "react-native-calendars";
 import { useEffect, useState } from "react";
 import { CustomImages } from "../../assets/CustomImages";
 import { colors } from "../../constants/colors";
 import CustomFont from "../../assets/fonts/customFonts";
 import CustomDay from "../../common/CustomDay";
 import {
+  dateToImageMapOfHomeFuel,
   dateToImageMapOfSleep,
   dateToImageMapOfStress,
   dateToImageMapOfWorkout,
 } from "../../utils/dummyCalenderData";
 import Weeks from "../../constants/Weeks";
+import CalendarHeader from "react-native-calendars/src/calendar/header";
+import MonthYearPicker from "../../constants/CalenderHeader";
 
 // Setup LocaleConfig if you're using custom date formatting
 LocaleConfig.locales["en"] = {
@@ -59,103 +75,128 @@ LocaleConfig.defaultLocale = "en";
 
 const CalenderTab = () => {
   const [selectedMonth, setSelectedMonth] = useState("2024-2"); // Format: 'yyyy-mm'
+  const [date, setDate] = useState(new Date());
 
-  const handleMonthChange = (month) => {
-    console.log(month, "month");
-    setSelectedMonth(month.dateString.slice(0, 7)); // Format month as 'yyyy-mm'
-  };
+  const currentMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}`;
 
+  console.log(currentMonth,"current month")
   useEffect(() => {
-    console.log(selectedMonth, "selected");
-  }, [selectedMonth]);
+    console.log(currentMonth, "selected");
+  }, [currentMonth]);
 
   return (
     <View style={styles.container}>
-      <TabLogo title="Habit Tracking" />
+      <TabLogo
+        title="Habit Tracking"
+        Boxstyle={styles.tabBarStyle}
+        titleStyle={styles.title}
+      />
 
-      <Text>Calendar Screen</Text>
+      <MonthYearPicker date={date} setDate={setDate} />
 
       <ScrollView
         style={styles.calenderBox}
         showsVerticalScrollIndicator={false}
       >
-        {/* Render additional Calendar components here if needed */}
-        <Calendar
-          style={styles.calendar}
-          current={selectedMonth}
-          renderHeader={() => null}
-          firstDay={1}
-          dayComponent={({ date, state }: { date: any; state: string }) => (
-            <CustomDay
-              date={date}
-              state={state}
-              imageSource={dateToImageMapOfStress}
-            />
-          )}
-          customHeader={({ day, stats }) => <Weeks title="Stress Levels" />}
-        />
+        <View style={styles.innerContent}>
+          <Calendar
+            style={styles.calendar}
+            current={currentMonth}
+            renderHeader={() => null}
+            firstDay={1}
+            dayComponent={({ date, state }: { date: any; state: string }) => (
+              <CustomDay
+                date={date}
+                state={state}
+                imageSource={dateToImageMapOfStress}
+              />
+            )}
+            customHeader={({ day, stats }) => <Weeks title="Stress Levels" />}
+          />
 
-        <Calendar
-          style={styles.calendar}
-          current={selectedMonth}
-          renderHeader={() => null}
-          firstDay={1}
-          dayComponent={({ date, state }: { date: any; state: string }) => (
-            <CustomDay
-              date={date}
-              state={state}
-              imageSource={dateToImageMapOfWorkout}
-              themeColor={colors.lottiePink}
-            />
-          )}
-          customHeader={({ day, stats }) => (
-            <Weeks title="Workout - 10 mins" headerColor={colors.lottiePink} />
-          )}
-        />
+          <Calendar
+            style={styles.calendar}
+            current={currentMonth}
+            renderHeader={() => null}
+            firstDay={1}
+            dayComponent={({ date, state }: { date: any; state: string }) => (
+              <CustomDay
+                date={date}
+                state={state}
+                imageSource={dateToImageMapOfWorkout}
+                themeColor={colors.lottiePink}
+              />
+            )}
+            customHeader={({ day, stats }) => (
+              <Weeks
+                title="Workout - 10 mins"
+                headerColor={colors.lottiePink}
+              />
+            )}
+          />
 
-        <Calendar
-          style={styles.calendar}
-          current={selectedMonth}
-          renderHeader={() => null}
-          firstDay={1}
-          dayComponent={({ date, state }: { date: any; state: string }) => (
-            <CustomDay
-              date={date}
-              state={state}
-              imageSource={dateToImageMapOfSleep}
-              themeColor={colors.lottieBlue}
-            />
-          )}
-          customHeader={({ day, stats }) => (
-            <Weeks title="Sleep - 7 hrs" headerColor={colors.lottieBlue} />
-          )}
-        />
-        <Calendar
-          style={styles.calendar}
-          current={selectedMonth}
-          renderHeader={() => null}
-          firstDay={1}
-          dayComponent={({ date, state }: { date: any; state: string }) => (
-            <CustomDay
-              date={date}
-              state={state}
-              imageSource={dateToImageMapOfSleep}
-              themeColor={colors.lottieGreen}
-            />
-          )}
-          customHeader={({ day, stats }) => (
-            <Weeks
-              title="Home Fuel - 3 outside meals/wk"
-              headerColor={colors.lottieGreen}
-            />
-          )}
-        />
+          <Calendar
+            style={styles.calendar}
+            current={currentMonth}
+            renderHeader={() => null}
+            firstDay={1}
+            dayComponent={({ date, state }: { date: any; state: string }) => (
+              <CustomDay
+                date={date}
+                state={state}
+                imageSource={dateToImageMapOfSleep}
+                themeColor={colors.lottieBlue}
+              />
+            )}
+            customHeader={({ day, stats }) => (
+              <Weeks title="Sleep - 7 hrs" headerColor={colors.lottieBlue} />
+            )}
+          />
+          <Calendar
+            style={styles.calendar}
+            current={currentMonth}
+            renderHeader={() => null}
+            firstDay={1}
+            dayComponent={({ date, state }: { date: any; state: string }) => (
+              <CustomDay
+                date={date}
+                state={state}
+                imageSource={dateToImageMapOfHomeFuel}
+                themeColor={colors.lottieGreen}
+              />
+            )}
+            customHeader={({ day, stats }) => (
+              <Weeks
+                title="Home Fuel - 3 outside meals/wk"
+                headerColor={colors.lottieGreen}
+              />
+            )}
+          />
+        </View>
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  title: {
+    marginTop: Platform.select({ android: 30 }),
+  },
+  tabBarStyle: {
+    height: Platform.select({ ios: 170, android: 150 }),
+    justifyContent: Platform.select({ ios: "center", android: 'flex-start' }),
+  },
+  calendarTitleBox: {
+    backgroundColor: colors.white,
+    marginHorizontal: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 13,
+    marginTop: -30,
+  },
+  calendarTitle: {},
+  innerContent: {
+    marginBottom: 100,
+  },
   dateText: {
     fontFamily: CustomFont.Urbanist400,
     fontSize: 14,
@@ -186,9 +227,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
   },
-  calenderBox: {},
+  calenderBox: {
+    marginTop: 24,
+  },
   container: {
     flex: 1, // Make the container take up all available space
+    backgroundColor: colors.appBackground,
   },
   calendar: {
     // ...StyleSheet.absoluteFillObject,

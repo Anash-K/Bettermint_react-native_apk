@@ -135,17 +135,28 @@ const WhatKingOfFoodYouEat: React.FC<ScreenProps<"WhatKingOfFoodYouEat">> = ({
               <DrawerButton
                 key={food}
                 text={food}
+                outBoxStyle={styles.outterBox}
                 buttonStyle={styles.commonButtonStyle}
                 textStyle={
                   [
                     styles.btnText,
                     selectedFood[food as keyof FoodYouEatState] && {
-                      color: colors.white,
+                      color: colors.primaryLight,
                     },
                   ] as any
                 }
                 customIcon={
                   <WhiteDot
+                    customStyle={[
+                      !!selectedFood[food as keyof FoodYouEatState] && {
+                        borderColor: colors.primaryLight,
+                      },
+                    ] as any}
+                    innerDotStyle={[
+                      !!selectedFood[food as keyof FoodYouEatState] && {
+                        backgroundColor: colors.primaryLight,
+                      },
+                    ] as any}
                     isFocus={!!selectedFood[food as keyof FoodYouEatState]}
                   />
                 }
@@ -172,6 +183,10 @@ const WhatKingOfFoodYouEat: React.FC<ScreenProps<"WhatKingOfFoodYouEat">> = ({
 export default WhatKingOfFoodYouEat;
 
 const styles = StyleSheet.create({
+  outterBox:{
+    borderWidth:0,
+    paddingHorizontal:16
+  },
   smallDeviceStyle: {
     marginBottom: Platform.select({ ios: 15, android: 40 }),
   },
@@ -268,8 +283,12 @@ const styles = StyleSheet.create({
   commonButtonStyle: {
     width: "100%",
     justifyContent: "space-between",
-    paddingVertical: 18.5,
-    paddingRight: 19,
+    paddingVertical: 16,
+    paddingHorizontal: 0,
     columnGap: 19,
+    backgroundColor: "transparent",
+    borderBottomColor:colors.appBackground,
+    borderBottomWidth:0.5,
+    borderRadius:0
   },
 });

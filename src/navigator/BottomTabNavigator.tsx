@@ -43,7 +43,7 @@ const TabBarIcon = ({
   icon: any;
   showDot?: boolean;
   focused?: boolean;
-  TabStyle?: ViewStyle|ViewStyle[];
+  TabStyle?: ViewStyle | ViewStyle[];
 }) => {
   return (
     <View style={[styles.tabIconBox, focused && styles.focusedIcon, TabStyle]}>
@@ -108,6 +108,7 @@ const BottomTabStack: React.FC<ScreenProps<"BottomTabStack">> = () => {
         borderColor={colors.bottomTabBorderColor}
         borderWidth={0.5}
         circleWidth={60}
+        
         height={Platform.select({ ios: bottom + 80, android: bottom + 70 })}
         screenOptions={{
           headerShown: false,
@@ -163,7 +164,7 @@ export default BottomTabStack;
 
 const styles = StyleSheet.create({
   centerTabFocus: {
-    borderColor: '#58a3a440',
+    borderColor: "#58a3a440",
   },
   centerTab: {
     borderWidth: 4,
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
   },
   tabbarItem: {
     marginBottom: Platform.select({ ios: 25 }),
-    marginHorizontal:0
+    marginHorizontal: 0,
   },
   centerTabIcon: {
     backgroundColor: colors.primaryLight,
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     bottom: 23,
     borderWidth: 4,
-    borderColor: 'transparent',
+    borderColor: "transparent",
   },
   logTabBar: {
     marginTop: -20,
