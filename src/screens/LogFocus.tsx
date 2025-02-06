@@ -1,4 +1,12 @@
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
@@ -29,35 +37,37 @@ const LogFocus = () => {
   const handleNextNav = useCallback(() => {}, []);
 
   return (
-    <ScrollView
-      style={[styles.container]}
-      contentContainerStyle={[
-        styles.innerScrollContent,
-        CustomStyle.safeAreaMarginBottom,
-      ]}
-    >
-      <Text style={[CustomStyle.title, styles.title]}>
-        Taking time out for doing things that make you feel like you lived a
-        fuller life.
-      </Text>
-      <View style={styles.contentWrapper}>
-        <View style={[styles.content, CustomStyle.CommonCardShadow]}>
-          <Text style={styles.addressQuestion}>What did you do today?</Text>
-          <CustomAddressBar height={108} />
-        </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <ScrollView
+        style={[styles.container]}
+        contentContainerStyle={[
+          styles.innerScrollContent,
+          CustomStyle.safeAreaMarginBottom,
+        ]}
+      >
+        <Text style={[CustomStyle.title, styles.title]}>
+          Taking time out for doing things that make you feel like you lived a
+          fuller life.
+        </Text>
+        <View style={styles.contentWrapper}>
+          <View style={[styles.content, CustomStyle.CommonCardShadow]}>
+            <Text style={styles.addressQuestion}>What did you do today?</Text>
+            <CustomAddressBar height={108} />
+          </View>
 
-        <CustomSelector
-          question="How much time did you spend on this?"
-          outerCardStyle={styles.card}
-          CustomOptions={{ startingNumber: 1, endingNumber: 20 }}
-          onSelect={(text) =>
-            handleOptionSelect({ fieldName: "timeSpend", text })
-          }
-          selectedOption={dailyActivity.timeSpend}
-        />
-      </View>
-      <CustomButton text="Save" onPress={handleNextNav} />
-    </ScrollView>
+          <CustomSelector
+            question="How much time did you spend on this?"
+            outerCardStyle={styles.card}
+            CustomOptions={{ startingNumber: 1, endingNumber: 20 }}
+            onSelect={(text) =>
+              handleOptionSelect({ fieldName: "timeSpend", text })
+            }
+            selectedOption={dailyActivity.timeSpend}
+          />
+        </View>
+        <CustomButton text="Save" onPress={handleNextNav} />
+      </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 

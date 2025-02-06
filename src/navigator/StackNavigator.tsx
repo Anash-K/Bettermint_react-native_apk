@@ -34,6 +34,7 @@ import LogEmotion from "../screens/LogEmotion";
 import WhatsOneGoodThing from "../screens/WhatsOneGoodThing";
 import LogFocus from "../screens/LogFocus";
 import FreeSubscription from "../screens/FreeSubscription";
+import ChangePassword from "../screens/ChangePassword";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -62,6 +63,7 @@ export type StackParams = {
   WhatsOneGoodThing: undefined;
   LogFocus: undefined;
   FreeSubscription:undefined;
+  ChangePassword:undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -71,7 +73,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
   const handlePress = useCallback(() => {}, []);
   return (
     <>
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar barStyle={"dark-content"} backgroundColor={'red'} />
       <Stack.Navigator
         screenOptions={({ navigation }) => ({
           contentStyle: styles.contentPagesStyle,
@@ -79,6 +81,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           headerTitleStyle: styles.headerTitleStyle,
           headerTitleAlign: "left",
           headerShadowVisible: false,
+          statusBarStyle:colors.primary,
           headerLeft: () => (
             <CustomButton
               icon={CustomImages.blackDropDownIcon}
@@ -88,7 +91,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             />
           ),
         })}
-        // initialRouteName='BottomTabStack'
+        initialRouteName='BottomTabStack'
       >
         <Stack.Screen
           name="TellUsALittleAboutYou"
@@ -521,6 +524,26 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             header: () => (
               <CustomHeader
               title=""
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+      <Stack.Screen
+          name='ChangePassword'
+          component={ChangePassword}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+              title="Change Password"
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}

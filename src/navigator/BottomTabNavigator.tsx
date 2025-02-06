@@ -43,7 +43,7 @@ const TabBarIcon = ({
   icon: any;
   showDot?: boolean;
   focused?: boolean;
-  TabStyle?: ViewStyle | ViewStyle[];
+  TabStyle?: ViewStyle | ViewStyle[] | any;
 }) => {
   return (
     <View style={[styles.tabIconBox, focused && styles.focusedIcon, TabStyle]}>
@@ -101,14 +101,13 @@ const BottomTabStack: React.FC<ScreenProps<"BottomTabStack">> = () => {
 
   return (
     <React.Fragment>
-      <StatusBar barStyle={"dark-content"} />
+      <StatusBar barStyle={'dark-content'} />
       <CurvedBottomBar.Navigator
         initialRouteName="HomeTab"
         bgColor={colors.white}
         borderColor={colors.bottomTabBorderColor}
         borderWidth={0.5}
         circleWidth={60}
-        
         height={Platform.select({ ios: bottom + 80, android: bottom + 70 })}
         screenOptions={{
           headerShown: false,
@@ -116,12 +115,15 @@ const BottomTabStack: React.FC<ScreenProps<"BottomTabStack">> = () => {
         }}
         borderTopLeftRight={0.5}
         renderCircle={({ selectedTab, navigate }) => (
-          <Pressable onPress={() => navigate("LogTab")}>
+          <Pressable
+            style={[
+              styles.centerIconBox,
+              selectedTab == "LogTab" && styles.buttonFocus,
+            ]}
+            onPress={() => navigate("LogTab")}
+          >
             <TabBarIcon
-              TabStyle={[
-                styles.centerTabIcon,
-                selectedTab == "LogTab" && styles.centerTabFocus,
-              ]}
+              TabStyle={[styles.centerTabIcon]}
               size={16}
               icon={CustomImages.add}
               color={colors.white}
@@ -163,6 +165,17 @@ const BottomTabStack: React.FC<ScreenProps<"BottomTabStack">> = () => {
 export default BottomTabStack;
 
 const styles = StyleSheet.create({
+  buttonFocus: {
+    borderColor: colors.lightBorderColor,
+  },
+  centerIconBox: {
+    borderWidth: 4,
+    borderRadius: 50,
+    bottom: Platform.select({ios:6,android:15}),
+    height: 56,
+    width: 56,
+    borderColor: "transparent",
+  },
   centerTabFocus: {
     borderColor: "#58a3a440",
   },
@@ -177,13 +190,10 @@ const styles = StyleSheet.create({
   centerTabIcon: {
     backgroundColor: colors.primaryLight,
     borderRadius: 40,
-    height: 50,
-    width: 50,
     justifyContent: "center",
     alignItems: "center",
-    bottom: 23,
-    borderWidth: 4,
-    borderColor: "transparent",
+    height: 48,
+    width: 48,
   },
   logTabBar: {
     marginTop: -20,

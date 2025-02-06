@@ -5,6 +5,7 @@ import MainStack from "./StackNavigator";
 import BottomTabStack from "./BottomTabNavigator";
 import AuthStack from "./AuthStack";
 import { useSelector } from "react-redux";
+import { colors } from "../constants/colors";
 
 export type RootStackParams = {
   AuthStack: undefined;
@@ -19,7 +20,7 @@ const RootScreen: React.FC<RootStackParams> = () => {
 
   return (
     <React.Fragment>
-      <StatusBar barStyle={'default'} backgroundColor={"#F2F7F6"} />
+      <StatusBar barStyle={"light-content"} backgroundColor={colors.primary} />
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
@@ -30,7 +31,6 @@ const RootScreen: React.FC<RootStackParams> = () => {
         ) : (
           <>
             <Stack.Screen name="MainStack" component={MainStack} />
-
           </>
         )}
       </Stack.Navigator>

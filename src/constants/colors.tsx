@@ -28,6 +28,7 @@ export const colors = {
   grayTertiary: '#D6DAD9', // Corrected spelling  
   unitColor:'#4AABC9',
   silverGray:'#E3EBE9',
-  menuTabBackground:'#E4F0F0'
+  menuTabBackground:'#E4F0F0',
+  lightSilverGray:'#DDE9EA'
   
 } as const;

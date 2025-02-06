@@ -22,6 +22,8 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
   const { steps, numberOfWorkout } = useSelector(
     (state: RootState) => state.userDetails
   );
+
+  const [toxicState, setToxicState] = useState({});
   const initialValues: initialValues = {
     week: 90,
     month: 75,
@@ -41,9 +43,49 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
     useShadowColorFromDataset: false,
   };
 
+  setTimeout(() => {
+    setToxicState({
+      movementText: {
+        top: 10,
+        right: -17,
+        transform: [{ rotateZ: "45deg" }],
+        color: colors.lottiePink,
+        opacity: 1,
+      },
+      nourishText: {
+        bottom: 13,
+        right: -7,
+        transform: [{ rotateZ: "-46deg" }],
+        color: colors.lottieGreen,
+        opacity: 1,
+      },
+      wellbeingText: {
+        bottom: 10,
+        left: -15,
+        transform: [{ rotateZ: "45deg" }],
+        color: colors.lottieYellow,
+        opacity: 1,
+      },
+      titleLottieText: {
+        fontSize: 14,
+        lineHeight: 16.8,
+        fontFamily: CustomFont.Urbanist700,
+        position: "absolute",
+      },
+      sleepText: {
+        top: 10,
+        left: -5,
+        transform: [{ rotateZ: "-45deg" }],
+        color: colors.lottieBlue,
+        opacity: 1,
+      },
+    });
+    // ToxicStyle = ;
+  }, 0);
+
   return (
     <View style={styles.container}>
-      <StatusBar barStyle={'light-content'} backgroundColor={colors.primary}/>
+      <StatusBar barStyle={"light-content"} backgroundColor={colors.primary} />
       <TabLogo isLogo={true} />
       <View style={styles.innerContainer}>
         <View style={styles.topHeader}>
@@ -76,9 +118,11 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
           </View>
         </View>
       </View>
-      <ScrollView style={styles.scrollableContainer}
-      contentContainerStyle={styles.innerScroallableContainer}
-       showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollableContainer}
+        contentContainerStyle={styles.innerScroallableContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.contentContainer}>
           <View style={styles.topBoxes}>
             {/* Begginer Box */}
@@ -90,7 +134,7 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
 
               <View style={styles.LottieBox}>
                 <View>
-                  <Text style={[styles.sleepText, styles.titleLottieText]}>
+                  <Text style={[styles.titleLottieText, toxicState.sleepText]}>
                     Sleep
                   </Text>
                   <FastImage
@@ -99,7 +143,9 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
                   />
                 </View>
                 <View>
-                  <Text style={[styles.movementText, styles.titleLottieText]}>
+                  <Text
+                    style={[styles.titleLottieText, toxicState.movementText]}
+                  >
                     Movement
                   </Text>
                   <FastImage
@@ -108,7 +154,9 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
                   />
                 </View>
                 <View>
-                  <Text style={[styles.wellbeingText, styles.titleLottieText]}>
+                  <Text
+                    style={[styles.titleLottieText, toxicState.wellbeingText]}
+                  >
                     Wellbeing
                   </Text>
                   <FastImage
@@ -117,7 +165,9 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
                   />
                 </View>
                 <View>
-                  <Text style={[styles.nourishText, styles.titleLottieText]}>
+                  <Text
+                    style={[styles.titleLottieText, toxicState.nourishText]}
+                  >
                     Nourish
                   </Text>
 
@@ -228,11 +278,9 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
 export default HomeTab;
 
 const styles = StyleSheet.create({
-  innerScroallableContainer:{
-
-  },
-  scrollableContainer:{
-    flex:1
+  innerScroallableContainer: {},
+  scrollableContainer: {
+    flex: 1,
   },
   stressCard: {
     backgroundColor: colors.lottieBlue,
@@ -340,6 +388,7 @@ const styles = StyleSheet.create({
     lineHeight: 16.8,
     fontFamily: CustomFont.Urbanist700,
     position: "absolute",
+    opacity: 0,
   },
   sleepText: {
     top: 10,
@@ -373,7 +422,7 @@ const styles = StyleSheet.create({
     width: 190,
     height: 190,
     gap: 7,
-    margin:'auto'
+    margin: "auto",
   },
   SleepStyle: {
     width: 180 / 2,

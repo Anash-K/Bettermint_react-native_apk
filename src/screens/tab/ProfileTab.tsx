@@ -100,7 +100,11 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = ({ navigation }) => {
             <MenuTab title={"Terms & Privacy"} icon={CustomImages.terms} />
           </MenuWrapper>
           <MenuWrapper title="Account">
-            <MenuTab title={"Change Password"} icon={CustomImages.password} />
+            <MenuTab
+              title={"Change Password"}
+              icon={CustomImages.password}
+              OnPressHandler={() => handleNav({ screenName: "ChangePassword" })}
+            />
             <MenuTab title={"Delete Account"} icon={CustomImages.delete} />
             <MenuTab title={"Logout"} icon={CustomImages.logout} />
           </MenuWrapper>

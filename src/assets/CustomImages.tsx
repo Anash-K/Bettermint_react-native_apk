@@ -83,4 +83,7 @@ export const CustomImages = {
   logout:require("./Images/logout.png"),
   freeSubBackground:require("./Images/freeSubImage.png"),
   referCodeBg:require("./Images/referCodeBg.png"),
+  copyIcon:require("./Images/copyIcon.png"),
+  circularTop:require("./Images/circularTop.png"),
+  liearGradientLine:require("./Images/liearGradientLine.png"),
 };

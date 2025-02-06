@@ -1,4 +1,11 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
@@ -11,23 +18,24 @@ const WhatsOneGoodThing: React.FC<ScreenProps<"WhatsOneGoodThing">> = ({
   navigation,
 }) => {
   const CustomStyle = useCustomStyle();
-  
 
   const handleNextNav = useCallback(() => {
     navigation.navigate("LogFocus");
   }, []);
 
   return (
-    <View style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
-      <Text style={[CustomStyle.title, styles.title]}>
-        What's one good thing that happened today?
-      </Text>
-      <View style={styles.content}>
-        <CustomAddressBar />
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
+        <Text style={[CustomStyle.title, styles.title]}>
+          What's one good thing that happened today?
+        </Text>
+        <View style={styles.content}>
+          <CustomAddressBar />
+        </View>
 
-      <CustomButton text="Save" onPress={handleNextNav} />
-    </View>
+        <CustomButton text="Save" onPress={handleNextNav} />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
