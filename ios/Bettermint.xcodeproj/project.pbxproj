@@ -22,6 +22,7 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		93DF7133C83C4E69851648A9 /* Urbanist-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CCC5FAAC29604FC59C25A1DA /* Urbanist-Bold.ttf */; };
 		9AC18C6E7BA148639F97040D /* Urbanist-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8A0957399174EB48AA596B9 /* Urbanist-Medium.ttf */; };
+		C70E6FB8034F451E98792D34 /* Urbanist-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A6014A077FAD4C898535AC85 /* Urbanist-ExtraBoldItalic.ttf */; };
 		DC62CE09B72740C79F7E6AA7 /* Urbanist-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1EDB6766BDF4F05926881CB /* Urbanist-ExtraBold.ttf */; };
 		E5B9F2556FC94EF6A0D9FC9B /* customFonts.jsx in Resources */ = {isa = PBXBuildFile; fileRef = 27793FA26EF4465B8969E887 /* customFonts.jsx */; };
 		EAE946B538D74041B8DDD262 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A10A8BE896746BE96B6A48F /* BootSplash.storyboard */; };
@@ -62,6 +63,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Bettermint/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Bettermint-BettermintTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bettermint-BettermintTests.release.xcconfig"; path = "Target Support Files/Pods-Bettermint-BettermintTests/Pods-Bettermint-BettermintTests.release.xcconfig"; sourceTree = "<group>"; };
 		A1EDB6766BDF4F05926881CB /* Urbanist-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-ExtraBold.ttf"; path = "../src/assets/fonts/Urbanist-ExtraBold.ttf"; sourceTree = "<group>"; };
+		A6014A077FAD4C898535AC85 /* Urbanist-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-ExtraBoldItalic.ttf"; path = "../src/assets/fonts/Urbanist-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		B2DAE489819A48CFA161972C /* TwemojiMozilla.woff2 */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = TwemojiMozilla.woff2; path = "../node_modules/react-native-international-phone-number/lib/assets/fonts/TwemojiMozilla.woff2"; sourceTree = "<group>"; };
 		BF7B2380D1B5401CB99DE5D7 /* Urbanist-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Urbanist-Light.ttf"; path = "../src/assets/fonts/Urbanist-Light.ttf"; sourceTree = "<group>"; };
 		CA03B14431424DA69E7C7C75 /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = Bettermint/Colors.xcassets; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				A1EDB6766BDF4F05926881CB /* Urbanist-ExtraBold.ttf */,
 				27793FA26EF4465B8969E887 /* customFonts.jsx */,
 				B2DAE489819A48CFA161972C /* TwemojiMozilla.woff2 */,
+				A6014A077FAD4C898535AC85 /* Urbanist-ExtraBoldItalic.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				DC62CE09B72740C79F7E6AA7 /* Urbanist-ExtraBold.ttf in Resources */,
 				E5B9F2556FC94EF6A0D9FC9B /* customFonts.jsx in Resources */,
 				3D91C211FA164194B1EB563C /* TwemojiMozilla.woff2 in Resources */,
+				C70E6FB8034F451E98792D34 /* Urbanist-ExtraBoldItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

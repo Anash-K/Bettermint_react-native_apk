@@ -1,60 +1,149 @@
-import {Platform, StyleSheet, View} from 'react-native';
-import CustomInput from '../common/CustomInput';
-import React, {useCallback, useState} from 'react';
-import CustomButton from '../common/CustomButton';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import { ScreenProps } from '../navigator/Stack';
+import {
+  Keyboard,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import CustomInput from "../common/CustomInput";
+import React, { useCallback, useState } from "react";
+import CustomButton from "../common/CustomButton";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ScreenProps } from "../navigator/Stack";
+import { Controller, useForm } from "react-hook-form";
+import { useCustomStyle } from "../constants/CustomStyles";
 
-const ChangePassword: React.FC<ScreenProps<'ChangePassword'>> = ({
+interface Inputs {
+  "Old Password": string;
+  "New Password": string;
+  "Confirm New Password": string;
+}
+
+const ChangePassword: React.FC<ScreenProps<"ChangePassword">> = ({
   navigation,
 }) => {
-  const [test1,setTest1] = useState("");
-  const [test2,setTest2] = useState("");
-  const [test3,setTest3] = useState("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    getValues,
+    control,
+    setValue,
+    setError,
+    formState: { errors },
+  } = useForm<Inputs>();
 
-  const handleChange = useCallback(() => {}, []);
+  const onSubmit = (data: Inputs) => {
+    if (data["New Password"] !== data["Confirm New Password"]) {
+      setError("Confirm New Password", { message: "Passwords do not match" });
+      return;
+    }
+    console.log("Password changed:", data);
+    // Implement password change logic here
+  };
+
+  const CustomStyle = useCustomStyle();
 
   const handlePress = useCallback(() => {
     navigation.goBack();
   }, []);
   const insets = useSafeAreaInsets();
   return (
-    <View
-      style={[
-        styles.container,
-        {marginBottom: Platform.select({ios: insets.bottom})},
-      ]}>
-      <View style={{flexGrow: 1}}>
-        <CustomInput
-          label="Old Password"
-          onChange={(val)=> setTest1(val)}
-          isPassword={true}
-          inputConfigurations={{value:test1}}
-        />
-        <CustomInput
-          label="New Password"
-          onChange={(val)=> setTest2(val)}
-          isPassword={true}
-          inputConfigurations={{value:test2}}
-        />
-        <CustomInput
-          label="Confirm New Password"
-          onChange={(val)=> setTest3(val)}
-          isPassword={true}
-          inputConfigurations={{value:test3}}
-        />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View
+        style={[
+          styles.container,
+          { marginBottom: Platform.select({ ios: insets.bottom }) },
+        ]}
+      >
+        <View style={styles.content}>
+          <Controller
+            control={control}
+            name="Old Password"
+            rules={{ required: "Old Password is required" }}
+            render={({ field: { onChange, value } }) => (
+              <CustomInput
+                label="Old Password"
+                onChange={onChange}
+                value={value}
+                isPassword={true}
+                inputConfigurations={{
+                  value: value,
+                  onChangeText: onChange,
+                }}
+              />
+            )}
+          />
+          {errors["Old Password"] && (
+            <Text style={CustomStyle.errorMessage}>
+              {errors?.["Old Password"]?.message}
+            </Text>
+          )}
+          <Controller
+            control={control}
+            name="New Password"
+            rules={{ required: "New Password is required" }}
+            render={({ field: { onChange, value } }) => (
+              <CustomInput
+                label="New Password"
+                onChange={onChange}
+                value={value}
+                isPassword={true}
+                inputConfigurations={{
+                  value: value,
+                  onChangeText: onChange,
+                }}
+              />
+            )}
+          />
+          {errors["New Password"] && (
+            <Text style={CustomStyle.errorMessage}>
+              {errors?.["New Password"]?.message}
+            </Text>
+          )}
+          <Controller
+            control={control}
+            name="Confirm New Password"
+            rules={{
+              required: "Confirm Password is required",
+              validate: (value) =>
+                value === getValues('New Password') || "Passwords do not match",
+            }}
+            render={({ field: { onChange, value } }) => (
+              <CustomInput
+                label="Confirm New Password"
+                onChange={onChange}
+                value={value}
+                isPassword={true}
+                inputConfigurations={{
+                  value: value,
+                  onChangeText: onChange,
+                }}
+              />
+            )}
+          />
+          {errors["Confirm New Password"] && (
+            <Text style={CustomStyle.errorMessage}>
+              {errors?.["Confirm New Password"]?.message}
+            </Text>
+          )}
+        </View>
+        <CustomButton text="Change password" onPress={handleSubmit(onSubmit)} />
       </View>
-      <CustomButton text="Change password" onPress={handlePress} />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 export default ChangePassword;
 
 const styles = StyleSheet.create({
+  content: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     padding: 16,
-    paddingBottom: Platform.select({android: 40}),
+    paddingBottom: Platform.select({ android: 40 }),
   },
 });

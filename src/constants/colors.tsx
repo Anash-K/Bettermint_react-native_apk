@@ -29,6 +29,10 @@ export const colors = {
   unitColor:'#4AABC9',
   silverGray:'#E3EBE9',
   menuTabBackground:'#E4F0F0',
-  lightSilverGray:'#DDE9EA'
+  lightSilverGray:'#DDE9EA',
+  blackPrimary:'#292D32',
+  silver:'#8A909B',
+  blackSecondary:'#18171C',
+  lightblue:'#E0F2F2'
   
 } as const;

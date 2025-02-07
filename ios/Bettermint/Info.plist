@@ -31,16 +31,36 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-		<key>NSAppleMusicUsageDescription</key>
+	<key>NSAppleMusicUsageDescription</key>
 	<string>This app requires access to convert text to speech</string>
 	<key>NSCameraUsageDescription</key>
 	<string>The app requires access to the camera to capture photos or videos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>The app requires access to your photo library to select images or videos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>FontAwesome6_Brands.ttf</string>
+		<string>FontAwesome6_Regular.ttf</string>
+		<string>FontAwesome6_Solid.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>Zocial.ttf</string>
+		<string>Fontisto.ttf</string>
+		<string>Urbanist-ExtraBoldItalic.ttf</string>
 		<string>HedvigLettersSerif-Regular.ttf</string>
 		<string>Urbanist-Bold.ttf</string>
 		<string>Urbanist-Light.ttf</string>
@@ -48,6 +68,7 @@
 		<string>Urbanist-Regular.ttf</string>
 		<string>Urbanist-SemiBold.ttf</string>
 		<string>Urbanist-ExtraBold.ttf</string>
+
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>BootSplash</string>
@@ -66,6 +87,6 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
+	<false/>
 </dict>
 </plist>

@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar, StyleSheet } from "react-native";
+import { Image, StatusBar, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useCallback } from "react";
 import { ScreenProps } from "./Stack";
 import ProvideYourMobileNumber from "../screens/ProvideYourMobileNumber";
@@ -35,6 +35,12 @@ import WhatsOneGoodThing from "../screens/WhatsOneGoodThing";
 import LogFocus from "../screens/LogFocus";
 import FreeSubscription from "../screens/FreeSubscription";
 import ChangePassword from "../screens/ChangePassword";
+import EditProfile from "../screens/EditProfile";
+import ExclusiveFitness from "../screens/ExclusiveFitness";
+//@ts-ignore
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import EvilIcons from "react-native-vector-icons/EvilIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -62,8 +68,10 @@ export type StackParams = {
   LogEmotion: undefined;
   WhatsOneGoodThing: undefined;
   LogFocus: undefined;
-  FreeSubscription:undefined;
-  ChangePassword:undefined;
+  FreeSubscription: undefined;
+  ChangePassword: undefined;
+  EditProfile: undefined;
+  ExclusiveFitness: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -73,7 +81,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
   const handlePress = useCallback(() => {}, []);
   return (
     <>
-      <StatusBar barStyle={"dark-content"} backgroundColor={'red'} />
+      <StatusBar barStyle={"dark-content"} backgroundColor={"red"} />
       <Stack.Navigator
         screenOptions={({ navigation }) => ({
           contentStyle: styles.contentPagesStyle,
@@ -81,7 +89,6 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           headerTitleStyle: styles.headerTitleStyle,
           headerTitleAlign: "left",
           headerShadowVisible: false,
-          statusBarStyle:colors.primary,
           headerLeft: () => (
             <CustomButton
               icon={CustomImages.blackDropDownIcon}
@@ -91,7 +98,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             />
           ),
         })}
-        initialRouteName='BottomTabStack'
+        initialRouteName="BottomTabStack"
       >
         <Stack.Screen
           name="TellUsALittleAboutYou"
@@ -517,13 +524,13 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           })}
         />
         <Stack.Screen
-          name='FreeSubscription'
+          name="FreeSubscription"
           component={FreeSubscription}
           options={({ navigation }) => ({
             headerTitle: "",
             header: () => (
               <CustomHeader
-              title=""
+                title=""
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}
@@ -536,14 +543,14 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             ),
           })}
         />
-      <Stack.Screen
-          name='ChangePassword'
+        <Stack.Screen
+          name="ChangePassword"
           component={ChangePassword}
           options={({ navigation }) => ({
             headerTitle: "",
             header: () => (
               <CustomHeader
-              title="Change Password"
+                title="Change Password"
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}
@@ -551,6 +558,58 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
                     iconStyle={styles.backArrowIcon}
                     onPress={() => navigation.goBack()}
                   />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Edit Profile"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+                rightComponent={
+                  <TouchableOpacity
+                    style={styles.IconButton}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <MaterialIcons
+                      name="done"
+                      size={32}
+                      color={colors.primary}
+                    />
+                  </TouchableOpacity>
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="ExclusiveFitness"
+          component={ExclusiveFitness}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title=""
+                leftComponent={
+                  <TouchableOpacity
+                    style={styles.IconButton}
+                    onPress={() => navigation.goBack()}
+                  >
+                    <AntDesign name="close" size={32} color={colors.primary} />
+                  </TouchableOpacity>
                 }
               />
             ),
@@ -564,6 +623,26 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
 export default MainStack;
 
 const styles = StyleSheet.create({
+  crossIcon: {
+    width: 22,
+    height: 22,
+  },
+  crossButton: {
+    borderWidth: 0,
+    backgroundColor: "transparent",
+    padding: 5,
+  },
+  IconButton: {
+    padding: 5,
+  },
+  tickIcon: {
+    width: 25,
+    height: 20,
+    tintColor: colors.primary,
+  },
+  tickButtonStyle: {
+    backgroundColor: "transparent",
+  },
   headerTitleStyle: {
     fontFamily: CustomFont.Urbanist700,
     fontSize: 20,

@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import CustomButton from "../common/CustomButton";
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScreenProps } from "../navigator/Stack";
 import { gender, logout } from "../redux/slices/authSlice";
@@ -32,7 +32,7 @@ const dropdownItems = [
   { title: "Other" },
 ];
 
-const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
+const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = memo(({
   navigation,
 }) => {
   const { token } = useSelector((state: any) => state.auth);
@@ -189,7 +189,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = ({
       />
     </ScrollView>
   );
-};
+});
 
 export default TellUsALittleAboutYou;
 

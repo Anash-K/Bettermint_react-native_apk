@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import React, { memo, useCallback } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { colors } from "./colors";
 import CustomImageHandler from "../common/CustomImageHandler";
@@ -7,7 +7,11 @@ import CustomButton from "../common/CustomButton";
 import CustomFont from "../assets/fonts/customFonts";
 import { useCustomStyle } from "./CustomStyles";
 
-const ProfileCard = memo(() => {
+interface ProfileCardType {
+  onPressEdit: () => void;
+}
+
+const ProfileCard: React.FC<ProfileCardType> = memo(({ onPressEdit }) => {
   const handleEditProfile = useCallback(() => {}, []);
   const CustomStyle = useCustomStyle();
   return (
@@ -24,7 +28,7 @@ const ProfileCard = memo(() => {
             text="Edit profile"
             textStyle={styles.editProfileText}
             buttonStyle={styles.editProfileButton}
-            onPress={handleEditProfile}
+            onPress={onPressEdit}
           />
         </View>
       </View>
