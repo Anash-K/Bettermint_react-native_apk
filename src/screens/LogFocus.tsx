@@ -11,9 +11,9 @@ import { useCustomStyle } from "../constants/CustomStyles";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
 import { useCallback, useState } from "react";
+import { handleOptionSelectType } from "./NutritionAssessmentDetails";
 import CustomAddressBar from "../common/CustomAddressBar";
 import CustomSelector from "../common/CustomSelector";
-import { handleOptionSelectType } from "./NutritionAssessmentDetails";
 import CustomButton from "../common/CustomButton";
 
 const LogFocus = () => {

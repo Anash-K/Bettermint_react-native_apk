@@ -1,9 +1,9 @@
 import React from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import FastImage from "react-native-fast-image";
-import { colors } from "../constants/colors"; // Import colors from your project
-import CustomFont from "../assets/fonts/customFonts";
-import { useCustomStyle } from "../constants/CustomStyles";
+import { colors } from "../../constants/colors"; // Import colors from your project
+import CustomFont from "../../assets/fonts/customFonts";
+import { useCustomStyle } from "../../constants/CustomStyles";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface CustomHeaderProps {

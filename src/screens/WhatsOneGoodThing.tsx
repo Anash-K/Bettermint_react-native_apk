@@ -10,9 +10,9 @@ import { useCustomStyle } from "../constants/CustomStyles";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
 import React, { useCallback, useState } from "react";
+import { ScreenProps } from "../navigator/Stack";
 import CustomAddressBar from "../common/CustomAddressBar";
 import CustomButton from "../common/CustomButton";
-import { ScreenProps } from "../navigator/Stack";
 
 const WhatsOneGoodThing: React.FC<ScreenProps<"WhatsOneGoodThing">> = ({
   navigation,

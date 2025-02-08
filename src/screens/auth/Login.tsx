@@ -11,11 +11,11 @@ import React, { useCallback } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "../../navigator/Stack";
 import { useCustomStyle } from "../../constants/CustomStyles";
-import CustomInput from "../../common/CustomInput";
 import { CustomImages } from "../../assets/CustomImages";
-import CustomButton from "../../common/CustomButton";
 import { colors } from "../../constants/colors";
 import CustomFont from "../../assets/fonts/customFonts";
+import CustomInput from "../../common/CustomInput";
+import CustomButton from "../../common/CustomButton";
 
 const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
   const handleChange = useCallback(() => {}, []);

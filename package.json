@@ -35,6 +35,7 @@
     "react-native-curved-bottom-bar": "^3.4.1",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.22.0",
+    "react-native-gifted-charts": "^1.4.56",
     "react-native-image-crop-picker": "^0.42.0",
     "react-native-international-phone-number": "^0.8.5",
     "react-native-linear-gradient": "^2.8.3",

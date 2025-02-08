@@ -4,11 +4,11 @@ import React from "react";
 import { ScreenProps } from "./Stack";
 import { StyleSheet } from "react-native";
 import { colors } from "../constants/colors";
-import CustomButton from "../common/CustomButton";
 import { CustomImages } from "../assets/CustomImages";
 import Login from "../screens/auth/Login";
 import SignUp from "../screens/auth/SignUp";
 import ForgotPassword from "../screens/auth/ForgotPassword";
+import CustomButton from "../common/CustomButton";
 
 export type AuthStackParams = {
   Login: undefined;

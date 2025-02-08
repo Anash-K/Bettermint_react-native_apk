@@ -6,13 +6,15 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import CustomInput from "../common/CustomInput";
+
 import React, { useCallback, useState } from "react";
-import CustomButton from "../common/CustomButton";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "../navigator/Stack";
 import { Controller, useForm } from "react-hook-form";
 import { useCustomStyle } from "../constants/CustomStyles";
+import CustomInput from "../common/CustomInput";
+import CustomButton from "../common/CustomButton";
 
 interface Inputs {
   "Old Password": string;

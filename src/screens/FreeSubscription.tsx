@@ -4,9 +4,9 @@ import { ScreenProps } from "../navigator/Stack";
 import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
-import CustomButton from "../common/CustomButton";
 import FastImage from "react-native-fast-image";
 import Share from "react-native-share";
+import CustomButton from "../common/CustomButton";
 
 const FreeSubscription: React.FC<ScreenProps<"FreeSubscription">> = memo(() => {
   const handlePress = useCallback(() => {

@@ -65,6 +65,7 @@ export const CustomImages = {
   steps:require("./Images/Steps.png"),
   pinkTick:require("./Images/pinkcheck.png"),
   redSpoon:require("./Images/redspoon.png"),
+  greenSpoon:require("./Images/greenspoon.png"),
   calenderTextRing:require("./Images/calenderTextRing.png"),
   normalLinear:require("./Images/normallinear.png"),
   happyLiner:require("./Images/happylinear.png"),

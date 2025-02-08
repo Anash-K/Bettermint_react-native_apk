@@ -1,10 +1,11 @@
 import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
-import CustomSelector from "../common/CustomSelector";
 import React, { useCallback, useEffect, useState } from "react";
-import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
-import CustomButton from "../common/CustomButton";
+
 import { ScreenProps } from "../navigator/Stack";
 import { useCustomStyle } from "../constants/CustomStyles";
+import CustomSelector from "../common/CustomSelector";
+import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
+import CustomButton from "../common/CustomButton";
 export interface handleOptionSelectType {
   fieldName: string;
   text: string;

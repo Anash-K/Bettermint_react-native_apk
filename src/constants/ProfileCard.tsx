@@ -1,11 +1,11 @@
 import React, { memo, useCallback } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { colors } from "./colors";
-import CustomImageHandler from "../common/CustomImageHandler";
 import { CustomImages } from "../assets/CustomImages";
-import CustomButton from "../common/CustomButton";
 import CustomFont from "../assets/fonts/customFonts";
 import { useCustomStyle } from "./CustomStyles";
+import CustomImageHandler from "../common/CustomImageHandler";
+import CustomButton from "../common/CustomButton";
 
 interface ProfileCardType {
   onPressEdit: () => void;

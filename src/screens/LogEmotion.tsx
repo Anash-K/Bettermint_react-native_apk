@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ScreenProps } from "../navigator/Stack";
+import { useCustomStyle } from "../constants/CustomStyles";
+import { CustomImages } from "../assets/CustomImages";
+import CustomEmotionSelector from "../common/CustomEmotionSelector";
 import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
-import { useCustomStyle } from "../constants/CustomStyles";
-import CustomEmotionSelector from "../common/CustomEmotionSelector";
-import { CustomImages } from "../assets/CustomImages";
 
 interface EmotionOption {
   id: number;

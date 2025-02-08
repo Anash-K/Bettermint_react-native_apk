@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
-import DrawerButton from "../common/DrawerButton";
 import React, { useCallback, useState } from "react";
+import { ScreenProps } from "../navigator/Stack";
+import DrawerButton from "../common/DrawerButton";
 import WhiteDot from "../common/WhiteDotBtn";
 import CustomButton from "../common/CustomButton";
-import { ScreenProps } from "../navigator/Stack";
 
 const DoYouWorkOut: React.FC<ScreenProps<"DoYouWorkOut">> = ({
   navigation,

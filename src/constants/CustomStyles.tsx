@@ -7,6 +7,12 @@ export const useCustomStyle = () => {
   const insets = useSafeAreaInsets();
 
   return {
+    commonText: {
+      fontSize: 14,
+      lineHeight: 16.8,
+      color: colors.secondaryLight,
+      fontFamily: CustomFont.Urbanist600,
+    } as TextStyle,
     title: {
       fontFamily: CustomFont.Urbanist800,
       color: colors.primary,

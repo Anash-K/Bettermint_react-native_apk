@@ -2,8 +2,10 @@ import React, { memo } from "react";
 import { Text, View, StyleSheet, Image } from "react-native";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "./colors";
+import FastImage from "react-native-fast-image";
+import { CustomImages } from "../assets/CustomImages";
 
-interface WeeksType {
+interface HomeFuelCalenderHeaderType {
   icon: any;
   title: string;
   headingText?: string;
@@ -11,7 +13,7 @@ interface WeeksType {
   headerColor?: string;
 }
 
-const Weeks: React.FC<WeeksType> = memo(
+const HomeFuelCalenderHeader: React.FC<HomeFuelCalenderHeaderType> = memo(
   ({ icon, title, headingText, headerIcon, headerColor }) => {
     const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -29,6 +31,20 @@ const Weeks: React.FC<WeeksType> = memo(
             {headingText && <Text>{headingText}</Text>}
           </View>
         </View>
+        <View style={styles.iconDetails}>
+          <View style={[styles.infoBox]}>
+            <View style={[styles.iconBox, styles.greenBox]}>
+              <FastImage style={styles.icon} source={CustomImages.greenSpoon} />
+            </View>
+            <Text style={styles.infoText}>Outside Meal</Text>
+          </View>
+          <View style={styles.infoBox}>
+            <View style={[styles.iconBox, styles.redBox]}>
+              <FastImage style={styles.icon} source={CustomImages.redSpoon} />
+            </View>
+            <Text style={styles.infoText}>Homemade Meal</Text>
+          </View>
+        </View>
         <View style={styles.weekBox}>
           {weekDays.map((day, index) => (
             <Text key={index} style={styles.weekText}>
@@ -41,11 +57,47 @@ const Weeks: React.FC<WeeksType> = memo(
   }
 );
 
-export default Weeks;
+export default HomeFuelCalenderHeader;
 
 const styles = StyleSheet.create({
-  innerContainer: { 
-    flexDirection: "row" 
+  redBox: {
+    backgroundColor: "#c53b3d26",
+  },
+  greenBox: {
+    backgroundColor: "#3bc58026",
+  },
+  icon: {
+    width: 14,
+    height: 14,
+  },
+  iconBox: {
+    padding: 3,
+    borderRadius: 8,
+  },
+  infoText: {
+    fontFamily: CustomFont.Urbanist600,
+    fontSize: 12,
+    lineHeight: 14.4,
+    color: colors.secondary,
+  },
+  iconDetails: {
+    flexDirection: "row",
+    columnGap: 24,
+    marginTop: 15,
+    paddingBottom: 10,
+    borderBottomColor: colors.appBackground,
+    borderBottomWidth: 1,
+    marginBottom: 10,
+    marginHorizontal: 10,
+  },
+  infoBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    columnGap: 6,
+  },
+  infoBox2: {},
+  innerContainer: {
+    flexDirection: "row",
   },
   title: {
     fontFamily: CustomFont.Urbanist800,
@@ -62,13 +114,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lottieYellow,
     margin: -5,
     marginTop: -8,
-    marginBottom: 10,
     justifyContent: "space-between",
   },
-  weekBox: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
+  weekBox: { flexDirection: "row", justifyContent: "space-around" },
   container: {
     paddingVertical: 8,
   },

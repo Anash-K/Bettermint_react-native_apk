@@ -16,7 +16,7 @@ import { colors } from "../constants/colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HomeTab from "../screens/tab/HomeTab";
 import CalenderTab from "../screens/tab/CalenderTab";
-import TrendsTab from "../screens/tab/TendsTab";
+import TrendsTab from "../screens/tab/TrendsTab";
 import ProfileTab from "../screens/tab/ProfileTab";
 import LogTab from "../screens/tab/LogTab";
 import { CurvedBottomBar } from "react-native-curved-bottom-bar";

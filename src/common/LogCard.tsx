@@ -1,9 +1,9 @@
 import React, { memo } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
 import FastImage, { FastImageProps } from "react-native-fast-image";
-import CustomFont from "../assets/fonts/customFonts";
-import { CustomImages } from "../assets/CustomImages";
+import CustomFont from "../../assets/fonts/customFonts";
+import { CustomImages } from "../../assets/CustomImages";
 
 interface LogCardType {
   IconSrc: any;

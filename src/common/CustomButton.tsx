@@ -10,8 +10,8 @@ import {
   ImageStyle,
   TouchableOpacity,
 } from "react-native";
-import CustomFont from "../assets/fonts/customFonts";
-import { colors } from "../constants/colors";
+import CustomFont from "../../assets/fonts/customFonts";
+import { colors } from "../../constants/colors";
 
 interface CustomButtonProps {
   text?: string;

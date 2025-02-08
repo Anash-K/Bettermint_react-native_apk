@@ -20,8 +20,8 @@ import {
   IntermediateTwoContent,
 } from "../utils/BeginnerContent";
 import LottieView from "lottie-react-native";
-import CustomButton from "../common/CustomButton";
 import { useFocusEffect } from "@react-navigation/native";
+import CustomButton from "../common/CustomButton";
 
 interface initialStateType {
   pageHeading: string;

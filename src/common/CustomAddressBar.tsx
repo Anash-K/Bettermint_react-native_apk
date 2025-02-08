@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import { colors } from "../constants/colors";
-import CustomFont from "../assets/fonts/customFonts";
+import { colors } from "../../constants/colors";
+import CustomFont from "../../assets/fonts/customFonts";
 
 interface CustomAddressBarType {
   height?: number;

@@ -9,9 +9,9 @@ import {
   FlatList,
   Platform,
 } from "react-native";
-import { colors } from "../constants/colors";
-import CustomFont from "../assets/fonts/customFonts";
-import { useCustomStyle } from "../constants/CustomStyles";
+import { colors } from "../../constants/colors";
+import CustomFont from "../../assets/fonts/customFonts";
+import { useCustomStyle } from "../../constants/CustomStyles";
 
 interface CustomOptions {
   startingNumber: number;

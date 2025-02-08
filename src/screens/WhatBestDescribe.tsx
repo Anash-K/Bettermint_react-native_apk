@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
-import CustomButton from "../common/CustomButton";
 import { CustomImages } from "../assets/CustomImages";
 import React, { useCallback, useState } from "react";
+import { ScreenProps } from "../navigator/Stack";
 import DrawerButton from "../common/DrawerButton";
 import WhiteDot from "../common/WhiteDotBtn";
-import { ScreenProps } from "../navigator/Stack";
+import CustomButton from "../common/CustomButton";
 
 const WhatBestDescribe:React.FC<ScreenProps<'WhatBestDescribe'>> = ({navigation}) => {
   const CustomStyle = useCustomStyle();

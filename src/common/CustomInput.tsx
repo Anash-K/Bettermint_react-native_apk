@@ -13,13 +13,13 @@ import {
   Platform,
   TextInput,
 } from "react-native";
-import { CustomImages } from "../assets/CustomImages";
-import CustomFont from "../assets/fonts/customFonts";
-import { colors } from "../constants/colors";
 import FastImage from "react-native-fast-image";
 import SelectDropdown from "react-native-select-dropdown";
 // import PhoneInput from "react-native-phone-number-input";
 import PhoneInput, { ICountry } from "react-native-international-phone-number";
+import { colors } from "../constants/colors";
+import { CustomImages } from "../assets/CustomImages";
+import CustomFont from "../assets/fonts/customFonts";
 
 interface CustomInputProps {
   value?: string | null ;

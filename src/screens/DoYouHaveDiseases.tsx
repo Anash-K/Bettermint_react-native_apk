@@ -1,15 +1,15 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import DrawerButton from "../common/DrawerButton";
 import React, { useCallback, useState } from "react";
-import WhiteDot from "../common/WhiteDotBtn";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 import FastImage from "react-native-fast-image";
 import { CustomImages } from "../assets/CustomImages";
-import CustomButton from "../common/CustomButton";
 import { ScreenProps } from "../navigator/Stack";
 import { useSelector } from "react-redux";
+import DrawerButton from "../common/DrawerButton";
+import WhiteDot from "../common/WhiteDotBtn";
+import CustomButton from "../common/CustomButton";
 
 type DiseaseState = {
   "Diabetes / Prediabetes": boolean;

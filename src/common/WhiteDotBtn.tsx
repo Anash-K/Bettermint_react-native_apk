@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
-import { colors } from "../constants/colors";
+import { colors } from "../../constants/colors";
 
 const WhiteDot = memo(
   ({

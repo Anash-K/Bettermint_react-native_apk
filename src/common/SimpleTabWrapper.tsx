@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
-import CustomFont from "../assets/fonts/customFonts";
-import { colors } from "../constants/colors";
+import CustomFont from "../../assets/fonts/customFonts";
+import { colors } from "../../constants/colors";
 
 interface SimpleTabWrapperType {
   children: React.ReactNode;

@@ -4,14 +4,15 @@ import { CustomImages } from "../assets/CustomImages";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
 
-interface CustomDayProps {
+interface HomeFuelDaysProps {
   date: any;
   state: string;
   imageSource: Record<string, any>;
   details?: string;
   themeColor?: string;
+  eatenOutsideCount: number;
 }
-const CustomDay: React.FC<CustomDayProps> = ({
+const HomeFuelDays: React.FC<HomeFuelDaysProps> = ({
   date,
   state,
   imageSource,
@@ -39,7 +40,7 @@ const CustomDay: React.FC<CustomDayProps> = ({
             source={image}
             style={[styles.icon, levelup && styles.levelup]}
             resizeMode="contain"
-            tintColor={levelup ? "" : (themeColor ?? '')}
+            tintColor={levelup ? "" : themeColor ?? ""}
           />
         ) : text ? (
           <ImageBackground
@@ -55,7 +56,7 @@ const CustomDay: React.FC<CustomDayProps> = ({
   );
 };
 
-export default CustomDay;
+export default HomeFuelDays;
 
 const styles = StyleSheet.create({
   levelup: {

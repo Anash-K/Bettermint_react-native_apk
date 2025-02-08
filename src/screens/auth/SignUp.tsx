@@ -16,11 +16,11 @@ import { ScreenProps } from "../../navigator/Stack";
 import { useCustomStyle } from "../../constants/CustomStyles";
 import { login } from "../../redux/slices/authSlice";
 import { CustomImages } from "../../assets/CustomImages";
-import CustomInput from "../../common/CustomInput";
-import CustomButton from "../../common/CustomButton";
 import EmailVerificationModal from "../../Modals/EmailVerificationModal";
 import CustomFont from "../../assets/fonts/customFonts";
 import { colors } from "../../constants/colors";
+import CustomInput from "../../common/CustomInput";
+import CustomButton from "../../common/CustomButton";
 
 type Inputs = {
   email: string;

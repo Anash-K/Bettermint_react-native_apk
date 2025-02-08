@@ -8,9 +8,9 @@ import {
   View,
 } from "react-native";
 import FastImage, { FastImageProps } from "react-native-fast-image";
+import { colors } from "../constants/colors";
 import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
-import { colors } from "../constants/colors";
 
 interface SimpleTabsType {
   tabIcon: ImageProps;

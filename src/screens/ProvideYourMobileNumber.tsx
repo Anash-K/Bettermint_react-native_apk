@@ -7,10 +7,10 @@ import {
 } from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
 import React, { useCallback, useState } from "react";
-import CustomInput from "../common/CustomInput";
 import { ICountry } from "react-native-international-phone-number";
-import CustomButton from "../common/CustomButton";
 import { ScreenProps } from "../navigator/Stack";
+import CustomButton from "../common/CustomButton";
+import CustomInput from "../common/CustomInput";
 
 const ProvideYourMobileNumber: React.FC<
   ScreenProps<"ProvideYourMobileNumber">

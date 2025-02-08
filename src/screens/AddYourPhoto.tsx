@@ -20,38 +20,32 @@ import {
   Keyboard,
   Text,
 } from "react-native";
-
-import CustomButton from "../common/CustomButton";
 import {
-  check,
-  request,
   PERMISSIONS,
-  RESULTS,
-  checkMultiple,
 } from "react-native-permissions";
-import CustomInput from "../common/CustomInput";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ImagePicker from "react-native-image-crop-picker";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import { ScreenProps } from "../navigator/Stack";
-import CustomImageHandler from "../common/CustomImageHandler";
+
 import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 import { useCustomStyle } from "../constants/CustomStyles";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { AppLoaderRef } from "../../App";
-import PermissionModal from "../common/PermissionModal";
+
 import {
   getFileNameFromUri,
   getMimeTypeFromUri,
 } from "../utils/MimeTypePicker";
-import {
-  CheckPermission,
-  handlePermission,
-  RequestPermission,
-} from "../common/HandlePermission";
+import { CheckPermission } from "../common/HandlePermission";
+import CustomImageHandler from "../common/CustomImageHandler";
+import CustomButton from "../common/CustomButton";
+import PermissionModal from "../common/PermissionModal";
+
 
 const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   navigation,

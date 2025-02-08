@@ -33,6 +33,7 @@ export const colors = {
   blackPrimary:'#292D32',
   silver:'#8A909B',
   blackSecondary:'#18171C',
-  lightblue:'#E0F2F2'
+  lightblue:'#E0F2F2',
+  chartBarColor:'#66707312'
   
 } as const;

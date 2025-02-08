@@ -8,11 +8,11 @@ import {
   ViewStyle,
 } from "react-native";
 import FastImage from "react-native-fast-image";
-import { CustomImages } from "../assets/CustomImages";
-import CustomFont from "../assets/fonts/customFonts";
+import { CustomImages } from "../../assets/CustomImages";
+import CustomFont from "../../assets/fonts/customFonts";
 import React from "react";
-import { colors } from "../constants/colors";
-import { useCustomStyle } from "../constants/CustomStyles";
+import { colors } from "../../constants/colors";
+import { useCustomStyle } from "../../constants/CustomStyles";
 
 interface EmojiOrImageCard {
   title: string;

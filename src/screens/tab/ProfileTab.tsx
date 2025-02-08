@@ -14,9 +14,9 @@ import React, { memo, useCallback, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "../../navigator/Stack";
 import ProfileCard from "../../constants/ProfileCard";
-import MenuTab from "../../common/MenuTabs";
 import MenuWrapper from "../../constants/MenuWrapper";
 import ActionModal from "../../Modals/ActionModal";
+import MenuTab from "../../common/MenuTabs";
 
 interface modalDetailsType {
   contentText: string;

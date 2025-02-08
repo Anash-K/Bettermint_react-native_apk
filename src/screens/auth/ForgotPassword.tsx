@@ -5,7 +5,6 @@ import { useCustomStyle } from "../../constants/CustomStyles";
 import CustomInput from "../../common/CustomInput";
 import CustomButton from "../../common/CustomButton";
 
-
 const ForgotPassword: React.FC<ScreenProps<"ForgotPassword">> = memo(({navigation}) => {
   const handleChange = useCallback(() => {}, []);
   const handleForgotPassword = useCallback(() => {

@@ -5,7 +5,6 @@ import { ScreenProps } from "./Stack";
 import ProvideYourMobileNumber from "../screens/ProvideYourMobileNumber";
 import TellUsALittleAboutYou from "../screens/TellUsALittleAboutYou";
 import { colors } from "../constants/colors";
-import CustomButton from "../common/CustomButton";
 import { CustomImages } from "../assets/CustomImages";
 import WhatsYourHeight from "../screens/WhatsYourHeight";
 import WhatsYourWeight from "../screens/WhatsYourWeight";
@@ -14,7 +13,6 @@ import AddYourPhoto from "../screens/AddYourPhoto";
 import CustomFont from "../assets/fonts/customFonts";
 import WhatsYourMeasurement from "../screens/WhatsYourMeasurement";
 import { useNavigation } from "@react-navigation/native";
-import CustomHeader from "../common/CustomHeader";
 import Guide from "../screens/Guide";
 import DoYouHaveDiseases from "../screens/DoYouHaveDiseases";
 import DoYouHaveFamilyHistory from "../screens/DoYouHaveFamilyHistory";
@@ -37,10 +35,13 @@ import FreeSubscription from "../screens/FreeSubscription";
 import ChangePassword from "../screens/ChangePassword";
 import EditProfile from "../screens/EditProfile";
 import ExclusiveFitness from "../screens/ExclusiveFitness";
+import CustomButton from "../common/CustomButton";
+import CustomHeader from "../common/CustomHeader";
 //@ts-ignore
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
+
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;

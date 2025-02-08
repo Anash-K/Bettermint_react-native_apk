@@ -8,21 +8,19 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import DrawerButton from "../common/DrawerButton";
 import React, { useCallback, useState } from "react";
-import WhiteDot from "../common/WhiteDotBtn";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 import FastImage from "react-native-fast-image";
 import { CustomImages } from "../assets/CustomImages";
-import CustomButton from "../common/CustomButton";
 import { ScreenProps } from "../navigator/Stack";
 import { Controller, useForm } from "react-hook-form";
-import CustomInput from "../common/CustomInput";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import useTimeFormatter from "../utils/timeFormatter";
+import CustomInput from "../common/CustomInput";
+import CustomButton from "../common/CustomButton";
 
 interface Inputs {
   "Fasting blood sugar/glucose (mg / DL)": string;

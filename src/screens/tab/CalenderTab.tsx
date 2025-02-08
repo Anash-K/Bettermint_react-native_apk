@@ -1,24 +1,10 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  ScrollView,
-  Image,
-  Platform,
-} from "react-native";
+import { View, StyleSheet, ScrollView, Platform } from "react-native";
 import TabLogo from "../../constants/TabLogo";
-import {
-  Calendar,
-  CalendarContext,
-  CalendarProvider,
-  ExpandableCalendar,
-  LocaleConfig,
-} from "react-native-calendars";
+import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useEffect, useState } from "react";
-import { CustomImages } from "../../assets/CustomImages";
 import { colors } from "../../constants/colors";
 import CustomFont from "../../assets/fonts/customFonts";
-import CustomDay from "../../common/CustomDay";
+
 import {
   dateToImageMapOfHomeFuel,
   dateToImageMapOfSleep,
@@ -26,8 +12,10 @@ import {
   dateToImageMapOfWorkout,
 } from "../../utils/dummyCalenderData";
 import Weeks from "../../constants/Weeks";
-import CalendarHeader from "react-native-calendars/src/calendar/header";
 import MonthYearPicker from "../../constants/CalenderHeader";
+import CustomDay from "../../common/CustomDay";
+import HomeFuelCalenderHeader from "../../constants/HomeFuelCalenderHeader";
+import HomeFuelDays from "../../constants/HomeFuelDays";
 
 // Setup LocaleConfig if you're using custom date formatting
 LocaleConfig.locales["en"] = {
@@ -77,9 +65,11 @@ const CalenderTab = () => {
   const [selectedMonth, setSelectedMonth] = useState("2024-2"); // Format: 'yyyy-mm'
   const [date, setDate] = useState(new Date());
 
-  const currentMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}`;
+  const currentMonth = `${date.getFullYear()}-${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}`;
 
-  console.log(currentMonth,"current month")
+  console.log(currentMonth, "current month");
   useEffect(() => {
     console.log(currentMonth, "selected");
   }, [currentMonth]);
@@ -158,15 +148,16 @@ const CalenderTab = () => {
             renderHeader={() => null}
             firstDay={1}
             dayComponent={({ date, state }: { date: any; state: string }) => (
-              <CustomDay
+              <HomeFuelDays
                 date={date}
                 state={state}
                 imageSource={dateToImageMapOfHomeFuel}
                 themeColor={colors.lottieGreen}
+                eatenOutsideCount={5}
               />
             )}
             customHeader={({ day, stats }) => (
-              <Weeks
+              <HomeFuelCalenderHeader
                 title="Home Fuel - 3 outside meals/wk"
                 headerColor={colors.lottieGreen}
               />
@@ -184,7 +175,7 @@ const styles = StyleSheet.create({
   },
   tabBarStyle: {
     height: Platform.select({ ios: 170, android: 150 }),
-    justifyContent: Platform.select({ ios: "center", android: 'flex-start' }),
+    justifyContent: Platform.select({ ios: "center", android: "flex-start" }),
   },
   calendarTitleBox: {
     backgroundColor: colors.white,

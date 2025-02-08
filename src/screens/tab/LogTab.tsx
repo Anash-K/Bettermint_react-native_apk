@@ -1,11 +1,11 @@
 import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
 import TabLogo from "../../constants/TabLogo";
-import LogCard from "../../common/LogCard";
 import { CustomImages } from "../../assets/CustomImages";
 import { colors } from "../../constants/colors";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "../../navigator/Stack";
+import LogCard from "../../common/LogCard";
 
 const initialValues = [
   {

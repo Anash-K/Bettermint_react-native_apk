@@ -5,8 +5,8 @@ import React, { useCallback } from "react";
 import { ScreenProps } from "../navigator/Stack";
 import { CustomImages } from "../assets/CustomImages";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import CustomButton from "../common/CustomButton";
 import CustomFont from "../assets/fonts/customFonts";
+import CustomButton from "../common/CustomButton";
 
 const SmallBriefBettermint: React.FC<ScreenProps<"SmallBriefBettermint">> = ({
   navigation,

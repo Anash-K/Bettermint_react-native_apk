@@ -12,11 +12,12 @@ import { useCustomStyle } from "../constants/CustomStyles";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
-import CustomButton from "../common/CustomButton";
-import DrawerButton from "../common/DrawerButton";
+
+
 import { ScreenProps } from "../navigator/Stack";
 import { useDispatch, useSelector } from "react-redux";
 import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
+import CustomButton from "../common/CustomButton";
 
 const { width, height } = Dimensions.get("screen");
 

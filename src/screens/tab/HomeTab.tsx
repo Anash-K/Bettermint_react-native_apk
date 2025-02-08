@@ -7,11 +7,11 @@ import { AnimatedCircularProgress } from "react-native-circular-progress";
 import TabLogo from "../../constants/TabLogo";
 import { CustomImages } from "../../assets/CustomImages";
 import { colors } from "../../constants/colors";
-import EmojiOrImageCard from "../../common/EmojiCard";
-import LinearProgressBar from "../../common/LinearProgressBar";
 import CustomFont from "../../assets/fonts/customFonts";
 import { RootState } from "../../redux/rootReducer";
 import { ScreenProps } from "../../navigator/Stack";
+import EmojiOrImageCard from "../../common/EmojiCard";
+import LinearProgressBar from "../../common/LinearProgressBar";
 
 interface initialValues {
   week: number;

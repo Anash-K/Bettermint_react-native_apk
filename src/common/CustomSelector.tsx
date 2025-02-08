@@ -8,8 +8,8 @@ import {
   TextStyle,
   FlatList,
 } from "react-native";
-import { colors } from "../constants/colors";
-import CustomFont from "../assets/fonts/customFonts";
+import { colors } from "../../constants/colors";
+import CustomFont from "../../assets/fonts/customFonts";
 
 interface CustomOptions {
   startingNumber: number;

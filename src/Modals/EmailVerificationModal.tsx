@@ -6,12 +6,12 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
-import CustomButton from "../common/CustomButton";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 import FastImage from "react-native-fast-image";
 import { CustomImages } from "../assets/CustomImages";
 import { useCustomStyle } from "../constants/CustomStyles";
+import CustomButton from "../common/CustomButton";
 
 type EmailVerificationModal = {
   isVisible: boolean;

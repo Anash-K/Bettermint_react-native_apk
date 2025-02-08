@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors } from "../constants/colors";
-import CustomFont from "../assets/fonts/customFonts";
+import { colors } from "../../constants/colors";
+import CustomFont from "../../assets/fonts/customFonts";
 
 export interface CommonPlansType {
   title: string;

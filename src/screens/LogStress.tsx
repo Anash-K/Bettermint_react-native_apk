@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ScreenProps } from "../navigator/Stack";
-import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
-import CustomButton from "../common/CustomButton";
+import { EmotionArray } from "./LogEmotion";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomEmotionSelector from "../common/CustomEmotionSelector";
-import { EmotionArray } from "./LogEmotion";
+import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
+import CustomButton from "../common/CustomButton";
 
 const LogStress: React.FC<ScreenProps<"LogStress">> = ({ navigation }) => {
   const CustomStyle = useCustomStyle();

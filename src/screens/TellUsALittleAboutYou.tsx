@@ -6,18 +6,19 @@ import {
   Text,
   View,
 } from "react-native";
-import CustomButton from "../common/CustomButton";
+
 import React, { memo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScreenProps } from "../navigator/Stack";
 import { gender, logout } from "../redux/slices/authSlice";
 import { useCustomStyle } from "../constants/CustomStyles";
-import CustomInput from "../common/CustomInput";
 import { Controller, useForm } from "react-hook-form";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import useTimeFormatter from "../utils/timeFormatter";
+import CustomInput from "../common/CustomInput";
+import CustomButton from "../common/CustomButton";
 
 interface Inputs {
   name: string;

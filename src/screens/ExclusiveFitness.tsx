@@ -11,9 +11,9 @@ import FastImage from "react-native-fast-image";
 import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
-import CommonPlans from "../common/CommonPlans";
 import { ScalingDot } from "react-native-animated-pagination-dots";
 import { useCustomStyle } from "../constants/CustomStyles";
+import CommonPlans from "../common/CommonPlans";
 import CustomButton from "../common/CustomButton";
 
 const ExclusiveFitness: React.FC = memo(() => {

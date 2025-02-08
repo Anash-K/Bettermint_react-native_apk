@@ -1,10 +1,10 @@
 import { memo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import CustomImageHandler from "../common/CustomImageHandler";
 import { CustomImages } from "../assets/CustomImages";
-import SimpleTabs from "../common/SimpleTabs";
+import CustomImageHandler from "../common/CustomImageHandler";
 import SimpleTabWrapper from "../common/SimpleTabWrapper";
+import SimpleTabs from "../common/SimpleTabs";
 
 const EditProfile = memo(() => {
   return (
