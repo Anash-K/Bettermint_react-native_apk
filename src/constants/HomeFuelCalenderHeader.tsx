@@ -6,7 +6,7 @@ import FastImage from "react-native-fast-image";
 import { CustomImages } from "../assets/CustomImages";
 
 interface HomeFuelCalenderHeaderType {
-  icon: any;
+  icon?: any;
   title: string;
   headingText?: string;
   headerIcon?: any;
@@ -15,7 +15,7 @@ interface HomeFuelCalenderHeaderType {
 
 const HomeFuelCalenderHeader: React.FC<HomeFuelCalenderHeaderType> = memo(
   ({ icon, title, headingText, headerIcon, headerColor }) => {
-    const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Week"];
 
     return (
       <View style={styles.container}>
@@ -28,20 +28,25 @@ const HomeFuelCalenderHeader: React.FC<HomeFuelCalenderHeaderType> = memo(
           <Text style={styles.title}>{title ?? "title"}</Text>
           <View style={styles.innerContainer}>
             {icon && <Image source={headerIcon ?? ""} />}
-            {headingText && <Text>{headingText}</Text>}
+            {headingText && (
+              <View style={styles.headerTextBox}>
+                <Text style={styles.headerText}>{headingText}</Text>
+              </View>
+            )}
           </View>
         </View>
         <View style={styles.iconDetails}>
           <View style={[styles.infoBox]}>
-            <View style={[styles.iconBox, styles.greenBox]}>
-              <FastImage style={styles.icon} source={CustomImages.greenSpoon} />
+            <View style={[styles.iconBox, styles.redBox]}>
+              <FastImage style={styles.icon} source={CustomImages.redSpoon} />
             </View>
             <Text style={styles.infoText}>Outside Meal</Text>
           </View>
           <View style={styles.infoBox}>
-            <View style={[styles.iconBox, styles.redBox]}>
-              <FastImage style={styles.icon} source={CustomImages.redSpoon} />
+            <View style={[styles.iconBox, styles.greenBox]}>
+              <FastImage style={styles.icon} source={CustomImages.greenSpoon} />
             </View>
+
             <Text style={styles.infoText}>Homemade Meal</Text>
           </View>
         </View>
@@ -60,6 +65,18 @@ const HomeFuelCalenderHeader: React.FC<HomeFuelCalenderHeaderType> = memo(
 export default HomeFuelCalenderHeader;
 
 const styles = StyleSheet.create({
+  headerTextBox: {
+    backgroundColor: colors.white,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 36,
+  },
+  headerText: {
+    fontSize: 16,
+    lineHeight: 19.2,
+    fontFamily: CustomFont.Urbanist700,
+    color: colors.red,
+  },
   redBox: {
     backgroundColor: "#c53b3d26",
   },
@@ -98,6 +115,8 @@ const styles = StyleSheet.create({
   infoBox2: {},
   innerContainer: {
     flexDirection: "row",
+    backgroundColor: colors.white,
+    borderRadius: 36,
   },
   title: {
     fontFamily: CustomFont.Urbanist800,
@@ -112,13 +131,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 15,
     backgroundColor: colors.lottieYellow,
-    margin: -5,
-    marginTop: -8,
     justifyContent: "space-between",
+    flexDirection: "row",
+    paddingRight: 20,
   },
-  weekBox: { flexDirection: "row", justifyContent: "space-around" },
+  weekBox: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
   container: {
-    paddingVertical: 8,
+    // paddingVertical: 8,
+    marginTop: 24,
+    backgroundColor: colors.white,
   },
   weekText: {
     fontSize: 14,

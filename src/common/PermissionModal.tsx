@@ -10,8 +10,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import CustomFont from '../../assets/fonts/customFonts';
-import { colors } from '../../constants/colors';
+import { colors } from '../constants/colors';
+import CustomFont from '../assets/fonts/customFonts';
+
 
 interface PermissionModal {
   isModalVisible: boolean;

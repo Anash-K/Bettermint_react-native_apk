@@ -41,20 +41,21 @@ import CustomHeader from "../common/CustomHeader";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 export type StackParams = {
-  TellUsALittleAboutYou: undefined;
-  ProvideYourMobileNumber: undefined;
-  WhatsYourHeight: undefined;
-  WhatsYourWeight: undefined;
-  WhatBestDescribe: undefined;
-  AddYourPhoto: undefined;
-  WhatsYourMeasurement: undefined;
+  TellUsALittleAboutYou: { editable?: boolean | null } | undefined;
+  ProvideYourMobileNumber: { editable?: boolean | null };
+  WhatsYourHeight: { editable?: boolean  };
+  WhatsYourWeight: { editable?: boolean  } | undefined;
+  WhatBestDescribe: { editable?: boolean | null };
+  AddYourPhoto: { editable?: boolean | null };
+  WhatsYourMeasurement: { editable?: boolean | null };
   Guide: undefined;
-  DoYouHaveDiseases: undefined;
-  DoYouHaveFamilyHistory: undefined;
-  PleaseShareYourMeasurement: undefined;
+  DoYouHaveDiseases: { editable?: boolean | null };
+  DoYouHaveFamilyHistory: { editable?: boolean | null };
+  PleaseShareYourMeasurement: { editable?: boolean };
   SmallBriefBettermint: undefined;
   MovementAssesment: undefined;
   DoYouWorkOut: undefined;
@@ -78,6 +79,9 @@ export type StackParams = {
 const Stack = createNativeStackNavigator<StackParams>();
 
 const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
+  const { isProfileSetup } = useSelector(
+    (state: RootState) => state.userDetails
+  );
   const nav = useNavigation();
   const handlePress = useCallback(() => {}, []);
   return (
@@ -90,6 +94,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           headerTitleStyle: styles.headerTitleStyle,
           headerTitleAlign: "left",
           headerShadowVisible: false,
+          orientation: "portrait",
           headerLeft: () => (
             <CustomButton
               icon={CustomImages.blackDropDownIcon}
@@ -99,7 +104,9 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             />
           ),
         })}
-        initialRouteName="BottomTabStack"
+        initialRouteName={
+          isProfileSetup ? "BottomTabStack" : "TellUsALittleAboutYou"
+        }
       >
         <Stack.Screen
           name="TellUsALittleAboutYou"

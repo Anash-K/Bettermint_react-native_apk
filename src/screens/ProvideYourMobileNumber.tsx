@@ -14,12 +14,13 @@ import CustomInput from "../common/CustomInput";
 
 const ProvideYourMobileNumber: React.FC<
   ScreenProps<"ProvideYourMobileNumber">
-> = ({ navigation }) => {
+> = ({ navigation, route }) => {
   const CustomStyle = useCustomStyle();
   const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(null);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false); // Track if input has been touched
+  const { editable } = route.params;
 
   const handleSelectedCountry = useCallback((country: ICountry) => {
     setSelectedCountry(country);
@@ -32,10 +33,10 @@ const ProvideYourMobileNumber: React.FC<
 
       if (formattedText.length > 15) {
         setError("Phone number cannot exceed 15 characters");
-        return
+        return;
       } else if (!/^[0-9]*$/.test(formattedText)) {
         setError("Only numeric values are allowed");
-        return
+        return;
       } else {
         setError(null);
       }
@@ -55,12 +56,15 @@ const ProvideYourMobileNumber: React.FC<
     // }
 
     if (!error) {
-      // If all checks pass, navigate to the next screen
-      navigation.navigate("WhatsYourHeight");
+      {
+        editable
+          ? navigation.goBack()
+          : navigation.navigate("WhatsYourHeight", {});
+      }
     }
   }, [phoneNumber, setError, setTouched, navigation]);
-  
-  console.log('phone', phoneNumber)
+
+  console.log("phone", phoneNumber);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -77,11 +81,12 @@ const ProvideYourMobileNumber: React.FC<
             selectedCountry={selectedCountry}
             OnCountryChange={handleSelectedCountry}
           />
-          {error && (
-            <Text style={CustomStyle.errorMessage}>{error}</Text>
-          )}
+          {error && <Text style={CustomStyle.errorMessage}>{error}</Text>}
         </View>
-        <CustomButton text="Continue" onPress={handleNextNav} />
+        <CustomButton
+          text={editable ? "Update Mobile No." : "Continue"}
+          onPress={handleNextNav}
+        />
       </View>
     </TouchableWithoutFeedback>
   );

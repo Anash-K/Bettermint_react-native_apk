@@ -1,9 +1,11 @@
 import { ImageSourcePropType, StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { colors } from "../../constants/colors";
+
 import React from "react";
-import { useCustomStyle } from "../../constants/CustomStyles";
-import CustomFont from "../../assets/fonts/customFonts";
+import { useCustomStyle } from "../constants/CustomStyles";
+import { colors } from "../constants/colors";
+import CustomFont from "../assets/fonts/customFonts";
+
 
 interface LinearProgressBarProps {
   iconSrc: ImageSourcePropType; // Type for the image source (FastImage)

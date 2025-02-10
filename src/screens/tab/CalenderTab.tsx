@@ -1,6 +1,6 @@
 import { View, StyleSheet, ScrollView, Platform } from "react-native";
 import TabLogo from "../../constants/TabLogo";
-import { Calendar, LocaleConfig } from "react-native-calendars";
+import { Calendar, LocaleConfig ,CalendarUtils} from "react-native-calendars";
 import { useEffect, useState } from "react";
 import { colors } from "../../constants/colors";
 import CustomFont from "../../assets/fonts/customFonts";
@@ -16,6 +16,7 @@ import MonthYearPicker from "../../constants/CalenderHeader";
 import CustomDay from "../../common/CustomDay";
 import HomeFuelCalenderHeader from "../../constants/HomeFuelCalenderHeader";
 import HomeFuelDays from "../../constants/HomeFuelDays";
+import WeeklyCalender from "../../components/WeelkyCalender";
 
 // Setup LocaleConfig if you're using custom date formatting
 LocaleConfig.locales["en"] = {
@@ -90,7 +91,9 @@ const CalenderTab = () => {
       >
         <View style={styles.innerContent}>
           <Calendar
+           key={currentMonth}
             style={styles.calendar}
+            enableSwipeMonths
             current={currentMonth}
             renderHeader={() => null}
             firstDay={1}
@@ -105,8 +108,10 @@ const CalenderTab = () => {
           />
 
           <Calendar
+           key={currentMonth+'workout'}
             style={styles.calendar}
             current={currentMonth}
+            enableSwipeMonths
             renderHeader={() => null}
             firstDay={1}
             dayComponent={({ date, state }: { date: any; state: string }) => (
@@ -126,8 +131,10 @@ const CalenderTab = () => {
           />
 
           <Calendar
+           key={currentMonth+'sleep'}
             style={styles.calendar}
-            current={currentMonth}
+            selected={currentMonth}
+            enableSwipeMonths
             renderHeader={() => null}
             firstDay={1}
             dayComponent={({ date, state }: { date: any; state: string }) => (
@@ -142,26 +149,11 @@ const CalenderTab = () => {
               <Weeks title="Sleep - 7 hrs" headerColor={colors.lottieBlue} />
             )}
           />
-          <Calendar
-            style={styles.calendar}
-            current={currentMonth}
-            renderHeader={() => null}
-            firstDay={1}
-            dayComponent={({ date, state }: { date: any; state: string }) => (
-              <HomeFuelDays
-                date={date}
-                state={state}
-                imageSource={dateToImageMapOfHomeFuel}
-                themeColor={colors.lottieGreen}
-                eatenOutsideCount={5}
-              />
-            )}
-            customHeader={({ day, stats }) => (
-              <HomeFuelCalenderHeader
-                title="Home Fuel - 3 outside meals/wk"
-                headerColor={colors.lottieGreen}
-              />
-            )}
+          <WeeklyCalender
+            currentMonth={currentMonth}
+            title="Home Fuel - 3 outside meals/wk"
+            headerColor={colors.lottieGreen}
+            headingText={"95%"}
           />
         </View>
       </ScrollView>

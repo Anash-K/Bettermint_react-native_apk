@@ -49,6 +49,7 @@ import PermissionModal from "../common/PermissionModal";
 
 const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   navigation,
+  route
 }) => {
   // const userData = useSelector((state: any) => state.auth);
   // const nameValidation = {
@@ -64,6 +65,9 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   const buttonRef = useRef<boolean>(false);
   const dispatch = useDispatch();
   const CustomStyle = useCustomStyle();
+
+  console.log(route.params,"test");
+  
 
   const toggleModal = useCallback(() => {
     setModalVisible((prev) => !prev);

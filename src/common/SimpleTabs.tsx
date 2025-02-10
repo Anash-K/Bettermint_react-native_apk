@@ -16,12 +16,13 @@ interface SimpleTabsType {
   tabIcon: ImageProps;
   actionText?: string;
   title: string;
+  HandlePress?:() => void;
 }
 
 const SimpleTabs: React.FC<SimpleTabsType> = memo(
-  ({ title, tabIcon, actionText = "Edit" }) => {
+  ({ title, tabIcon, actionText = "Edit" ,HandlePress}) => {
     return (
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={HandlePress}>
         <Image
           source={tabIcon}
           style={styles.tabIcon}

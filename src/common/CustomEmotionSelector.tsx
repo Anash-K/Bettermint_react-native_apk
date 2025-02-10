@@ -9,9 +9,9 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { colors } from "../../constants/colors";
-import CustomFont from "../../assets/fonts/customFonts";
-import { useCustomStyle } from "../../constants/CustomStyles";
+import { useCustomStyle } from "../constants/CustomStyles";
+import CustomFont from "../assets/fonts/customFonts";
+import { colors } from "../constants/colors";
 
 // Define the type for the options array item (each option in the list)
 interface EmotionOption {

@@ -33,164 +33,175 @@ const dropdownItems = [
   { title: "Other" },
 ];
 
-const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> = memo(({
-  navigation,
-}) => {
-  const { token } = useSelector((state: any) => state.auth);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    getValues,
-    control,
-    setValue,
-    setError,
-    formState: { errors },
-  } = useForm<Inputs>();
+const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
+  memo(({ navigation, route }) => {
+    const { token } = useSelector((state: any) => state.auth);
+    const {
+      register,
+      handleSubmit,
+      watch,
+      getValues,
+      control,
+      setValue,
+      setError,
+      formState: { errors },
+    } = useForm<Inputs>();
 
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const showDatePicker = useCallback(() => {
-    setDatePickerVisibility(true);
-  }, [isDatePickerVisible]);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const showDatePicker = useCallback(() => {
+      setDatePickerVisibility(true);
+    }, [isDatePickerVisible]);
 
-  const hideDatePicker = useCallback(() => {
-    setDatePickerVisibility(false);
-  }, [isDatePickerVisible]);
+    const hideDatePicker = useCallback(() => {
+      setDatePickerVisibility(false);
+    }, [isDatePickerVisible]);
 
-  const handleConfirm = useCallback(
-    (date: Date) => {
-      let SomeDate = useTimeFormatter({ date: date });
-      setValue("DOB", SomeDate);
-      setError("DOB", { type: "manual", message: "" });
-      hideDatePicker();
-    },
-    [hideDatePicker]
-  );
+    const handleConfirm = useCallback(
+      (date: Date) => {
+        let SomeDate = useTimeFormatter({ date: date });
+        setValue("DOB", SomeDate);
+        setError("DOB", { type: "manual", message: "" });
+        hideDatePicker();
+      },
+      [hideDatePicker]
+    );
 
-  const dispatch = useDispatch();
-  const CustomStyle = useCustomStyle();
+    console.log(route.params, "route");
 
-  const onSubmit = useCallback((data: any) => {
-    dispatch(gender(data.Gender));
-    navigation.navigate("ProvideYourMobileNumber");
-  }, []);
+    const { editable } = route.params;
 
-  const handleGenderChange = useCallback((gender: any) => {
-    setValue("Gender", gender.title);
-    setError("Gender", { type: "manual", message: "" });
-  }, []);
+    const dispatch = useDispatch();
+    const CustomStyle = useCustomStyle();
 
-  return (
-    <ScrollView
-      style={[
-        styles.container,
-        CustomStyle?.safeAreaMarginBottom,
-        CustomStyle.safeAreaMarginTop,
-      ]}
-      contentContainerStyle={styles.innerContent}
-    >
-      <View style={styles.topContainer}>
-        <Text style={[CustomStyle.title, styles.title]}>
-          Tell us a little about you
-        </Text>
-        <Text style={[CustomStyle.subtitle, styles.subtitle]}>
-          Please provide basic details about yourself to personalize your
-          experience.
-        </Text>
+    const onSubmit = useCallback((data: any) => {
+      dispatch(gender(data.Gender));
+      {
+        editable
+          ? navigation.goBack()
+          : navigation.navigate("ProvideYourMobileNumber");
+      }
+    }, []);
 
-        {/* Register inputs using Controller */}
-        <Controller
-          control={control}
-          name="name"
-          rules={{ required: "Email is required" }}
-          render={({ field: { onChange, value } }) => (
-            <CustomInput
-              label="Name"
-              placeholderText="Enter name"
-              onChange={onChange}
-              value={value}
-              inputConfigurations={{
-                value: value,
-                onChangeText: onChange,
-              }}
-            />
+    const handleGenderChange = useCallback((gender: any) => {
+      setValue("Gender", gender.title);
+      setError("Gender", { type: "manual", message: "" });
+    }, []);
+
+    return (
+      <ScrollView
+        style={[
+          styles.container,
+          CustomStyle?.safeAreaMarginBottom,
+          CustomStyle.safeAreaMarginTop,
+        ]}
+        contentContainerStyle={styles.innerContent}
+      >
+        <View style={styles.topContainer}>
+          <Text style={[CustomStyle.title, styles.title]}>
+            {editable ? "Update Your Details" : "Tell us a little about you"}
+          </Text>
+          <Text style={[CustomStyle.subtitle, styles.subtitle]}>
+            {editable
+              ? "Update your information to personalize your experience further."
+              : "Please provide basic details about yourself to personalize your experience."}
+          </Text>
+
+          {/* Register inputs using Controller */}
+          <Controller
+            control={control}
+            name="name"
+            rules={{ required: "Email is required" }}
+            render={({ field: { onChange, value } }) => (
+              <CustomInput
+                label="Name"
+                placeholderText="Enter name"
+                onChange={onChange}
+                value={value}
+                inputConfigurations={{
+                  value: value,
+                  onChangeText: onChange,
+                }}
+              />
+            )}
+          />
+          {errors.name && (
+            <Text style={styles.errorMessage}>{errors?.name?.message}</Text>
           )}
-        />
-        {errors.name && (
-          <Text style={styles.errorMessage}>{errors?.name?.message}</Text>
-        )}
-        <Controller
-          control={control}
-          name="DOB"
-          rules={{ required: "DOB is required" }}
-          render={({ field: { value, onChange } }) => (
-            <CustomInput
-              label="DOB"
-              placeholderText="Enter dOB"
-              onChange={onChange}
-              value={value}
-              onFocusAction={showDatePicker}
-              inputConfigurations={{
-                value: value ?? "",
-                onChange: onChange,
-              }}
-            />
+          <Controller
+            control={control}
+            name="DOB"
+            rules={{ required: "DOB is required" }}
+            render={({ field: { value, onChange } }) => (
+              <CustomInput
+                label="DOB"
+                placeholderText="Enter dOB"
+                onChange={onChange}
+                value={value}
+                onFocusAction={showDatePicker}
+                inputConfigurations={{
+                  value: value ?? "",
+                  onChange: onChange,
+                }}
+              />
+            )}
+          />
+          {errors.DOB && (
+            <Text style={styles.errorMessage}>{errors?.DOB?.message}</Text>
           )}
-        />
-        {errors.DOB && (
-          <Text style={styles.errorMessage}>{errors?.DOB?.message}</Text>
-        )}
 
-        <Controller
-          control={control}
-          name="Gender"
-          rules={{ required: "Gender is required" }}
-          render={({ field: { value } }) => (
-            <CustomInput
-              label="Gender"
-              placeholderText="Enter gender"
-              onChange={handleGenderChange}
-              value={value}
-              isDropDown={true}
-              dropdownItems={dropdownItems}
-            />
+          <Controller
+            control={control}
+            name="Gender"
+            rules={{ required: "Gender is required" }}
+            render={({ field: { value } }) => (
+              <CustomInput
+                label="Gender"
+                placeholderText="Enter gender"
+                onChange={handleGenderChange}
+                value={value}
+                isDropDown={true}
+                dropdownItems={dropdownItems}
+              />
+            )}
+          />
+          {errors.Gender && (
+            <Text style={styles.errorMessage}>{errors?.Gender?.message}</Text>
           )}
-        />
-        {errors.Gender && (
-          <Text style={styles.errorMessage}>{errors?.Gender?.message}</Text>
-        )}
 
-        <Controller
-          control={control}
-          name="City"
-          rules={{ required: "City is required" }}
-          render={({ field: { value, onChange } }) => (
-            <CustomInput
-              label="City"
-              placeholderText="Enter city"
-              onChange={onChange}
-              value={value}
-              inputConfigurations={{
-                value: value,
-                onChangeText: onChange,
-              }}
-            />
+          <Controller
+            control={control}
+            name="City"
+            rules={{ required: "City is required" }}
+            render={({ field: { value, onChange } }) => (
+              <CustomInput
+                label="City"
+                placeholderText="Enter city"
+                onChange={onChange}
+                value={value}
+                inputConfigurations={{
+                  value: value,
+                  onChangeText: onChange,
+                }}
+              />
+            )}
+          />
+          {errors.City && (
+            <Text style={styles.errorMessage}>{errors?.City?.message}</Text>
           )}
+        </View>
+        <CustomButton
+          text={editable ? "Save Changes" : "Continue"}
+          onPress={handleSubmit(onSubmit)}
         />
-        {errors.City && (
-          <Text style={styles.errorMessage}>{errors?.City?.message}</Text>
-        )}
-      </View>
-      <CustomButton text="Continue" onPress={handleSubmit(onSubmit)} />
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      />
-    </ScrollView>
-  );
-});
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirm}
+          onCancel={hideDatePicker}
+        />
+      </ScrollView>
+    );
+  });
 
 export default TellUsALittleAboutYou;
 

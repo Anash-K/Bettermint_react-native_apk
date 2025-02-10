@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
 import { CustomImages } from "../assets/CustomImages";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
+import { useCustomStyle } from "./CustomStyles";
 
 interface HomeFuelDaysProps {
   date: any;
@@ -19,7 +20,8 @@ const HomeFuelDays: React.FC<HomeFuelDaysProps> = ({
   themeColor,
 }) => {
   const dayData = imageSource[date.dateString] || {};
-  const { image, text, levelup } = dayData;
+  const { image, text, levelup, outsideCount } = dayData;
+  const { calenderDates } = useCustomStyle();
 
   return (
     <View style={styles.container}>
@@ -33,25 +35,27 @@ const HomeFuelDays: React.FC<HomeFuelDaysProps> = ({
         {date.day}
       </Text>
 
-      {/* Show Image or Text */}
-      <View style={styles.dayDetailsBox}>
-        {image ? (
+      {outsideCount >= 0 ? (
+        <View style={styles.dayDetailsBox}>
           <Image
-            source={image}
-            style={[styles.icon, levelup && styles.levelup]}
+            source={
+              outsideCount ? CustomImages.redSpoon : CustomImages.greenSpoon
+            }
+            style={[styles.icon]}
             resizeMode="contain"
-            tintColor={levelup ? "" : themeColor ?? ""}
           />
-        ) : text ? (
-          <ImageBackground
-            source={CustomImages.calenderTextRing}
-            style={styles.imageBackground}
-            tintColor={themeColor ?? colors.lottieYellow}
-          >
-            <Text style={styles.detailText}>{text}</Text>
-          </ImageBackground>
-        ) : null}
-      </View>
+          {levelup && (
+            <Image
+              source={image}
+              style={[styles.icon, levelup && styles.levelup]}
+              resizeMode="contain"
+            />
+          )}
+          {outsideCount ? (
+            <Text style={[styles.outsideCount]}> x{String(outsideCount)}</Text>
+          ) : null}
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -59,19 +63,19 @@ const HomeFuelDays: React.FC<HomeFuelDaysProps> = ({
 export default HomeFuelDays;
 
 const styles = StyleSheet.create({
-  levelup: {
-    width: 45,
-    height: 45,
-    marginTop: 5,
-  },
-  detailText: {
-    textAlign: "center",
-    alignSelf: "center",
-    fontSize: 11,
+  outsideCount: {
+    fontSize: 12,
+    lineHeight: 14.4,
+    color: colors.darkRed,
     fontFamily: CustomFont.Urbanist700,
-    lineHeight: 13.2,
-    color: colors.secondary,
+    marginTop: 12,
   },
+  levelup: {
+    width: 30,
+    height: 30,
+    marginTop: 3,
+  },
+  detailText: {},
   imageBackground: {
     width: 48,
     height: 35,
@@ -79,19 +83,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-
   dayDetailsBox: {
     flexDirection: "row",
     justifyContent: "space-evenly",
+    alignItems: "center",
   },
   container: {
     alignItems: "center",
-    // borderColor: colors.secondaryWhite,
-    // borderWidth: 1,
     width: "100%",
     padding: 8,
     flexGrow: 1,
-    // justifyContent: "center",
   },
   text: {
     color: colors.secondaryLight,
@@ -104,8 +105,8 @@ const styles = StyleSheet.create({
   },
   todayText: {},
   icon: {
-    width: 32,
-    height: 32,
-    marginTop: 10,
+    width: 15,
+    height: 15,
+    marginTop: 12,
   },
 });

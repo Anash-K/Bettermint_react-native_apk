@@ -66,7 +66,7 @@ const PleaseShareYourMeasurement: React.FC<
   const handleConfirm = useCallback(
     (date: Date) => {
       let SomeDate = useTimeFormatter({ date: date });
-      setValue("Date of report", SomeDate);
+      setValue("Date of report", SomeDate ?? "");
       setError("Date of report", { type: "manual", message: "" });
       hideDatePicker();
     },
@@ -162,7 +162,7 @@ const PleaseShareYourMeasurement: React.FC<
               />
             </View>
 
-            <CustomButton text="Continue" onPress={handleNextNav} />
+            <CustomButton text="Update Reports" onPress={handleNextNav} />
           </View>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}

@@ -7,6 +7,14 @@ export const useCustomStyle = () => {
   const insets = useSafeAreaInsets();
 
   return {
+    calenderDates: {
+      textAlign: "center",
+      alignSelf: "center",
+      fontSize: 11,
+      fontFamily: CustomFont.Urbanist700,
+      lineHeight: 13.2,
+      color: colors.secondary,
+    } as TextStyle,
     commonText: {
       fontSize: 14,
       lineHeight: 16.8,

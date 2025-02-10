@@ -1,10 +1,7 @@
 import { CustomImages } from "../assets/CustomImages";
 
 // Mapping of dates (1 to 10) to specific images
-export const dateToImageMapOfStress: Record<
-  string,
-  { image: any; text: string }
-> = {
+export const dateToImageMapOfStress: Record<string, any> = {
   "2025-02-01": { image: CustomImages.confuse, text: "" },
   "2025-02-02": { image: CustomImages.smile, text: "" },
   "2025-02-03": { image: CustomImages.sad, text: "" },
@@ -46,16 +43,20 @@ export const dateToImageMapOfSleep: Record<string, any> = {
 } as const;
 
 export const dateToImageMapOfHomeFuel: Record<string, any> = {
-  "2025-02-01": { image: null, text: "Office Outing" },
-  "2025-02-02": { image: null, text: "Binge Watching" },
-  "2025-02-03": { image: CustomImages.pinkTick, text: "" },
-  "2025-02-04": { image: CustomImages.pinkTick, text: "" },
-  "2025-02-05": { image: CustomImages.pinkTick, text: "" },
-  "2025-02-06": { image: null, text: "Social Outing" },
-  "2025-02-07": { image: null, text: "Scrolling" },
-  "2025-02-08": { image: CustomImages.pinkTick, text: "" },
-  "2025-02-09": { image: CustomImages.greenlevelup, text: "", levelup: true },
-  "2025-02-10": { image: CustomImages.pinkTick, text: "" },
-  "2025-02-11": { image: null, text: "Scrolling" },
+  "2025-02-01": { outsideCount: 1 },
+  "2025-02-02": { outsideCount: 2 },
+  "2025-02-03": { outsideCount: 3 },
+  "2025-02-04": { outsideCount: 0 },
+  "2025-02-05": { outsideCount: 1 },
+  "2025-02-06": { outsideCount: 0 },
+  "2025-02-07": { outsideCount: 0 },
+  "2025-02-08": { outsideCount: 2 },
+  "2025-02-09": {
+    image: CustomImages.greenlevelup,
+    text: "",
+    levelup: true,
+    outsideCount: 0,
+  },
+  "2025-02-10": { outsideCount: 1 },
+  "2025-02-11": { outsideCount: 1 },
 } as const;
-

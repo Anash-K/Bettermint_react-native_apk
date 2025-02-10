@@ -7,10 +7,11 @@ import {
   View,
   ViewStyle,
 } from "react-native";
-import { CustomImages } from "../../assets/CustomImages";
-import CustomFont from "../../assets/fonts/customFonts";
-import { colors } from "../../constants/colors";
-import { useCustomStyle } from "../../constants/CustomStyles";
+import { useCustomStyle } from "../constants/CustomStyles";
+import { CustomImages } from "../assets/CustomImages";
+import { colors } from "../constants/colors";
+import CustomFont from "../assets/fonts/customFonts";
+
 
 interface ProfileTab {
   title: String;

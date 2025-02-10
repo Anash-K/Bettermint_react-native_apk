@@ -9,6 +9,8 @@ import { ScreenProps } from "../navigator/Stack";
 import DrawerButton from "../common/DrawerButton";
 import WhiteDot from "../common/WhiteDotBtn";
 import CustomButton from "../common/CustomButton";
+import { useDispatch } from "react-redux";
+import { setBooleanFieldAction } from "../redux/slices/workoutDetailsSlice";
 
 type DiseaseState = {
   Diabetes: boolean;
@@ -22,6 +24,7 @@ const DoYouHaveFamilyHistory: React.FC<
   ScreenProps<"DoYouHaveFamilyHistory">
 > = ({ navigation }) => {
   const CustomStyle = useCustomStyle();
+  const dispatch = useDispatch();
   const initialState: DiseaseState = {
     Diabetes: false,
     Cholesterol: false,
@@ -41,7 +44,8 @@ const DoYouHaveFamilyHistory: React.FC<
   };
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate('SmallBriefBettermint');
+    dispatch(setBooleanFieldAction({ field: "isProfileSetup", value: true }));
+    navigation.navigate("SmallBriefBettermint");
   }, []);
 
   return (
@@ -81,7 +85,7 @@ const DoYouHaveFamilyHistory: React.FC<
             />
           ))}
         </View>
-        <CustomButton text="Continue" onPress={handleNextNav} />
+        <CustomButton text="Update Family History" onPress={handleNextNav} />
       </View>
     </ScrollView>
   );
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
   radioButtonBox: {
     rowGap: 9,
     marginTop: 48,
-    marginBottom:48,
+    marginBottom: 48,
     flex: 1,
   },
   btnText: {
