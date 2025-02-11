@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useCallback, useState } from "react";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import DrawerButton from "../common/DrawerButton";
 import WhiteDot from "../common/WhiteDotBtn";
 import CustomButton from "../common/CustomButton";
+import useProfileSetup from "../hooks/useProfileSetup";
 
 type DiseaseState = {
   "Diabetes / Prediabetes": boolean;
@@ -25,6 +26,7 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
 }) => {
   const { gender } = useSelector((state: any) => state.auth);
   const CustomStyle = useCustomStyle();
+  const isProfileSetup = useProfileSetup();
   const initialState: DiseaseState = {
     "Diabetes / Prediabetes": false,
     Cholesterol: false,
@@ -48,7 +50,9 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
   };
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate("PleaseShareYourMeasurement");
+    isProfileSetup
+      ? navigation.goBack()
+      : navigation.navigate("PleaseShareYourMeasurement");
   }, []);
 
   return (
@@ -88,7 +92,11 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
             />
           ))}
         </View>
-        <CustomButton text="Continue" onPress={handleNextNav} />
+        <CustomButton
+          text={isProfileSetup ? "Update Health Conditions" : "Continue"}
+          onPress={handleNextNav}
+          buttonStyle={styles.buttonStyle}
+        />
       </View>
     </ScrollView>
   );
@@ -97,6 +105,9 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
 export default DoYouHaveDiseases;
 
 const styles = StyleSheet.create({
+  buttonStyle: {
+    marginBottom: Platform.select({ android: 40 }),
+  },
   contentStyle: {
     flexGrow: 1,
   },

@@ -15,12 +15,14 @@ import { colors } from "../constants/colors";
 import { ScreenProps } from "../navigator/Stack";
 import DrawerButton from "../common/DrawerButton";
 import CustomButton from "../common/CustomButton";
+import { useSelector } from "react-redux";
+import useProfileSetup from "../hooks/useProfileSetup";
 
 const WhatsYourHeight: React.FC<ScreenProps<"WhatsYourHeight">> = ({
   navigation,
 }) => {
   const customStyle = useCustomStyle();
-
+  const isProfileSetup = useProfileSetup();
   const heightData: { key: any }[] = Array.from({ length: 201 }, (_, i) => ({
     key: `${50 + i}`,
   }));
@@ -34,7 +36,7 @@ const WhatsYourHeight: React.FC<ScreenProps<"WhatsYourHeight">> = ({
   useEffect(() => {
     if (flatListRef.current) {
       setTimeout(() => {
-        flatListRef.current.scrollToOffset({
+        flatListRef.current?.scrollToOffset({
           offset:
             (heightData.length / 2) * itemWidth -
             screenWidth / 2 +
@@ -43,7 +45,7 @@ const WhatsYourHeight: React.FC<ScreenProps<"WhatsYourHeight">> = ({
         });
       }, 100);
     }
-  }, []);
+  }, [flatListRef.current]); // Add dependency
 
   const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
     if (viewableItems.length > 0) {
@@ -63,8 +65,10 @@ const WhatsYourHeight: React.FC<ScreenProps<"WhatsYourHeight">> = ({
   }, []);
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate('WhatsYourWeight');
-  }, []);
+    isProfileSetup
+      ? navigation.goBack()
+      : navigation.navigate("WhatsYourWeight");
+  }, [isProfileSetup, navigation]);
 
   return (
     <ScrollView
@@ -128,7 +132,7 @@ const WhatsYourHeight: React.FC<ScreenProps<"WhatsYourHeight">> = ({
       <View style={styles.bottomBtn}>
         <CustomButton
           buttonStyle={styles.submitButton}
-          text="Continue"
+          text={isProfileSetup ? 'Update Height' :"Continue"}
           onPress={handleNextNav}
         />
       </View>

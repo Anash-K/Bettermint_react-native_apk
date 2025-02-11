@@ -13,12 +13,12 @@ import CustomImageHandler from "../common/CustomImageHandler";
 import SimpleTabWrapper from "../common/SimpleTabWrapper";
 import SimpleTabs from "../common/SimpleTabs";
 import { colors } from "../constants/colors";
-import { ScreenProps } from "../navigator/Stack";
+import { ScreenParams, ScreenProps } from "../navigator/Stack";
 
 const EditProfile: React.FC<ScreenProps<"EditProfile">> = memo(
   ({ navigation }) => {
-    const handleActions = useCallback(({ page }: { page: string }) => {
-      navigation.navigate(page,{editable:true});
+    const handleActions = useCallback(({ page }: { page: any }) => {
+      navigation.navigate(page);
     }, []);
 
     return (
@@ -61,29 +61,56 @@ const EditProfile: React.FC<ScreenProps<"EditProfile">> = memo(
             tabIcon={CustomImages.height}
             actionText="5ft, 11in"
             HandlePress={handleActions.bind(this, {
-              page: "ProvideYourMobileNumber",
+              page: "WhatsYourHeight",
             })}
           />
           <SimpleTabs
             title="Weight"
             tabIcon={CustomImages.weight}
             actionText="72kg"
+            HandlePress={handleActions.bind(this, {
+              page: "WhatsYourWeight",
+            })}
           />
           <SimpleTabs
             title="Status"
             tabIcon={CustomImages.status}
             actionText="Working"
+            HandlePress={handleActions.bind(this, {
+              page: "WhatBestDescribe",
+            })}
           />
         </SimpleTabWrapper>
         <SimpleTabWrapper title="Wellness Details">
-          <SimpleTabs title="Body Measurements" tabIcon={CustomImages.scale} />
-          <SimpleTabs title="Disease" tabIcon={CustomImages.disease} />
+          <SimpleTabs
+            title="Body Measurements"
+            tabIcon={CustomImages.scale}
+            HandlePress={handleActions.bind(this, {
+              page: "WhatsYourMeasurement",
+            })}
+          />
+          <SimpleTabs
+            title="Disease"
+            tabIcon={CustomImages.disease}
+            HandlePress={handleActions.bind(this, {
+              page: "DoYouHaveDiseases",
+            })}
+          />
           <SimpleTabs
             title="Health Reports"
             tabIcon={CustomImages.history}
             actionText="Add"
+            HandlePress={handleActions.bind(this, {
+              page: "PleaseShareYourMeasurement",
+            })}
           />
-          <SimpleTabs title="Family History" tabIcon={CustomImages.disease} />
+          <SimpleTabs
+            title="Family History"
+            tabIcon={CustomImages.disease}
+            HandlePress={handleActions.bind(this, {
+              page: "DoYouHaveFamilyHistory",
+            })}
+          />
         </SimpleTabWrapper>
       </ScrollView>
     );

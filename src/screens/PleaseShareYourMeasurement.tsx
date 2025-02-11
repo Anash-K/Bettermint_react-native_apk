@@ -21,6 +21,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import useTimeFormatter from "../utils/timeFormatter";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
+import useProfileSetup from "../hooks/useProfileSetup";
 
 interface Inputs {
   "Fasting blood sugar/glucose (mg / DL)": string;
@@ -34,6 +35,7 @@ interface Inputs {
 const PleaseShareYourMeasurement: React.FC<
   ScreenProps<"PleaseShareYourMeasurement">
 > = ({ navigation }) => {
+  const isProfileSetup = useProfileSetup();
   const initialValues: Inputs = {
     "Fasting blood sugar/glucose (mg / DL)": "74",
     "Total Cholesterol (mg / DL)": "184",
@@ -77,7 +79,9 @@ const PleaseShareYourMeasurement: React.FC<
   const Insets = useSafeAreaInsets();
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate("DoYouHaveFamilyHistory");
+    isProfileSetup
+      ? navigation.goBack()
+      : navigation.navigate("DoYouHaveFamilyHistory");
   }, [navigation]);
 
   const inputFields = [
@@ -162,7 +166,10 @@ const PleaseShareYourMeasurement: React.FC<
               />
             </View>
 
-            <CustomButton text="Update Reports" onPress={handleNextNav} />
+            <CustomButton
+              text={isProfileSetup ? "Update Reports" : "Continue"}
+              onPress={handleNextNav}
+            />
           </View>
           <DateTimePickerModal
             isVisible={isDatePickerVisible}

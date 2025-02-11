@@ -16,6 +16,7 @@ import { ScreenProps } from "../navigator/Stack";
 import { useSelector } from "react-redux";
 import DrawerButton from "../common/DrawerButton";
 import CustomButton from "../common/CustomButton";
+import useProfileSetup from "../hooks/useProfileSetup";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -24,7 +25,7 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
 }) => {
   const gender = useSelector((state: any) => state.auth);
   const customStyle = useCustomStyle();
-
+  const isProfileSetup = useProfileSetup();
   const heightData: { key: any }[] = Array.from({ length: 201 }, (_, i) => ({
     key: `${50 + i}`,
   }));
@@ -67,7 +68,9 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
   }, []);
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate('DoYouHaveDiseases');
+    isProfileSetup
+      ? navigation.goBack()
+      : navigation.navigate("DoYouHaveDiseases");
   }, []);
 
   console.log(width, "screen width");
@@ -152,7 +155,7 @@ const WhatsYourMeasurement: React.FC<ScreenProps<"WhatsYourMeasurement">> = ({
       <View style={styles.bottomBtn}>
         <CustomButton
           buttonStyle={styles.submitButton}
-          text="Continue"
+          text={isProfileSetup ? "Update Measurements" : "Continue"}
           onPress={handleNextNav}
         />
       </View>
@@ -210,9 +213,9 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 48,
-    maxWidth:343,
-    marginHorizontal:'auto',
-    marginTop:21
+    maxWidth: 343,
+    marginHorizontal: "auto",
+    marginTop: 21,
   },
   selectedHeightText: {
     marginTop: 20,

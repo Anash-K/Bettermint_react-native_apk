@@ -13,11 +13,10 @@ import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 
-
 interface CustomOptions {
   startingNumber: number;
   endingNumber: number;
-}
+};
 
 interface CustomSelectorProps {
   question: string;
@@ -31,7 +30,7 @@ interface CustomSelectorProps {
   buttonStyle?: ViewStyle;
   optionStyle?: TextStyle;
   CustomOptions?: CustomOptions;
-}
+};
 
 interface CustomOptionsComponent {
   customOptions: number | undefined;
@@ -39,9 +38,9 @@ interface CustomOptionsComponent {
   item: string;
   buttonStyle: ViewStyle | undefined;
   onSelect: (text: string) => void;
-  optionStyle: TextStyle | undefined;
+  optionStyle: TextStyle | TextStyle[] | undefined;
   outerBorderBoxStyle: ViewStyle | undefined;
-}
+};
 
 const CustomOptionsComponent = ({
   customOptions,
@@ -113,6 +112,7 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
   } else {
     generatedOptions = options;
   }
+
   return (
     <View style={[styles.card, CustomStyle.CommonCardShadow, outerCardStyle]}>
       <Text style={[styles.question, questionStyle]}>
@@ -123,7 +123,7 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
           <CustomOptionsComponent
             key={index}
             customOptions={CustomOptions?.startingNumber}
-            optionStyle={optionStyle}
+            optionStyle={[optionStyle as any]}
             outerBorderBoxStyle={outerBorderBoxStyle}
             selectedOption={selectedOption}
             buttonStyle={buttonStyle}
@@ -184,8 +184,8 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   question: {
-    fontSize: 18,
-    lineHeight: 21.6,
+    fontSize: 20,
+    lineHeight: 24,
     fontFamily: CustomFont.Urbanist700,
     marginBottom: 24,
     color: colors.primary,

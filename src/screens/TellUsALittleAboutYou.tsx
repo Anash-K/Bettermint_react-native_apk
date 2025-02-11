@@ -19,6 +19,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import useTimeFormatter from "../utils/timeFormatter";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
+import { RootState } from "../redux/rootReducer";
 
 interface Inputs {
   name: string;
@@ -48,6 +49,9 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     } = useForm<Inputs>();
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const { isProfileSetup } = useSelector(
+      (state: RootState) => state.userDetails
+    );
     const showDatePicker = useCallback(() => {
       setDatePickerVisibility(true);
     }, [isDatePickerVisible]);
@@ -68,15 +72,13 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
 
     console.log(route.params, "route");
 
-    const { editable } = route.params;
-
     const dispatch = useDispatch();
     const CustomStyle = useCustomStyle();
 
     const onSubmit = useCallback((data: any) => {
       dispatch(gender(data.Gender));
       {
-        editable
+        isProfileSetup
           ? navigation.goBack()
           : navigation.navigate("ProvideYourMobileNumber");
       }
@@ -98,10 +100,12 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
       >
         <View style={styles.topContainer}>
           <Text style={[CustomStyle.title, styles.title]}>
-            {editable ? "Update Your Details" : "Tell us a little about you"}
+            {isProfileSetup
+              ? "Update Your Details"
+              : "Tell us a little about you"}
           </Text>
           <Text style={[CustomStyle.subtitle, styles.subtitle]}>
-            {editable
+            {isProfileSetup
               ? "Update your information to personalize your experience further."
               : "Please provide basic details about yourself to personalize your experience."}
           </Text>
@@ -190,7 +194,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
           )}
         </View>
         <CustomButton
-          text={editable ? "Save Changes" : "Continue"}
+          text={isProfileSetup ? "Save Changes" : "Continue"}
           onPress={handleSubmit(onSubmit)}
         />
         <DateTimePickerModal

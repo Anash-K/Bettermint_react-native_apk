@@ -15,6 +15,7 @@ const initialValues = [
     content: "",
     color: "#45c6f6", // Solid color (for text/icon)
     iconBoxColor: "#45c6f640", // Background color with opacity
+    navPage: "LogSleep",
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ const initialValues = [
     content: "",
     color: "#ff5733",
     iconBoxColor: "#ff573360",
+    navPage: "LogWorkout",
   },
   {
     id: 3,
@@ -77,7 +79,7 @@ const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
             IconSrc={item.iconSrc}
             color={item.color ?? ""}
             iconBoxColor={item.iconBoxColor} // Passing separately
-            OnClick={() => handleNextNav("LogStress")}
+            OnClick={() => handleNextNav(item.navPage)}
           />
         ))}
       </View>

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
@@ -11,6 +11,7 @@ import WhiteDot from "../common/WhiteDotBtn";
 import CustomButton from "../common/CustomButton";
 import { useDispatch } from "react-redux";
 import { setBooleanFieldAction } from "../redux/slices/workoutDetailsSlice";
+import useProfileSetup from "../hooks/useProfileSetup";
 
 type DiseaseState = {
   Diabetes: boolean;
@@ -25,6 +26,7 @@ const DoYouHaveFamilyHistory: React.FC<
 > = ({ navigation }) => {
   const CustomStyle = useCustomStyle();
   const dispatch = useDispatch();
+  const isProfileSetup = useProfileSetup();
   const initialState: DiseaseState = {
     Diabetes: false,
     Cholesterol: false,
@@ -45,7 +47,9 @@ const DoYouHaveFamilyHistory: React.FC<
 
   const handleNextNav = useCallback(() => {
     dispatch(setBooleanFieldAction({ field: "isProfileSetup", value: true }));
-    navigation.navigate("SmallBriefBettermint");
+    isProfileSetup
+      ? navigation.goBack()
+      : navigation.navigate("SmallBriefBettermint");
   }, []);
 
   return (
@@ -85,7 +89,11 @@ const DoYouHaveFamilyHistory: React.FC<
             />
           ))}
         </View>
-        <CustomButton text="Update Family History" onPress={handleNextNav} />
+        <CustomButton
+          text={isProfileSetup ? "Update Family History" : "Continue"}
+          onPress={handleNextNav}
+          buttonStyle={styles.buttonStyle}
+        />
       </View>
     </ScrollView>
   );
@@ -94,6 +102,9 @@ const DoYouHaveFamilyHistory: React.FC<
 export default DoYouHaveFamilyHistory;
 
 const styles = StyleSheet.create({
+  buttonStyle: {
+    marginBottom: Platform.select({ android: 40 }),
+  },
   title: {
     maxWidth: 343,
     marginHorizontal: "auto",

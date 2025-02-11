@@ -99,4 +99,8 @@ export const CustomImages = {
   exclusiveIcon:require("./Images/exclusiveIcon.png"),
   linearArrow:require("./Images/lieanrArrow.png"),
   premium:require("./Images/premium.png"),
+  afternoon:require("./Images/afternoonIcon.png"),
+  nightIcon:require("./Images/nightIcon.png"),
+  weatherIcon:require("./Images/wheatherIcon.png"),
+  clockIcon:require("./Images/clockIcon.png"),
 };

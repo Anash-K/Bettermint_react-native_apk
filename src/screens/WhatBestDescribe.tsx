@@ -6,9 +6,13 @@ import { ScreenProps } from "../navigator/Stack";
 import DrawerButton from "../common/DrawerButton";
 import WhiteDot from "../common/WhiteDotBtn";
 import CustomButton from "../common/CustomButton";
+import useProfileSetup from "../hooks/useProfileSetup";
 
-const WhatBestDescribe:React.FC<ScreenProps<'WhatBestDescribe'>> = ({navigation}) => {
+const WhatBestDescribe: React.FC<ScreenProps<"WhatBestDescribe">> = ({
+  navigation,
+}) => {
   const CustomStyle = useCustomStyle();
+  const isProfileSetup = useProfileSetup();
   const initialState = {
     working: true,
     studying: false,
@@ -30,7 +34,7 @@ const WhatBestDescribe:React.FC<ScreenProps<'WhatBestDescribe'>> = ({navigation}
   );
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate('AddYourPhoto')
+    isProfileSetup ? navigation.goBack() : navigation.navigate("AddYourPhoto");
   }, []);
 
   return (
@@ -43,7 +47,7 @@ const WhatBestDescribe:React.FC<ScreenProps<'WhatBestDescribe'>> = ({navigation}
           text="Working"
           buttonStyle={styles.commonButtonStyle}
           textStyle={styles.btnText}
-          customIcon={<WhiteDot isFocus={radioButton.working}/>}
+          customIcon={<WhiteDot isFocus={radioButton.working} />}
           onPress={handlePress.bind(this, "working")}
           customIconPosition="right"
           isFocus={radioButton.working}
@@ -54,20 +58,23 @@ const WhatBestDescribe:React.FC<ScreenProps<'WhatBestDescribe'>> = ({navigation}
           textStyle={styles.btnText}
           customIcon={<WhiteDot isFocus={radioButton.studying} />}
           onPress={handlePress.bind(this, "studying")}
-           customIconPosition="right"
+          customIconPosition="right"
           isFocus={radioButton.studying}
         />
         <DrawerButton
           text="Neither"
           buttonStyle={styles.commonButtonStyle}
           textStyle={styles.btnText}
-          customIcon={<WhiteDot isFocus={radioButton.neither}/>}
+          customIcon={<WhiteDot isFocus={radioButton.neither} />}
           onPress={handlePress.bind(this, "neither")}
           customIconPosition="right"
           isFocus={radioButton.neither}
         />
       </View>
-      <CustomButton text="Continue" onPress={handleNextNav} />
+      <CustomButton
+        text={isProfileSetup ? "Update Status" : "Continue"}
+        onPress={handleNextNav}
+      />
     </View>
   );
 };
@@ -92,7 +99,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
     paddingVertical: 18.5,
-    paddingRight:18,
+    paddingRight: 18,
 
     // iOS Shadow
     shadowColor: "rgba(28, 101, 124, 0.2)",

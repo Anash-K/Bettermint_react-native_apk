@@ -11,6 +11,8 @@ import { ICountry } from "react-native-international-phone-number";
 import { ScreenProps } from "../navigator/Stack";
 import CustomButton from "../common/CustomButton";
 import CustomInput from "../common/CustomInput";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 const ProvideYourMobileNumber: React.FC<
   ScreenProps<"ProvideYourMobileNumber">
@@ -20,7 +22,7 @@ const ProvideYourMobileNumber: React.FC<
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false); // Track if input has been touched
-  const { editable } = route.params;
+  const { isProfileSetup } = useSelector((state: RootState) => state.userDetails);
 
   const handleSelectedCountry = useCallback((country: ICountry) => {
     setSelectedCountry(country);
@@ -28,24 +30,24 @@ const ProvideYourMobileNumber: React.FC<
   }, []);
 
   const handleInputChange = useCallback(
-    (text: string) => {
-      const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15);
+  (text: string) => {
+    const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15); // Allow only numbers & limit to 15 digits
 
-      if (formattedText.length > 15) {
-        setError("Phone number cannot exceed 15 characters");
-        return;
-      } else if (!/^[0-9]*$/.test(formattedText)) {
-        setError("Only numeric values are allowed");
-        return;
-      } else {
-        setError(null);
-      }
-      setTouched(true); // Set touched when user types
+    if (formattedText.length > 15) {
+      setError("Phone number cannot exceed 15 characters");
+      return;
+    } else if (!/^[0-9]*$/.test(formattedText)) {
+      setError("Only numeric values are allowed");
+      return;
+    } else {
+      setError(null);
+    }
+    setTouched(true); // Set touched when user types
 
-      setPhoneNumber(text);
-    },
-    [phoneNumber, touched, error]
-  );
+    setPhoneNumber(formattedText); // Fix: Use formattedText instead of text
+  },
+  [phoneNumber, touched, error]
+);
 
   const handleNextNav = useCallback(() => {
     // Check if phone number is required
@@ -57,9 +59,9 @@ const ProvideYourMobileNumber: React.FC<
 
     if (!error) {
       {
-        editable
+        isProfileSetup
           ? navigation.goBack()
-          : navigation.navigate("WhatsYourHeight", {});
+          : navigation.navigate("WhatsYourHeight");
       }
     }
   }, [phoneNumber, setError, setTouched, navigation]);
@@ -84,7 +86,7 @@ const ProvideYourMobileNumber: React.FC<
           {error && <Text style={CustomStyle.errorMessage}>{error}</Text>}
         </View>
         <CustomButton
-          text={editable ? "Update Mobile No." : "Continue"}
+          text={isProfileSetup ? "Update Mobile No." : "Continue"}
           onPress={handleNextNav}
         />
       </View>

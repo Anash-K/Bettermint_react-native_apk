@@ -7,6 +7,28 @@ export const useCustomStyle = () => {
   const insets = useSafeAreaInsets();
 
   return {
+    SelectQuestionStyle: {
+      fontSize: 20,
+      lineHeight: 24,
+      fontFamily: CustomFont.Urbanist700,
+      marginBottom: 24,
+      color: colors.primary,
+      textAlign: "center",
+      paddingHorizontal: 16,
+    } as TextStyle,
+    cardStyle: {
+      backgroundColor: "#fff",
+      borderRadius: 20,
+      paddingVertical: 24,
+      paddingHorizontal: 16,
+      marginVertical: 16,
+      shadowColor: colors.gray,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 10,
+      marginHorizontal: 16,
+    } as ViewStyle,
     calenderDates: {
       textAlign: "center",
       alignSelf: "center",

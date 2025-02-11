@@ -6,6 +6,7 @@ import { useCustomStyle } from "../constants/CustomStyles";
 import CustomEmotionSelector from "../common/CustomEmotionSelector";
 import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
+import StatusBarWrapper from "../components/StatusBarWrapper";
 
 const LogStress: React.FC<ScreenProps<"LogStress">> = ({ navigation }) => {
   const CustomStyle = useCustomStyle();
@@ -44,57 +45,60 @@ const LogStress: React.FC<ScreenProps<"LogStress">> = ({ navigation }) => {
   }, []);
 
   return (
-    <ScrollView
-      style={[styles.container, CustomStyle.safeAreaMarginBottom]}
-      contentContainerStyle={[styles.contentStyle]}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.content}>
-        <CustomEmotionSelector
-          question="How would you rate your emotional state today?"
-          options={EmotionArray}
-          selectedOption={
-            selectedOptions["How would you rate your emotional state today?"] ||
-            ""
-          }
-          onSelect={(option) =>
-            handleSelect(
-              "How would you rate your emotional state today?",
-              option
-            )
-          }
-        />
+    <StatusBarWrapper>
+      <ScrollView
+        style={[styles.container, CustomStyle.safeAreaMarginBottom]}
+        contentContainerStyle={[styles.contentStyle]}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          <CustomEmotionSelector
+            question="How would you rate your emotional state today?"
+            options={EmotionArray}
+            selectedOption={
+              selectedOptions[
+                "How would you rate your emotional state today?"
+              ] || ""
+            }
+            onSelect={(option) =>
+              handleSelect(
+                "How would you rate your emotional state today?",
+                option
+              )
+            }
+          />
 
-        <CustomTextOptionSelector
-          question="What influenced your mood today?"
-          options={textArray}
-          selectedOption={
-            selectedOptions["What influenced your mood today?"] || ""
-          }
-          onSelect={(option) =>
-            handleSelect("What influenced your mood today?", option)
-          }
-        />
+          <CustomTextOptionSelector
+            question="What influenced your mood today?"
+            options={textArray}
+            selectedOption={
+              selectedOptions["What influenced your mood today?"] || ""
+            }
+            onSelect={(option) =>
+              handleSelect("What influenced your mood today?", option)
+            }
+          />
 
-        <CustomTextOptionSelector
-          question="Was your mood within your control?"
-          options={lastArray}
-          selectedOption={
-            selectedOptions["Was your mood within your control?"] || ""
-          }
-          onSelect={(option) =>
-            handleSelect("Was your mood within your control?", option)
-          }
-          optionStyle={{ width: "100%" }}
-        />
-      </View>
+          <CustomTextOptionSelector
+            question="Was your mood within your control?"
+            options={lastArray}
+            selectedOption={
+              selectedOptions["Was your mood within your control?"] || ""
+            }
+            onSelect={(option) =>
+              handleSelect("Was your mood within your control?", option)
+            }
+            optionStyle={{ width: "100%" }}
+          />
+        </View>
 
-      <CustomButton
-        text="Save"
-        onPress={handleNextNav}
-        buttonStyle={styles.buttonStyle}
-      />
-    </ScrollView>
+        <CustomButton
+          text="Save"
+          onPress={handleNextNav}
+          buttonStyle={styles.buttonStyle}
+        />
+      </ScrollView>
+    </StatusBarWrapper>
   );
 };
 

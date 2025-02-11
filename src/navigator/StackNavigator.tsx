@@ -1,5 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Image, StatusBar, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Image,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import React, { useCallback } from "react";
 import { ScreenProps } from "./Stack";
 import ProvideYourMobileNumber from "../screens/ProvideYourMobileNumber";
@@ -39,23 +45,31 @@ import CustomButton from "../common/CustomButton";
 import CustomHeader from "../common/CustomHeader";
 //@ts-ignore
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+//@ts-ignore
 import EvilIcons from "react-native-vector-icons/EvilIcons";
+//@ts-ignore
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
+import LogSleep from "../screens/LogSleep";
+import LogUnPlug from "../screens/LogUnPlug";
+import LogMorningRoutine from "../screens/LogMorningRoutine";
+import LogUnwind from "../screens/LogUnwind";
+import LogWorkout from "../screens/LogWorkout";
+import LogBalancedWorkout from "../screens/LogBalancedWorkout";
 
 export type StackParams = {
-  TellUsALittleAboutYou: { editable?: boolean | null } | undefined;
-  ProvideYourMobileNumber: { editable?: boolean | null };
-  WhatsYourHeight: { editable?: boolean  };
-  WhatsYourWeight: { editable?: boolean  } | undefined;
-  WhatBestDescribe: { editable?: boolean | null };
-  AddYourPhoto: { editable?: boolean | null };
-  WhatsYourMeasurement: { editable?: boolean | null };
+  TellUsALittleAboutYou: undefined;
+  ProvideYourMobileNumber: undefined;
+  WhatsYourHeight: undefined;
+  WhatsYourWeight: undefined;
+  WhatBestDescribe: undefined;
+  AddYourPhoto: undefined;
+  WhatsYourMeasurement: undefined;
   Guide: undefined;
-  DoYouHaveDiseases: { editable?: boolean | null };
-  DoYouHaveFamilyHistory: { editable?: boolean | null };
-  PleaseShareYourMeasurement: { editable?: boolean };
+  DoYouHaveDiseases: undefined;
+  DoYouHaveFamilyHistory: undefined;
+  PleaseShareYourMeasurement: undefined;
   SmallBriefBettermint: undefined;
   MovementAssesment: undefined;
   DoYouWorkOut: undefined;
@@ -74,6 +88,12 @@ export type StackParams = {
   ChangePassword: undefined;
   EditProfile: undefined;
   ExclusiveFitness: undefined;
+  LogSleep: undefined;
+  LogUnPlug: undefined;
+  LogMorningRoutine: undefined;
+  LogUnwind: undefined;
+  LogWorkout: undefined;
+  LogBalancedWorkout: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -86,7 +106,13 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
   const handlePress = useCallback(() => {}, []);
   return (
     <>
-      <StatusBar barStyle={"dark-content"} backgroundColor={"red"} />
+      <StatusBar
+        barStyle={Platform.select({
+          ios: "dark-content",
+          android: "light-content",
+        })}
+        backgroundColor={colors.primary}
+      />
       <Stack.Navigator
         screenOptions={({ navigation }) => ({
           contentStyle: styles.contentPagesStyle,
@@ -149,14 +175,15 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           component={AddYourPhoto}
           options={({ navigation }) => ({
             headerTitle: "",
-            headerRight: () => (
-              <CustomButton
-                text="Skip"
-                buttonStyle={styles.skipButton}
-                textStyle={styles.skipText}
-                onPress={() => navigation.navigate("WhatsYourMeasurement")}
-              />
-            ),
+            headerRight: () =>
+              isProfileSetup ? null : (
+                <CustomButton
+                  text="Skip"
+                  buttonStyle={styles.skipButton}
+                  textStyle={styles.skipText}
+                  onPress={() => navigation.navigate("WhatsYourMeasurement")}
+                />
+              ),
           })}
         />
         <Stack.Screen
@@ -173,7 +200,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             headerTitle: "",
             header: () => (
               <CustomHeader
-                title="Self-Assessment"
+                title={isProfileSetup ? "" : "Self-Assessment"}
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}
@@ -221,7 +248,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             headerTitle: "",
             header: () => (
               <CustomHeader
-                title="Self-Assessment"
+                title={isProfileSetup ? "" : "Self-Assessment"}
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}
@@ -241,7 +268,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             headerTitle: "",
             header: () => (
               <CustomHeader
-                title="Self-Assessment"
+                title={isProfileSetup ? "" : "Self-Assessment"}
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}
@@ -261,7 +288,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             headerTitle: "",
             header: () => (
               <CustomHeader
-                title="Self-Assessment"
+                title={isProfileSetup ? "" : "Self-Assessment"}
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}
@@ -271,14 +298,16 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
                   />
                 }
                 rightComponent={
-                  <CustomButton
-                    text="Skip"
-                    buttonStyle={styles.skipButton}
-                    textStyle={styles.skipText}
-                    onPress={() =>
-                      navigation.navigate("DoYouHaveFamilyHistory")
-                    }
-                  />
+                  isProfileSetup ? null : (
+                    <CustomButton
+                      text="Skip"
+                      buttonStyle={styles.skipButton}
+                      textStyle={styles.skipText}
+                      onPress={() =>
+                        navigation.navigate("DoYouHaveFamilyHistory")
+                      }
+                    />
+                  )
                 }
               />
             ),
@@ -618,6 +647,126 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
                   >
                     <AntDesign name="close" size={32} color={colors.primary} />
                   </TouchableOpacity>
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogSleep"
+          component={LogSleep}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Sleep"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogUnPlug"
+          component={LogUnPlug}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Unplug"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogMorningRoutine"
+          component={LogMorningRoutine}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Morning Routine"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogUnwind"
+          component={LogUnwind}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Unwind"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogWorkout"
+          component={LogWorkout}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Workout"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogBalancedWorkout"
+          component={LogBalancedWorkout}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Balanced Workout"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
                 }
               />
             ),
