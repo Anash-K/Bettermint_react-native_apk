@@ -9,11 +9,12 @@ import CustomFont from "../assets/fonts/customFonts";
 interface SelectDropdownInputType {
   options: string[] | any;
   onChange: any;
-  suffix?:string;
+  suffix?: string;
+  textSize?: number;
 }
 
 const SelectDropdownInput: React.FC<SelectDropdownInputType> = memo(
-  ({ options, onChange ,suffix}) => {
+  ({ options, onChange, suffix, textSize }) => {
     return (
       <View style={styles.container}>
         <SelectDropdown
@@ -31,9 +32,11 @@ const SelectDropdownInput: React.FC<SelectDropdownInputType> = memo(
                   style={[
                     styles.SelectInputText,
                     !selectedItem?.title && styles.SelectInputTextEmpty,
+                    textSize && { fontSize: textSize },
                   ]}
                 >
-                  {selectedItem?.title ?? "Select"}{suffix}
+                  {selectedItem?.title ?? "Select"}
+                  {suffix}
                 </Text>
                 <FastImage
                   source={CustomImages.calenderArrow}

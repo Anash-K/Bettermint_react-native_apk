@@ -52,6 +52,8 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     const { isProfileSetup } = useSelector(
       (state: RootState) => state.userDetails
     );
+
+
     const showDatePicker = useCallback(() => {
       setDatePickerVisibility(true);
     }, [isDatePickerVisible]);
@@ -70,7 +72,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
       [hideDatePicker]
     );
 
-    console.log(route.params, "route");
+    console.log(isProfileSetup, "isProfileSetup");
 
     const dispatch = useDispatch();
     const CustomStyle = useCustomStyle();

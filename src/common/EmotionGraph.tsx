@@ -75,53 +75,48 @@ const EmotionGraph: React.FC<EmotionGraphType> = memo(
           </View>
         </View>
         <View style={styles.graphBox}>
-          <View
-            style={{
-              height: 250,
-              justifyContent:'space-between',
-              marginRight: 2,
-              marginBottom: 25,
-            }}
-          >
+          <View style={styles.yAxisLabels}>
             {yAxisImages.map((img, index) => (
               <FastImage key={index} source={img} style={styles.emotionIcon} />
             ))}
           </View>
-          <LineChart
-            areaChart
-            curved
-            data={dataSet1 ?? []}
-            data2={dataSet2 ?? []}
-            height={250}
-            spacing={50}
-            initialSpacing={0}
-            color1={color1}
-            color2={color2 ?? "orange"}
-            textColor1="green"
-            hideDataPoints
-            dataPointsColor1={color1}
-            dataPointsColor2={color2 ?? "orange"}
-            startFillColor1={color1}
-            startFillColor2={color2 ?? "orange"}
-            startOpacity={1}
-            endOpacity={0.7}
-            maxValue={5}
-            textShiftY={-2}
-            textShiftX={-5}
-            yAxisOffset={0}
-            yAxisLabelSuffix="k"
-            textFontSize={13}
-            noOfSections={5}
-            xAxisLabelTexts={months}
-            yAxisLabelTexts={yAxislabel ?? []}
-            hideYAxisText
-            yAxisTextStyle={[styles.commonAxisStyle, styles.yAxisText]}
-            xAxisLabelTextStyle={[styles.commonAxisStyle, styles.xAxisText]}
-            hideRules={true}
-            xAxisColor={colors.chartBarColor}
-            yAxisColor={colors.chartBarColor}
-            xAxisLength={width - 100}
-          />
+          <View style={styles.graphTree}>
+            <LineChart
+              areaChart
+              curved
+              data={dataSet1 ?? []}
+              data2={dataSet2 ?? []}
+              height={185}
+              spacing={50}
+              initialSpacing={0}
+              color1={color1}
+              color2={color2 ?? "orange"}
+              textColor1="green"
+              hideDataPoints
+              dataPointsColor1={color1}
+              dataPointsColor2={color2 ?? "orange"}
+              startFillColor1={color1}
+              startFillColor2={color2 ?? "orange"}
+              startOpacity={1}
+              endOpacity={0.7}
+              maxValue={5}
+              textShiftY={-2}
+              textShiftX={-5}
+              yAxisOffset={0}
+              yAxisLabelSuffix="k"
+              textFontSize={13}
+              noOfSections={5}
+              xAxisLabelTexts={months}
+              yAxisLabelTexts={yAxislabel ?? []}
+              hideYAxisText
+              yAxisTextStyle={[styles.commonAxisStyle, styles.yAxisText]}
+              xAxisLabelTextStyle={[styles.commonAxisStyle, styles.xAxisText]}
+              hideRules={true}
+              xAxisColor={colors.chartBarColor}
+              yAxisColor={colors.chartBarColor}
+              xAxisLength={30}
+            />
+          </View>
         </View>
 
         <View style={styles.feedbackBox}>
@@ -138,9 +133,19 @@ const EmotionGraph: React.FC<EmotionGraphType> = memo(
 export default EmotionGraph;
 
 const styles = StyleSheet.create({
+  yAxisLabels: {
+    height: 185,
+    justifyContent: "space-between",
+    marginRight: 2,
+    marginBottom: 20,
+    flex: 0.07,
+  },
+  graphTree: {
+    flex: 0.93,
+  },
   emotionIcon: {
-    width: 22,
-    height: 22,
+    width: 20,
+    height: 20,
   },
   graphBox: {
     flexDirection: "row",
@@ -175,6 +180,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     borderRadius: 25,
     paddingBottom: 18,
+    overflow: "hidden",
   },
   xAxisText: {
     marginLeft: 10,

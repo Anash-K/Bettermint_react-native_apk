@@ -8,13 +8,13 @@ import { CustomImages } from "../assets/CustomImages";
 interface HomeFuelCalenderHeaderType {
   icon?: any;
   title: string;
-  headingText?: string;
+  performanceRatio?: number;
   headerIcon?: any;
   headerColor?: string;
 }
 
 const HomeFuelCalenderHeader: React.FC<HomeFuelCalenderHeaderType> = memo(
-  ({ icon, title, headingText, headerIcon, headerColor }) => {
+  ({ icon, title, performanceRatio, headerIcon, headerColor }) => {
     const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Week"];
 
     return (
@@ -26,11 +26,18 @@ const HomeFuelCalenderHeader: React.FC<HomeFuelCalenderHeaderType> = memo(
           ]}
         >
           <Text style={styles.title}>{title ?? "title"}</Text>
-          <View style={styles.innerContainer}>
+          <View
+            style={[
+              styles.innerContainer,
+              headerIcon || performanceRatio
+                ? { borderColor: "rgba(255, 255, 255, 0.25)" }
+                : null,
+            ]}
+          >
             {icon && <Image source={headerIcon ?? ""} />}
-            {headingText && (
+            {performanceRatio && (
               <View style={styles.headerTextBox}>
-                <Text style={styles.headerText}>{headingText}</Text>
+                <Text style={styles.headerText}>{performanceRatio}%</Text>
               </View>
             )}
           </View>
@@ -75,7 +82,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19.2,
     fontFamily: CustomFont.Urbanist700,
-    color: colors.red,
+    color: colors.lottieGreen,
   },
   redBox: {
     backgroundColor: "#c53b3d26",
@@ -115,8 +122,9 @@ const styles = StyleSheet.create({
   infoBox2: {},
   innerContainer: {
     flexDirection: "row",
-    backgroundColor: colors.white,
     borderRadius: 36,
+    borderColor: "transparent",
+    borderWidth: 2,
   },
   title: {
     fontFamily: CustomFont.Urbanist800,
@@ -134,6 +142,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "row",
     paddingRight: 20,
+    alignItems:'center'
   },
   weekBox: {
     flexDirection: "row",

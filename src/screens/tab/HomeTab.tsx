@@ -1,4 +1,11 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+} from "react-native";
 import FastImage from "react-native-fast-image";
 import * as Progress from "react-native-progress";
 import React, { useState } from "react";
@@ -12,10 +19,19 @@ import { RootState } from "../../redux/rootReducer";
 import { ScreenProps } from "../../navigator/Stack";
 import EmojiOrImageCard from "../../common/EmojiCard";
 import LinearProgressBar from "../../common/LinearProgressBar";
+import * as ProgressBar from "react-native-progress";
 
 interface initialValues {
   week: number;
   month: number;
+}
+
+interface ToxicStateType {
+  movementText?: TextStyle;
+  nourishText?: TextStyle;
+  wellbeingText?: TextStyle;
+  titleLottieText?: TextStyle;
+  sleepText?: TextStyle;
 }
 
 const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
@@ -23,7 +39,7 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
     (state: RootState) => state.userDetails
   );
 
-  const [toxicState, setToxicState] = useState({});
+  const [toxicState, setToxicState] = useState<ToxicStateType>({});
   const initialValues: initialValues = {
     week: 90,
     month: 75,
@@ -193,6 +209,7 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
                   backgroundColor={colors.progressBarBackground}
                   lineCap="round"
                   rotation={0}
+                  duration={0}
                 >
                   {(fill) => <Text style={styles.progressText}>{fill}%</Text>}
                 </AnimatedCircularProgress>
@@ -209,6 +226,7 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
                   backgroundColor={colors.progressBarBackground}
                   lineCap="round"
                   rotation={0}
+                  duration={0}
                 >
                   {(fill) => <Text style={styles.progressText}>{fill}%</Text>}
                 </AnimatedCircularProgress>

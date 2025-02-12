@@ -70,7 +70,7 @@ const GraphHandler: React.FC<GraphHandlerType> = memo(
           curved
           data={dataSet1 ?? []}
           data2={dataSet2 ?? []}
-          height={250}
+          height={185}
           spacing={50}
           initialSpacing={0}
           color1={color1}

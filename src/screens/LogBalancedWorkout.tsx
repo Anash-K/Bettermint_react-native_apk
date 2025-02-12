@@ -78,7 +78,7 @@ const LogBalancedWorkout: React.FC<ScreenProps<"LogBalancedWorkout">> = () => {
             }
           />
         </View>
-        <CommonSaveBtn NavPage="BottomTabStack" ButtonStyle={styles.buttonStyle} />
+        <CommonSaveBtn NavPage="BalancedWorkoutReason" ButtonStyle={styles.buttonStyle} />
       </ScrollView>
     </StatusBarWrapper>
   );

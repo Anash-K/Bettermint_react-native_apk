@@ -42,6 +42,7 @@ const initialValues = [
     content: "",
     color: colors.lottieGreen,
     iconBoxColor: "#3bc58040",
+    navPage: "LogHomeFuel",
   },
 ];
 

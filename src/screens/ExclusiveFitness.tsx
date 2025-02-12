@@ -52,12 +52,14 @@ const ExclusiveFitness: React.FC = memo(() => {
         <View>
           <ScalingDot
             data={PLANS_DATA}
-            expandingDotWidth={20}
+            expandingDotWidth={0}
             scrollX={scrollX}
             inActiveDotOpacity={0.6}
+            activeDotColor={colors.secondary}
+            inActiveDotColor={colors.primaryBlur}
             dotStyle={{
-              width: 8,
-              height: 8,
+              width: 6,
+              height: 6,
               backgroundColor: colors.secondary,
               borderRadius: 5,
               marginHorizontal: 5,

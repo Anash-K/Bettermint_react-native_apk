@@ -9,21 +9,20 @@ import {
   ImageSourcePropType,
   ImageStyle,
   TouchableOpacity,
+  StyleProp,
 } from "react-native";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
-
 
 interface CustomButtonProps {
   text?: string;
   onPress: () => void;
   icon?: ImageSourcePropType; // For handling images (local or remote)
   iconPosition?: "left" | "right"; // Icon position
-  buttonStyle?: ViewStyle; // Custom button style
-  textStyle?: TextStyle; // Custom text style
-  iconStyle?: ImageStyle | ""; // Custom icon style
+  buttonStyle?: StyleProp<ViewStyle>; // Accepts both a single object and an array
+  textStyle?: StyleProp<TextStyle>; // Accepts both a single object and an array
+  iconStyle?: StyleProp<ImageStyle>; // Accepts both a single object and an array
 }
-
 const CustomButton: React.FC<CustomButtonProps> = ({
   text,
   onPress,

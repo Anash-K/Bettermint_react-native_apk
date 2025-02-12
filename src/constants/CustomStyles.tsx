@@ -7,6 +7,13 @@ export const useCustomStyle = () => {
   const insets = useSafeAreaInsets();
 
   return {
+    tagsStyle: {
+      fontSize: 16,
+      lineHeight: 19.2,
+      fontFamily: CustomFont.Urbanist600,
+      color: colors.primary,
+      textAlign: "center",
+    } as TextStyle,
     SelectQuestionStyle: {
       fontSize: 20,
       lineHeight: 24,

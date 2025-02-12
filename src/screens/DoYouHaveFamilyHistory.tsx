@@ -103,7 +103,7 @@ export default DoYouHaveFamilyHistory;
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    marginBottom: Platform.select({ android: 40 }),
+    // marginBottom: Platform.select({ android: 40 }),
   },
   title: {
     maxWidth: 343,

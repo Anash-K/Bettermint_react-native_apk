@@ -1,4 +1,11 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
@@ -20,6 +27,7 @@ type DiseaseState = {
   "Fatty Liver": boolean;
   "PCOD / PCOS"?: boolean;
 };
+const { width } = Dimensions.get("screen");
 
 const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
   navigation,
@@ -27,6 +35,7 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
   const { gender } = useSelector((state: any) => state.auth);
   const CustomStyle = useCustomStyle();
   const isProfileSetup = useProfileSetup();
+
   const initialState: DiseaseState = {
     "Diabetes / Prediabetes": false,
     Cholesterol: false,
@@ -54,6 +63,8 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
       ? navigation.goBack()
       : navigation.navigate("PleaseShareYourMeasurement");
   }, []);
+
+  console.log(width, "width");
 
   return (
     <ScrollView
@@ -95,7 +106,10 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
         <CustomButton
           text={isProfileSetup ? "Update Health Conditions" : "Continue"}
           onPress={handleNextNav}
-          buttonStyle={styles.buttonStyle}
+          buttonStyle={[
+            styles.buttonStyle,
+            width < 400 && styles.responsiveButtonStyle,
+          ]}
         />
       </View>
     </ScrollView>
@@ -105,9 +119,10 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
 export default DoYouHaveDiseases;
 
 const styles = StyleSheet.create({
-  buttonStyle: {
+  responsiveButtonStyle: {
     marginBottom: Platform.select({ android: 40 }),
   },
+  buttonStyle: {},
   contentStyle: {
     flexGrow: 1,
   },

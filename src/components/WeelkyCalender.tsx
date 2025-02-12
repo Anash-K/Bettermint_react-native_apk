@@ -13,14 +13,14 @@ import { getWeeklyRanges } from "../utils/GetWeeklyRanges";
 interface WeeklyCalenderType {
   currentMonth: string;
   title: string;
-  headingText?: string;
+  performanceRatio?: number;
   headerColor?: string;
   headerIcon?: any;
   icon?: any;
 }
 
 const WeeklyCalender: React.FC<WeeklyCalenderType> = memo(
-  ({ currentMonth, title, headingText, headerColor, headerIcon, icon }) => {
+  ({ currentMonth, title, performanceRatio, headerColor, headerIcon, icon }) => {
     const { calenderDates } = useCustomStyle();
     const [weeklyRanges, setWeeklyRanges] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<string[]>([]);
@@ -76,7 +76,7 @@ const WeeklyCalender: React.FC<WeeklyCalenderType> = memo(
       <View style={styles.container}>
         <View style={styles.header}>
           <HomeFuelCalenderHeader
-            headingText={headingText}
+            performanceRatio={performanceRatio}
             headerColor={headerColor}
             title={title}
             headerIcon={headerIcon}

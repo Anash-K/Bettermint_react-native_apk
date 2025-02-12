@@ -1,6 +1,6 @@
 import { View, StyleSheet, ScrollView, Platform } from "react-native";
 import TabLogo from "../../constants/TabLogo";
-import { Calendar, LocaleConfig ,CalendarUtils} from "react-native-calendars";
+import { Calendar, LocaleConfig, CalendarUtils } from "react-native-calendars";
 import { useEffect, useState } from "react";
 import { colors } from "../../constants/colors";
 import CustomFont from "../../assets/fonts/customFonts";
@@ -17,6 +17,7 @@ import CustomDay from "../../common/CustomDay";
 import HomeFuelCalenderHeader from "../../constants/HomeFuelCalenderHeader";
 import HomeFuelDays from "../../constants/HomeFuelDays";
 import WeeklyCalender from "../../components/WeelkyCalender";
+import { CustomImages } from "../../assets/CustomImages";
 
 // Setup LocaleConfig if you're using custom date formatting
 LocaleConfig.locales["en"] = {
@@ -91,7 +92,7 @@ const CalenderTab = () => {
       >
         <View style={styles.innerContent}>
           <Calendar
-           key={currentMonth}
+            key={currentMonth}
             style={styles.calendar}
             enableSwipeMonths
             current={currentMonth}
@@ -104,11 +105,13 @@ const CalenderTab = () => {
                 imageSource={dateToImageMapOfStress}
               />
             )}
-            customHeader={({ day, stats }) => <Weeks title="Stress Levels" />}
+            customHeader={({ day, stats }) => (
+              <Weeks title="Stress Levels" headerIcon={CustomImages.sad} />
+            )}
           />
 
           <Calendar
-           key={currentMonth+'workout'}
+            key={currentMonth + "workout"}
             style={styles.calendar}
             current={currentMonth}
             enableSwipeMonths
@@ -126,12 +129,13 @@ const CalenderTab = () => {
               <Weeks
                 title="Workout - 10 mins"
                 headerColor={colors.lottiePink}
+                performanceRatio={35}
               />
             )}
           />
 
           <Calendar
-           key={currentMonth+'sleep'}
+            key={currentMonth + "sleep"}
             style={styles.calendar}
             selected={currentMonth}
             enableSwipeMonths
@@ -146,14 +150,18 @@ const CalenderTab = () => {
               />
             )}
             customHeader={({ day, stats }) => (
-              <Weeks title="Sleep - 7 hrs" headerColor={colors.lottieBlue} />
+              <Weeks
+                title="Sleep - 7 hrs"
+                headerColor={colors.lottieBlue}
+                performanceRatio={75}
+              />
             )}
           />
           <WeeklyCalender
             currentMonth={currentMonth}
             title="Home Fuel - 3 outside meals/wk"
             headerColor={colors.lottieGreen}
-            headingText={"95%"}
+            performanceRatio={95}
           />
         </View>
       </ScrollView>

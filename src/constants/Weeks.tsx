@@ -6,13 +6,13 @@ import { colors } from "./colors";
 interface WeeksType {
   icon: any;
   title: string;
-  headingText?: string;
+  performanceRatio?: number;
   headerIcon?: any;
   headerColor?: string;
 }
 
 const Weeks: React.FC<WeeksType> = memo(
-  ({ icon, title, headingText, headerIcon, headerColor }) => {
+  ({ icon, title, performanceRatio, headerIcon, headerColor }) => {
     const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
     return (
@@ -24,9 +24,33 @@ const Weeks: React.FC<WeeksType> = memo(
           ]}
         >
           <Text style={styles.title}>{title ?? "title"}</Text>
-          <View style={styles.innerContainer}>
-            {icon && <Image source={headerIcon ?? ""} />}
-            {headingText && <Text>{headingText}</Text>}
+          <View
+            style={[
+              styles.innerContainer,
+              headerIcon || performanceRatio
+                ? { borderColor: "rgba(255, 255, 255, 0.25)" }
+                : null,
+            ]}
+          >
+            {headerIcon && (
+              <Image style={styles.headerIcon} source={headerIcon ?? ""} />
+            )}
+            {performanceRatio && (
+              <View style={styles.headerTextBox}>
+                <Text
+                  style={[
+                    styles.performanceRatio,
+                    performanceRatio < 50 ? { color: colors.red } : {},
+                    performanceRatio >= 50 && performanceRatio < 90
+                      ? { color: colors.orange }
+                      : {},
+                      performanceRatio >= 90 ? { color: colors.lottieGreen } : {},
+                  ]}
+                >
+                  {performanceRatio}%
+                </Text>
+              </View>
+            )}
           </View>
         </View>
         <View style={styles.weekBox}>
@@ -44,8 +68,27 @@ const Weeks: React.FC<WeeksType> = memo(
 export default Weeks;
 
 const styles = StyleSheet.create({
-  innerContainer: { 
-    flexDirection: "row" 
+  headerIcon: {
+    width: 27,
+    height: 27,
+  },
+  headerTextBox: {
+    backgroundColor: colors.white,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 36,
+  },
+  performanceRatio: {
+    fontSize: 16,
+    lineHeight: 19.2,
+    fontFamily: CustomFont.Urbanist700,
+    color: colors.red,
+  },
+  innerContainer: {
+    flexDirection: "row",
+    borderRadius: 36,
+    borderColor: "transparent",
+    borderWidth: 2,
   },
   title: {
     fontFamily: CustomFont.Urbanist800,
@@ -64,6 +107,9 @@ const styles = StyleSheet.create({
     marginTop: -8,
     marginBottom: 10,
     justifyContent: "space-between",
+    flexDirection: "row",
+    paddingRight: 20,
+    alignItems:'center'
   },
   weekBox: {
     flexDirection: "row",

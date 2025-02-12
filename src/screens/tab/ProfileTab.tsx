@@ -17,6 +17,9 @@ import ProfileCard from "../../constants/ProfileCard";
 import MenuWrapper from "../../constants/MenuWrapper";
 import ActionModal from "../../Modals/ActionModal";
 import MenuTab from "../../common/MenuTabs";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
+import { logout } from "../../redux/slices/authSlice";
 
 interface modalDetailsType {
   contentText: string;
@@ -24,21 +27,6 @@ interface modalDetailsType {
   logo: ImageProps | null;
   handle: () => void;
 }
-
-const ActionsDataSet = {
-  delete: {
-    contentText: "Are you sure? Your journey doesn’t have to end!",
-    actionText: "Delete account",
-    logo: CustomImages.trashIcon,
-    handle: () => {},
-  },
-  logout: {
-    contentText: "Taking a pause? We’ll be here when you’re back!",
-    actionText: "Logout",
-    logo: CustomImages.logout,
-    handle: () => {},
-  },
-};
 
 const initialModalDetails: modalDetailsType = {
   contentText: "",
@@ -50,11 +38,16 @@ const initialModalDetails: modalDetailsType = {
 const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
   ({ navigation }) => {
     const { top } = useSafeAreaInsets();
+    const dispatch = useDispatch();
+    const { isProfileSetup } = useSelector(
+      (state: RootState) => state.userDetails
+    );
     const [isModalVisible, setIsModalVisible] = useState<
       "delete" | "logout" | null
     >(null);
     const [modalDetails, SetModalDetails] =
       useState<modalDetailsType>(initialModalDetails);
+    console.log("profile tab", isProfileSetup);
 
     const closeModal = useCallback(() => {
       setIsModalVisible(null);
@@ -63,6 +56,23 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
     const handleNav = useCallback(({ screenName }: { screenName: any }) => {
       navigation.navigate(screenName);
     }, []);
+
+    const ActionsDataSet = {
+      delete: {
+        contentText: "Are you sure? Your journey doesn’t have to end!",
+        actionText: "Delete account",
+        logo: CustomImages.trashIcon,
+        handle: () => {},
+      },
+      logout: {
+        contentText: "Taking a pause? We’ll be here when you’re back!",
+        actionText: "Logout",
+        logo: CustomImages.logout,
+        handle: () => {
+          dispatch(logout());
+        },
+      },
+    };
 
     const handleModal = useCallback(({ modalType }: { modalType: string }) => {
       if (modalType == "delete") {
@@ -101,7 +111,7 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
               title={"Go Premium"}
               icon={CustomImages.premium}
               OnPressHandler={handleNav.bind(this, {
-                screenName: 'ExclusiveFitness',
+                screenName: "ExclusiveFitness",
               })}
             />
             <MenuTab
