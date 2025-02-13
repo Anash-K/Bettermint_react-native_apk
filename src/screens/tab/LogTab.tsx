@@ -6,6 +6,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "../../navigator/Stack";
 import LogCard from "../../common/LogCard";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
 
 const initialValues = [
   {
@@ -48,6 +50,7 @@ const initialValues = [
 
 const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
   const [logCardData, setLogCardData] = useState(initialValues);
+
   const { top } = useSafeAreaInsets();
   useEffect(() => {
     setLogCardData(initialValues);
@@ -64,7 +67,7 @@ const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-            <StatusBar barStyle={'light-content'} backgroundColor={colors.primary}/>
+      <StatusBar barStyle={"light-content"} backgroundColor={colors.primary} />
       <TabLogo
         Boxstyle={[
           { height: Platform.select({ ios: top + 70, android: top + 70 }) },

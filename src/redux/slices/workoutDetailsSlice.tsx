@@ -8,7 +8,12 @@ interface UserState {
   currentStatus: string | null;
   isProfileSetup: boolean;
   projectPhotos: string[];
-  numberOfWorkout:number;
+  numberOfWorkout: number;
+  sleepTrack: {
+    bedTime: string;
+    wakeUpTime: string;
+    reason?:string
+  };
 }
 
 // Initial state with proper typing
@@ -19,7 +24,12 @@ export const initialUserState: UserState = {
   currentStatus: null,
   isProfileSetup: false,
   projectPhotos: [],
-  numberOfWorkout:0,
+  numberOfWorkout: 0,
+  sleepTrack: {
+    bedTime: "",
+    wakeUpTime: "",
+    reason:''
+  },
 };
 
 const userSlice = createSlice({
@@ -29,8 +39,8 @@ const userSlice = createSlice({
     setFieldAction(
       state,
       action: PayloadAction<{
-        field: keyof Omit<UserState, "projectPhotos" | "isProfileSetup">;
-        value: string | number;
+        field: keyof UserState;
+        value: any;
       }>
     ) {
       const { field, value } = action.payload;
@@ -57,10 +67,7 @@ const userSlice = createSlice({
 });
 
 // Export actions and reducer
-export const {
-  setBooleanFieldAction,
-  removeProjectPhotos,
-  setFieldAction,
-} = userSlice.actions;
+export const { setBooleanFieldAction, removeProjectPhotos, setFieldAction } =
+  userSlice.actions;
 
 export default userSlice.reducer;

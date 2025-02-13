@@ -93,7 +93,7 @@ const CustomSelector: React.FC<CustomSelectorProps> = ({
   optionStyle,
   CustomOptions,
 }) => {
-  let generatedOptions: string[] = [];
+  let generatedOptions: string[] | number[] = [];
 
   if (
     CustomOptions?.startingNumber !== undefined &&

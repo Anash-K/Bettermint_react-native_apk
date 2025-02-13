@@ -1,14 +1,15 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import SleepTimeTracker from "../components/SleepTimeTracker";
 import { TextOption, TimeTrackerType } from "../Types/CommonTypes";
 import { getTimeDifference } from "../utils/GetTimeDifference";
 import CustomButton from "../common/CustomButton";
-import useHandleNextNavigation from "../utils/handleNextNavigation";
 import { ScreenProps } from "../navigator/Stack";
 import { useCustomStyle } from "../constants/CustomStyles";
 import StatusBarWrapper from "../components/StatusBarWrapper";
+import { useDispatch } from "react-redux";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 
 export type TimeUpdate = {
   type: "sleepTime" | "wakeupTime";
@@ -18,6 +19,7 @@ export type TimeUpdate = {
 const LogSleep: React.FC<ScreenProps<"LogSleep">> = memo(({ navigation }) => {
   //code started
   const { safeAreaMarginBottom } = useCustomStyle();
+  const dispatch = useDispatch();
 
   const textArray: TextOption[] = [
     { id: 1, label: "Binge Watching" },
@@ -57,8 +59,28 @@ const LogSleep: React.FC<ScreenProps<"LogSleep">> = memo(({ navigation }) => {
   );
 
   const handleNext = useCallback(() => {
+    dispatch(
+      setFieldAction({
+        field: "sleepTrack",
+        value: {
+          bedTime: selectedTime.sleepTime,
+          wakeupTime: selectedTime.wakeupTime,
+          reason:
+            selectedOptions[
+              "What was the reason you were unable to sleep for 7 hours?"
+            ],
+        },
+      })
+    );
+
     navigation.navigate("LogUnPlug");
   }, []);
+
+  useEffect(() =>{
+    console.log(selectedOptions,'reason', selectedOptions[
+      "What was the reason you were unable to sleep for 7 hours?"
+    ])
+  },[selectedOptions])
 
   const sleepDuration = getTimeDifference(
     selectedTime.sleepTime,
@@ -79,10 +101,15 @@ const LogSleep: React.FC<ScreenProps<"LogSleep">> = memo(({ navigation }) => {
               question="What was the reason you were unable to sleep for 7 hours?"
               options={textArray.map((item) => item.label)} // Only the labels
               selectedOption={
-                selectedOptions["What caused this emotion?"] || ""
+                selectedOptions[
+                  "What was the reason you were unable to sleep for 7 hours?"
+                ] || ""
               }
               onSelect={(option) =>
-                handleSelect("What caused this emotion?", option)
+                handleSelect(
+                  "What was the reason you were unable to sleep for 7 hours?",
+                  option
+                )
               }
             />
           ) : null}

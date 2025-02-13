@@ -32,7 +32,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
   const CustomStyle = useCustomStyle();
   const { top } = useSafeAreaInsets();
   return (
-    <View style={[styles.container, { marginTop: top }, style]}>
+    <View style={[styles.container, { marginTop: top }, CustomStyle.safeAreaMarginTop,style]}>
       {leftComponent}
       {/* Left Icon */}
       <TouchableOpacity onPress={onLeftPress} style={styles.leftIconContainer}>

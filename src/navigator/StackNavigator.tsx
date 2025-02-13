@@ -61,6 +61,10 @@ import BalancedWorkoutReason from "../screens/BalancedWorkoutReason";
 import LogSteps from "../screens/LogSteps";
 import LogHomeFuel from "../screens/LogHomeFuel";
 import HomeFuelReason from "../screens/HomeFuelReason";
+import LogStopEating from "../screens/LogStopEating";
+import LogWaterConsumed from "../screens/LogWaterConsumed";
+import LogBalancedMeals from "../screens/LogBalancedMeals";
+import LogFixYourBasics from "../screens/LogFixYourBasics";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
@@ -102,6 +106,10 @@ export type StackParams = {
   LogSteps: undefined;
   LogHomeFuel: undefined;
   HomeFuelReason: undefined;
+  LogStopEating: undefined;
+  LogWaterConsumed: undefined;
+  LogBalancedMeals: undefined;
+  LogFixYourBasics: undefined;
 };
 
 const Stack = createNativeStackNavigator<StackParams>();
@@ -848,6 +856,86 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             header: () => (
               <CustomHeader
                 title="Log Home Fuel"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogStopEating"
+          component={LogStopEating}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Stop Eating By 8 p.m."
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogWaterConsumed"
+          component={LogWaterConsumed}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Water Consumed"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogBalancedMeals"
+          component={LogBalancedMeals}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Balanced Meals"
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="LogFixYourBasics"
+          component={LogFixYourBasics}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title="Log Fix Your Basics"
                 leftComponent={
                   <CustomButton
                     icon={CustomImages.blackDropDownIcon}

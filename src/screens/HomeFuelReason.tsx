@@ -6,7 +6,7 @@ import { ScreenProps } from "../navigator/Stack";
 import { useCustomStyle } from "../constants/CustomStyles";
 
 const options = {
-  choices: ["Lazy", "No time", "Tired", "Difficult"],
+  choices: ["Office Party", "Social Outing", "Stressed", "Bored","Working Late"],
 };
 
 const HomeFuelReason: React.FC<
@@ -32,10 +32,10 @@ const HomeFuelReason: React.FC<
         Question="What was the reason you failed to complete this week?"
         optionsList={options.choices as (keyof typeof selectedValues)[]}
         initialState={selectedValues}
-        isMultiSelect={true}
+        isMultiSelect={false}
         GetSelectedValues={handleSelectedValues}
       />
-      <CommonSaveBtn NavPage="LogSteps" />
+      <CommonSaveBtn NavPage="LogStopEating" />
     </View>
   );
 };

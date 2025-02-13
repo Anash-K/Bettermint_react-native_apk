@@ -10,6 +10,8 @@ interface CheckBoxProps {
   isCircular?: boolean;
   size?: number;
   color?: string;
+  isChecked: boolean;
+  setIsChecked: (isChecked: boolean) => void;
 }
 
 const CheckBox: React.FC<CheckBoxProps> = ({
@@ -17,8 +19,9 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   isTitleVisible = true,
   isCircular,
   size = 18,
+  isChecked,
+  setIsChecked,
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
   const handlePress = useCallback(() => {
     setIsChecked(!isChecked);
   }, [isChecked]);

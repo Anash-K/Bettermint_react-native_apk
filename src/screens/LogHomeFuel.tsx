@@ -10,7 +10,8 @@ import CustomFont from "../assets/fonts/customFonts";
 import CommonFuelTracker from "../common/CommonFuelTracker";
 
 const LogHomeFuel: React.FC<ScreenProps<"LogHomeFuel">> = () => {
-  const { safeAreaMarginBottom, subtitle, tagsStyle } = useCustomStyle();
+  const { safeAreaMarginBottom, subtitle, tagsStyle, CommonCardShadow } =
+    useCustomStyle();
   return (
     <StatusBarWrapper>
       <ScrollView
@@ -18,18 +19,18 @@ const LogHomeFuel: React.FC<ScreenProps<"LogHomeFuel">> = () => {
         contentContainerStyle={styles.scrollableContent}
         bounces={false}
       >
-        <View style={styles.content}>
+        <View style={[styles.content, CommonCardShadow]}>
           <View style={styles.header}>
             <Text style={[tagsStyle, styles.title]}></Text>
             <Text style={[tagsStyle, styles.title]}>Homemade?</Text>
             <Text style={[tagsStyle, styles.RightTitle]}>Fullness</Text>
           </View>
           <View style={styles.SelectBox}>
-            <CommonFuelTracker />
-            <CommonFuelTracker />
-            <CommonFuelTracker />
-            <CommonFuelTracker />
-            <CommonFuelTracker />
+            <CommonFuelTracker title="Breakfast" />
+            <CommonFuelTracker title="Lunch" />
+            <CommonFuelTracker title="Dinner" />
+            <CommonFuelTracker title="Morning Snack" />
+            <CommonFuelTracker title="Evening Snack" />
           </View>
         </View>
         <CommonSaveBtn NavPage="HomeFuelReason" />
@@ -43,7 +44,7 @@ export default memo(LogHomeFuel);
 const styles = StyleSheet.create({
   SelectBox: {
     padding: 16,
-    paddingTop: 20,
+    paddingTop: 0,
   },
   RightTitle: {
     width: "40.63%",
@@ -60,12 +61,13 @@ const styles = StyleSheet.create({
   },
   content: {
     backgroundColor: colors.white,
-    flex: 1,
     marginBottom: 48,
     paddingVertical: 24,
+    borderRadius: 20,
   },
   scrollableContent: {
     flexGrow: 1,
+    justifyContent: "space-between",
   },
   scrollContainer: {
     flex: 1,
