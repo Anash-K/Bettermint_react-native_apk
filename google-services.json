@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "69005762038",
+    "project_id": "bettermint-f6c61",
+    "storage_bucket": "bettermint-f6c61.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69005762038:android:99b2c93d6a55b8f310bbd7",
+        "android_client_info": {
+          "package_name": "com.betterminthealth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdV0unk8I41B2Y-uL-WrgEefD8L4WNdjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

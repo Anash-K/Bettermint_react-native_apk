@@ -27,7 +27,7 @@ const App: React.FC = () => {
     return () => clearTimeout(timer); // Clean up on unmount
   }, []);
 
-  // console.error = () => {};
+  console.error = () => {};
 
   return (
     <View style={styles.container}>

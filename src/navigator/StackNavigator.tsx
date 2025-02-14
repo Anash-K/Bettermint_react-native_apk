@@ -67,8 +67,8 @@ import LogBalancedMeals from "../screens/LogBalancedMeals";
 import LogFixYourBasics from "../screens/LogFixYourBasics";
 
 export type StackParams = {
-  TellUsALittleAboutYou: undefined;
-  ProvideYourMobileNumber: undefined;
+  TellUsALittleAboutYou: {kfhkdsnfklndsklfnkl: number};
+  ProvideYourMobileNumber: (text:string) => void;
   WhatsYourHeight: undefined;
   WhatsYourWeight: undefined;
   WhatBestDescribe: undefined;

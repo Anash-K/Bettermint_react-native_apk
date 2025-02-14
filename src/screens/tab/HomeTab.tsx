@@ -1,4 +1,5 @@
 import {
+  Image,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -142,14 +143,23 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
         <View style={styles.contentContainer}>
           <View style={styles.topBoxes}>
             {/* Begginer Box */}
-            <View style={styles.beginnerBox}>
-              <View style={styles.beginnerBoxHeader}>
-                <FastImage source={CustomImages.star} style={styles.starIcon} />
-                <Text style={styles.beginnerBoxTitle}>Beginner</Text>
-              </View>
+            <View style={{ flex: 1 , backgroundColor:'white' ,borderRadius:20 }}>
+              <View style={styles.beginnerBox}>
+                <View style={styles.beginnerBoxHeader}>
+                  <FastImage
+                    source={CustomImages.star}
+                    style={styles.starIcon}
+                  />
+                  <Text style={styles.beginnerBoxTitle}>Beginner</Text>
+                </View>
 
-              <View style={styles.LottieBox}>
-                <View>
+                {/* <View style={styles.LottieBox}> */}
+                {/* <Image
+                    style={{ width: "100%", height: "100%" }}
+                    source={CustomImages.HomeBar}
+                    resizeMode="contain"
+                  /> */}
+                {/* <View>
                   <Text style={[styles.titleLottieText, toxicState.sleepText]}>
                     Sleep
                   </Text>
@@ -191,7 +201,58 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
                     source={CustomImages.NutritionBeginner}
                     style={styles.NutritionStyle}
                   />
+                </View> */}
+                {/* </View> */}
+              </View>
+              <View style={styles.LottieBox}>
+                <Image
+                  style={{ width: "100%", height: 220 }}
+                  source={CustomImages.HomeBar}
+                  resizeMode="contain"
+                />
+                {/* <View>
+                  <Text style={[styles.titleLottieText, toxicState.sleepText]}>
+                    Sleep
+                  </Text>
+                  <FastImage
+                    source={CustomImages.SleepBeginner}
+                    style={styles.SleepStyle}
+                  />
                 </View>
+                <View>
+                  <Text
+                    style={[styles.titleLottieText, toxicState.movementText]}
+                  >
+                    Movement
+                  </Text>
+                  <FastImage
+                    source={CustomImages.MovementBeginner}
+                    style={styles.MovementStyle}
+                  />
+                </View>
+                <View>
+                  <Text
+                    style={[styles.titleLottieText, toxicState.wellbeingText]}
+                  >
+                    Wellbeing
+                  </Text>
+                  <FastImage
+                    source={CustomImages.WellbeingBeginner}
+                    style={styles.WellBeingStyle}
+                  />
+                </View>
+                <View>
+                  <Text
+                    style={[styles.titleLottieText, toxicState.nourishText]}
+                  >
+                    Nourish
+                  </Text>
+
+                  <FastImage
+                    source={CustomImages.NutritionBeginner}
+                    style={styles.NutritionStyle}
+                  />
+                </View> */}
               </View>
             </View>
 
@@ -242,13 +303,13 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
               title="Workout"
               cardStyle={styles.workoutCard}
               iconSrc={CustomImages.workout}
-              src={CustomImages.smileBold}
+              src={CustomImages.pinkLoader}
             />
             <EmojiOrImageCard
               title="Stress"
               cardStyle={styles.stressCard}
-              iconSrc={CustomImages.smileBold}
-              src={CustomImages.smileBold}
+              iconSrc={CustomImages.sleep}
+              src={CustomImages.circleLoader}
             />
             <EmojiOrImageCard
               title="Stress"
@@ -437,10 +498,14 @@ const styles = StyleSheet.create({
   LottieBox: {
     flexDirection: "row",
     flexWrap: "wrap",
-    width: 190,
-    height: 190,
-    gap: 7,
+    // width: 190,
+    // height: 190,
+    // gap: 7,
     margin: "auto",
+    flex: 1,
+
+    //
+    width: "100%",
   },
   SleepStyle: {
     width: 180 / 2,
@@ -468,7 +533,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     columnGap: 8,
-    marginBottom: 40,
+    // marginBottom: 40,
     alignItems: "center",
   },
   starIcon: {
@@ -480,8 +545,9 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 20,
     paddingTop: 16,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     paddingBottom: 28,
+    //
   },
   points: {
     fontFamily: CustomFont.Urbanist700,

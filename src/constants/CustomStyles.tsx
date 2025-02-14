@@ -87,6 +87,7 @@ export const useCustomStyle = () => {
       lineHeight: 19.2,
       fontFamily: CustomFont.Urbanist500,
       marginBottom: 16,
+      color:colors.secondary
     } as TextStyle,
     CommonCardShadow: {
       shadowColor: colors.gray,

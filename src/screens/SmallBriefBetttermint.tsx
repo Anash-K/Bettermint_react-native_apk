@@ -7,6 +7,7 @@ import { CustomImages } from "../assets/CustomImages";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CustomFont from "../assets/fonts/customFonts";
 import CustomButton from "../common/CustomButton";
+import { colors } from "../constants/colors";
 
 const SmallBriefBettermint: React.FC<ScreenProps<"SmallBriefBettermint">> = ({
   navigation,
@@ -81,13 +82,16 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist500,
     fontSize: 16,
     lineHeight: 19.2,
+    color:colors.secondary
   },
   paraTwo: {
     marginTop: 32,
+    color:colors.secondary
   },
   paraOne: {
     marginTop: 16,
     marginBottom: 32,
+    color:colors.secondary
   },
   icon: {
     width: 220,

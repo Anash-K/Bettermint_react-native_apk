@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
   },
   calenderBox: {
     marginTop: 24,
+    paddingHorizontal:16
   },
   container: {
     flex: 1, // Make the container take up all available space

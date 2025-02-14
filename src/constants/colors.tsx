@@ -37,5 +37,9 @@ export const colors = {
   chartBarColor: "#66707312",
   red: "#F54336",
   orange: "#ED7E1C",
-  darkRed:'#C53B3D'
+  darkRed:'#C53B3D',
+  lightPink:'#ff76b640',
+  lightYellow:'#ffcf4840',
+  lightGreen:"#3bc58040",
+  lightBlue:"#45c6f640"
 } as const;

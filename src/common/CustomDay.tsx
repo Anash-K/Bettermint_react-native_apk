@@ -66,9 +66,9 @@ const styles = StyleSheet.create({
   detailText: {
     textAlign: "center",
     alignSelf: "center",
-    fontSize: 11,
+    fontSize: 10,
     fontFamily: CustomFont.Urbanist700,
-    lineHeight: 13.2,
+    lineHeight: 11.2,
     color: colors.secondary,
   },
   imageBackground: {
@@ -85,8 +85,6 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
-    // borderColor: colors.secondaryWhite,
-    // borderWidth: 1,
     width: "100%",
     padding: 8,
     flexGrow: 1,

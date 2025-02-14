@@ -59,28 +59,24 @@ const LogSleep: React.FC<ScreenProps<"LogSleep">> = memo(({ navigation }) => {
   );
 
   const handleNext = useCallback(() => {
+    let reasonOfLack =
+      selectedOptions[
+        "What was the reason you were unable to sleep for 7 hours?"
+      ];
+
     dispatch(
       setFieldAction({
         field: "sleepTrack",
         value: {
           bedTime: selectedTime.sleepTime,
           wakeupTime: selectedTime.wakeupTime,
-          reason:
-            selectedOptions[
-              "What was the reason you were unable to sleep for 7 hours?"
-            ],
+          reason: reasonOfLack,
         },
       })
     );
 
     navigation.navigate("LogUnPlug");
-  }, []);
-
-  useEffect(() =>{
-    console.log(selectedOptions,'reason', selectedOptions[
-      "What was the reason you were unable to sleep for 7 hours?"
-    ])
-  },[selectedOptions])
+  }, [selectedOptions, navigation, selectedTime]);
 
   const sleepDuration = getTimeDifference(
     selectedTime.sleepTime,

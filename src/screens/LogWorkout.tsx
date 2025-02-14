@@ -6,6 +6,8 @@ import { TextOption } from "../Types/CommonTypes";
 import { ScreenProps } from "../navigator/Stack";
 import CommonSaveBtn from "../components/CommonSaveBtn";
 import { useCustomStyle } from "../constants/CustomStyles";
+import { useDispatch } from "react-redux";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 
 const textArray: TextOption[] = [
   { id: 1, label: "Not at all" },
@@ -34,6 +36,7 @@ const textBArray: TextOption[] = [
 
 const LogWorkout: React.FC<ScreenProps<"LogWorkout">> = () => {
   const { safeAreaMarginBottom } = useCustomStyle();
+  const dispatch = useDispatch();
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: string;
   }>({});
@@ -46,6 +49,10 @@ const LogWorkout: React.FC<ScreenProps<"LogWorkout">> = () => {
     },
     [selectedOptions]
   );
+
+  const handlePress = useCallback(() => {
+    dispatch(setFieldAction({ field: "isWorkout", value: true }));
+  }, []);
 
   return (
     <StatusBarWrapper>
@@ -95,6 +102,7 @@ const LogWorkout: React.FC<ScreenProps<"LogWorkout">> = () => {
         <CommonSaveBtn
           NavPage="LogBalancedWorkout"
           ButtonStyle={styles.buttonStyle}
+          HandleOnPress={handlePress}
         />
       </ScrollView>
     </StatusBarWrapper>

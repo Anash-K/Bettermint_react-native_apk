@@ -28,7 +28,7 @@ interface Inputs {
   "Total Cholesterol (mg / DL)": string | null;
   "HDL Chol (mg / DL)": string;
   "LDL Chol (mg / DL)": string;
-  "Avg BP": string;
+  "Avg BP (120/ 80)": string;
   "Date of report": string;
 }
 
@@ -41,7 +41,7 @@ const PleaseShareYourMeasurement: React.FC<
     "Total Cholesterol (mg / DL)": "184",
     "HDL Chol (mg / DL)": "264",
     "LDL Chol (mg / DL)": "12",
-    "Avg BP": "32",
+    "Avg BP (120/ 80)": "120/80",
     "Date of report": "25 Dec, 2024",
   };
 
@@ -105,7 +105,11 @@ const PleaseShareYourMeasurement: React.FC<
       label: "LDL Chol (mg / DL)",
       placeholder: "Enter LDL Chol (mg / DL)",
     },
-    { name: "Avg BP", label: "Avg BP", placeholder: "Enter Avg BP" },
+    {
+      name: "Avg BP (120/ 80)",
+      label: "Avg BP (120/ 80)",
+      placeholder: "Enter Avg BP (120/ 80)",
+    },
   ];
 
   return (
@@ -140,7 +144,10 @@ const PleaseShareYourMeasurement: React.FC<
                       inputConfigurations={{
                         value: value,
                         onChangeText: onChange,
-                        keyboardType: "number-pad",
+                        keyboardType:
+                          label == "Avg BP (120/ 80)"
+                            ? "default"
+                            : "number-pad",
                       }}
                     />
                   )}

@@ -1,5 +1,4 @@
 import { NavigationProp, RouteProp } from "@react-navigation/native";
-
 import { StackParams } from "./StackNavigator";
 import { BottomParams } from "./BottomTabNavigator";
 import { AuthStackParams } from "./AuthStack";

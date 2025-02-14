@@ -8,25 +8,40 @@ import { ScreenProps } from "../../navigator/Stack";
 import LogCard from "../../common/LogCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
+import SleepDataLog from "../../components/logTabSubComponent/SleepDataLog";
+import WorkoutDataLog from "../../components/logTabSubComponent/WorkoutDataLog";
 
-const initialValues = [
+interface LogCardItem {
+  id: number;
+  iconSrc: any;
+  title: string;
+  content: string;
+  color: string;
+  iconBoxColor: string;
+  navPage: string;
+  Details: JSX.Element | null;
+}
+
+const initialValues: LogCardItem[] = [
   {
     id: 1,
     iconSrc: CustomImages.sleep,
     title: "Sleep",
     content: "",
-    color: "#45c6f6", // Solid color (for text/icon)
-    iconBoxColor: "#45c6f640", // Background color with opacity
+    color: colors.lottieBlue, // Solid color (for text/icon)
+    iconBoxColor: colors.lightBlue, // Background color with opacity
     navPage: "LogSleep",
+    Details: null,
   },
   {
     id: 2,
     iconSrc: CustomImages.workout,
     title: "Workout",
     content: "",
-    color: "#ff5733",
-    iconBoxColor: "#ff573360",
+    color: colors.lottiePink,
+    iconBoxColor: colors.lightPink,
     navPage: "LogWorkout",
+    Details: null,
   },
   {
     id: 3,
@@ -34,8 +49,9 @@ const initialValues = [
     title: "Stress Level",
     content: "",
     color: "",
-    iconBoxColor: "#ffcf4840",
+    iconBoxColor: colors.lightYellow,
     navPage: "LogStress",
+    Details: null,
   },
   {
     id: 4,
@@ -43,13 +59,17 @@ const initialValues = [
     title: "Home Fuel",
     content: "",
     color: colors.lottieGreen,
-    iconBoxColor: "#3bc58040",
+    iconBoxColor: colors.lightGreen,
     navPage: "LogHomeFuel",
+    Details: null,
   },
 ];
 
 const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
   const [logCardData, setLogCardData] = useState(initialValues);
+  const { sleepTrack, isWorkout } = useSelector(
+    (state: RootState) => state.userDetails
+  );
 
   const { top } = useSafeAreaInsets();
   useEffect(() => {
@@ -64,6 +84,24 @@ const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
     },
     [navigation]
   );
+
+  useEffect(() => {
+    if (sleepTrack?.bedTime) {
+      setLogCardData((prev) =>
+        prev.map((item) =>
+          item.id === 1 ? { ...item, Details: <SleepDataLog /> } : item
+        )
+      );
+    }
+
+    if (isWorkout) {
+      setLogCardData((prev) =>
+        prev.map((item) =>
+          item.id === 2 ? { ...item, Details: <WorkoutDataLog /> } : item
+        )
+      );
+    }
+  }, [sleepTrack, isWorkout]);
 
   return (
     <View style={styles.container}>
@@ -84,6 +122,7 @@ const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
             color={item.color ?? ""}
             iconBoxColor={item.iconBoxColor} // Passing separately
             OnClick={() => handleNextNav(item.navPage)}
+            Details={item.Details}
           />
         ))}
       </View>

@@ -11,9 +11,10 @@ interface UserState {
   numberOfWorkout: number;
   sleepTrack: {
     bedTime: string;
-    wakeUpTime: string;
-    reason?:string
+    wakeupTime: string;
+    reason?: string;
   };
+  isWorkout: boolean;
 }
 
 // Initial state with proper typing
@@ -27,9 +28,10 @@ export const initialUserState: UserState = {
   numberOfWorkout: 0,
   sleepTrack: {
     bedTime: "",
-    wakeUpTime: "",
-    reason:''
+    wakeupTime: "",
+    reason: "",
   },
+  isWorkout: false,
 };
 
 const userSlice = createSlice({

@@ -1,5 +1,6 @@
 import {
   ImageBackground,
+  Keyboard,
   Platform,
   ScrollView,
   StatusBar,
@@ -8,7 +9,7 @@ import {
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -21,6 +22,8 @@ import CustomFont from "../../assets/fonts/customFonts";
 import { colors } from "../../constants/colors";
 import CustomInput from "../../common/CustomInput";
 import CustomButton from "../../common/CustomButton";
+import { AppLoaderRef } from "../../../App";
+import { ErrorHandler } from "../../utils/ErrorHandler";
 
 type Inputs = {
   email: string;
@@ -40,6 +43,7 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
   const [isModal, setIsModal] = useState<boolean>(false);
   const dispatch = useDispatch();
   const CustomStyle = useCustomStyle();
+  const btnDisableRef = useRef<boolean>(false);
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log(data);
@@ -61,6 +65,68 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
   }, []);
 
   const insets = useSafeAreaInsets();
+
+  // const onSubmit = useCallback(
+  //   async (data: SingUpForm) => {
+  //     if (btnDisableRef.current) return;
+
+  //     btnDisableRef.current = true;
+
+  //     Keyboard.dismiss();
+  //     const email = data?.email?.trim();
+  //     const username = data?.username?.trim();
+  //     const password = data?.password?.trim();
+
+  //     AppLoaderRef.current?.start();
+
+  //     try {
+  //       if (auth().currentUser) {
+  //         await auth().signOut();
+  //       }
+
+  //       await auth().createUserWithEmailAndPassword(email, password);
+  //       const firebaseToken = await auth().currentUser?.getIdToken();
+  //       const pushToken = await getFCMToken();
+
+  //       await signUpApi({
+  //         username: username,
+  //         email: email,
+  //         device_type: Platform.OS,
+  //         firebase_token: firebaseToken,
+  //         push_token: pushToken,
+  //       });
+
+  //       // await auth().currentUser?.sendEmailVerification();
+  //       onSendVerification(email);
+  //       await auth().signOut();
+  //     } catch (er) {
+  //       ErrorHandler(er);
+  //       if (auth()?.currentUser) {
+  //         await auth().currentUser?.delete();
+  //       }
+  //       AppLoaderRef.current?.stop();
+  //     } finally {
+  //       btnDisableRef.current = false;
+  //     }
+  //   },
+  //   [onSendVerification],
+  // );
+
+
+  // const onSendVerification = useCallback(async (email: string) => {
+  //   try {
+  //     await emailVerificationApi({email: email});
+  //     SuccessToast(strings.signUpSuccess);
+  //   } catch (error) {
+  //     ErrorHandler(error);
+  //   } finally {
+  //     AppLoaderRef.current?.stop();
+  //     onLoginNav();
+  //   }
+  // }, []);
+
+
+
   return (
     <ScrollView
       style={[styles.container, CustomStyle.safeAreaMarginBottom]}
@@ -196,6 +262,7 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist400,
     fontSize: 16,
     lineHeight: 19.2,
+    color:colors.secondaryLight
   },
   bottomButtonContainer: {
     flexDirection: "row",

@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist400,
     fontSize: 16,
     lineHeight: 19.2,
+    color:colors.secondaryLight
   },
   bottomButtonContainer: {
     flexDirection: "row",

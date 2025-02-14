@@ -8,23 +8,32 @@ interface CommonSaveBtnType {
   BtnStyle?: ViewStyle | ViewStyle[];
   NavPage: string;
   ButtonStyle?: ViewStyle | ViewStyle[];
+  HandleOnPress?: () => void;
 }
 
 const CommonSaveBtn: React.FC<CommonSaveBtnType> = ({
   Title,
   BtnStyle,
   NavPage,
-  ButtonStyle
+  ButtonStyle,
+  HandleOnPress,
 }) => {
   const { navigate } = useNavigation();
 
   const HandleAction = useCallback(() => {
+    if (HandleOnPress) {
+      HandleOnPress();
+    }
     navigate(NavPage);
   }, []);
 
   return (
     <View style={[styles.container, BtnStyle]}>
-      <CustomButton text={Title ?? "Save"} onPress={HandleAction} buttonStyle={ButtonStyle} />
+      <CustomButton
+        text={Title ?? "Save"}
+        onPress={HandleAction}
+        buttonStyle={ButtonStyle}
+      />
     </View>
   );
 };

@@ -6,6 +6,7 @@ import { ScreenProps } from "../navigator/Stack";
 import DrawerButton from "../common/DrawerButton";
 import WhiteDot from "../common/WhiteDotBtn";
 import CustomButton from "../common/CustomButton";
+import { colors } from "../constants/colors";
 
 const DoYouWorkOut: React.FC<ScreenProps<"DoYouWorkOut">> = ({
   navigation,
@@ -82,6 +83,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19.2,
     marginTop: 24,
+    color:colors.secondaryLight
   },
   container: {
     flex: 1,

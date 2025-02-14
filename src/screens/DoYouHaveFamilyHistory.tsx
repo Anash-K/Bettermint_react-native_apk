@@ -19,6 +19,7 @@ type DiseaseState = {
   "Blood Pressure": boolean;
   Cancer: boolean;
   "Heart Attack": boolean;
+  "None of Above": boolean;
 };
 
 const DoYouHaveFamilyHistory: React.FC<
@@ -33,6 +34,7 @@ const DoYouHaveFamilyHistory: React.FC<
     "Blood Pressure": false,
     Cancer: false,
     "Heart Attack": false,
+    "None of Above": false,
   };
 
   const [selectedDiseases, setSelectedDiseases] =

@@ -108,4 +108,10 @@ export const CustomImages = {
   sugar: require("./Images/SugaryFoods.png"),
   carbs: require("./Images/Carbs.png"),
   friedFood: require("./Images/FriedFoods.png"),
+  questionMark: require("./Images/questionMark.png"),
+  homeTabIcon: require("./Images/HomeTabIcon.png"),
+  //temp image
+  circleLoader: require("./Images/circularloader.png"),
+  pinkLoader: require("./Images/pinkLoader.png"),
+  HomeBar: require("./Images/homeBar.png"),
 };

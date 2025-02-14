@@ -5,33 +5,44 @@ import { CustomImages } from "../assets/CustomImages";
 import { colors } from "../constants/colors";
 import CustomFont from "../assets/fonts/customFonts";
 
-
 interface LogCardType {
   IconSrc: any;
   Title: string;
   color?: string;
   iconBoxColor: string;
-  OnClick:() => void;
+  OnClick: () => void;
+  Details: React.ReactNode;
 }
 
 const LogCard: React.FC<LogCardType> = memo(
-  ({ IconSrc, Title, color, iconBoxColor,OnClick }) => {
+  ({ IconSrc, Title, color, iconBoxColor, OnClick, Details }) => {
     return (
-      <Pressable style={styles.container} onPress={OnClick}>
+      <Pressable
+        style={[styles.container, Details ? styles.detailContainer : null]}
+        onPress={OnClick}
+      >
         <View style={[styles.iconBox, { backgroundColor: iconBoxColor }]}>
           <Image source={IconSrc} style={styles.iconStyle} tintColor={color} />
         </View>
         <View style={styles.rightPart}>
           <View style={styles.titleContent}>
             <Text style={styles.title}>{Title}</Text>
-            <Text style={styles.contentText}>Add Log</Text>
+            {Details ? (
+              Details
+            ) : (
+              <Text style={styles.contentText}>Add Log</Text>
+            )}
           </View>
-          <Image
-            source={CustomImages.blackDropDownIcon}
-            style={styles.forwardArrow}
-            resizeMode="contain"
-            tintColor={colors.primary}
-          />
+          {!Details ? (
+            <View style={styles.sideArrowBox}>
+              <Image
+                source={CustomImages.blackDropDownIcon}
+                style={styles.forwardArrow}
+                resizeMode="contain"
+                tintColor={colors.primary}
+              />
+            </View>
+          ) : null}
         </View>
       </Pressable>
     );
@@ -41,9 +52,16 @@ const LogCard: React.FC<LogCardType> = memo(
 export default LogCard;
 
 const styles = StyleSheet.create({
+  detailContainer: {
+    alignItems: "flex-start",
+  },
+  sideArrowBox: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   titleContent: {
     flex: 1,
-    rowGap:8
+    rowGap: 8,
   },
   rightPart: {
     flexDirection: "row",
@@ -76,7 +94,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     columnGap: 16,
-    marginVertical:8
+    marginVertical: 8,
   },
   title: {
     fontFamily: CustomFont.Urbanist700,
