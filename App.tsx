@@ -4,8 +4,10 @@ import BootSplash from "react-native-bootsplash";
 import RootScreen from "./src/navigator/RootScreen";
 import { NavigationContainer } from "@react-navigation/native";
 import { Loader } from "./src/Types/CommonTypes";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export const AppLoaderRef = React.createRef<Loader>();
+const queryClient = new QueryClient();
 
 export const setDefaultFontScaling = () => {
   (Text as any).defaultProps = (Text as any).defaultProps || {};
@@ -27,14 +29,16 @@ const App: React.FC = () => {
     return () => clearTimeout(timer); // Clean up on unmount
   }, []);
 
-  console.error = () => {};
+  // console.error = () => {};
 
   return (
-    <View style={styles.container}>
-      <NavigationContainer>
-        <RootScreen />
-      </NavigationContainer>
-    </View>
+    <QueryClientProvider client={queryClient}>
+      <View style={styles.container}>
+        <NavigationContainer>
+          <RootScreen />
+        </NavigationContainer>
+      </View>
+    </QueryClientProvider>
   );
 };
 

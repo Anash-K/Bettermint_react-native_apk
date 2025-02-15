@@ -195,7 +195,7 @@ export default PleaseShareYourMeasurement;
 const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
-    marginBottom: Platform.select({ ios: 15, android: 30 }),
+    marginBottom: Platform.select({ ios: 15, android: 40 }),
   },
   title: {
     maxWidth: 343,

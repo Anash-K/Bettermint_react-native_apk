@@ -1,4 +1,11 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useCallback, useState } from "react";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
@@ -21,6 +28,7 @@ type DiseaseState = {
   "Heart Attack": boolean;
   "None of Above": boolean;
 };
+const { width, height } = Dimensions.get("screen");
 
 const DoYouHaveFamilyHistory: React.FC<
   ScreenProps<"DoYouHaveFamilyHistory">
@@ -54,6 +62,7 @@ const DoYouHaveFamilyHistory: React.FC<
       : navigation.navigate("SmallBriefBettermint");
   }, []);
 
+  console.log(height, "height");
   return (
     <ScrollView
       style={[styles.container, CustomStyle.safeAreaMarginBottom]}
@@ -94,7 +103,10 @@ const DoYouHaveFamilyHistory: React.FC<
         <CustomButton
           text={isProfileSetup ? "Update Family History" : "Continue"}
           onPress={handleNextNav}
-          buttonStyle={styles.buttonStyle}
+          buttonStyle={[
+            styles.buttonStyle,
+            height < 920 && {marginBottom:Platform.select({ android: 40 })},
+          ]}
         />
       </View>
     </ScrollView>
@@ -105,7 +117,7 @@ export default DoYouHaveFamilyHistory;
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    // marginBottom: Platform.select({ android: 40 }),
+    // marginBottom:  ,
   },
   title: {
     maxWidth: 343,

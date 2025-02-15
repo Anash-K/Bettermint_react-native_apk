@@ -20,6 +20,10 @@ import MenuTab from "../../common/MenuTabs";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../redux/slices/authSlice";
+import { useMutation } from "@tanstack/react-query";
+import { MutationKey } from "../../Types/MutationKeys";
+import { logoutApi } from "../../axious/GetApis";
+import { AppLoaderRef } from "../../../App";
 
 interface modalDetailsType {
   contentText: string;
@@ -83,6 +87,16 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
         SetModalDetails(ActionsDataSet.logout);
       }
     }, []);
+
+    const {mutate: logoutUser} = useMutation ({
+      mutationKey:[MutationKey.LogoutKey],
+      mutationFn: async() => await logoutApi,
+      onMutate:AppLoaderRef.current?.start(),
+      onError:(error) =>{
+        console.log(error)
+      },
+      onSettled:AppLoaderRef.current?.stop()
+    })
 
     return (
       <View style={styles.container}>

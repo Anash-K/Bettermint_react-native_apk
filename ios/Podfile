@@ -1,4 +1,5 @@
 # Resolve script with node to allow for hoisting
+
 def node_require(script)
   # Resolve script with node to allow for hoisting
   require Pod::Executable.execute_command('node', ['-p',
@@ -48,7 +49,8 @@ end
 
 target 'Bettermint' do
   config = use_native_modules!
-
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.

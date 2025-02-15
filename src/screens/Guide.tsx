@@ -4,6 +4,7 @@ import { CustomImages } from "../assets/CustomImages";
 import { useSelector } from "react-redux";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
+import { colors } from "../constants/colors";
 
 const Guide = () => {
   const { gender } = useSelector((state: any) => state.auth);
@@ -12,7 +13,7 @@ const Guide = () => {
   return (
     <ScrollView
       style={[styles.container]}
-      contentContainerStyle={{paddingBottom:20 ,flexGrow:1}}
+      contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
       bounces={false}
       showsVerticalScrollIndicator={false}
     >
@@ -41,7 +42,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19.2,
     marginTop: 40,
-    marginBottom:30
+    marginBottom: 30,
+    color: colors.secondary,
   },
   container: {
     flex: 1,

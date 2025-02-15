@@ -24,6 +24,17 @@ import CustomInput from "../../common/CustomInput";
 import CustomButton from "../../common/CustomButton";
 import { AppLoaderRef } from "../../../App";
 import { ErrorHandler } from "../../utils/ErrorHandler";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut,
+  getIdToken,
+  sendEmailVerification,
+  deleteUser,
+} from "firebase/auth";
+import auth from "@react-native-firebase/auth";
+import { loginApi } from "../../axious/PostApis";
+// import { getFCMToken } from "../../utils/FCM";
 
 type Inputs = {
   email: string;
@@ -49,7 +60,7 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
     console.log(data);
     toggleEmailModal();
   };
-  const handleChange = useCallback(() => {}, []);
+
   const handlePress = useCallback(() => {
     navigation.navigate("Login");
   }, []);
@@ -64,68 +75,111 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
     }, 1000);
   }, []);
 
-  const insets = useSafeAreaInsets();
+  const onSendVerification = useCallback(async (email: string) => {
+    try {
+      // await emailVerificationApi({email: email});
+      // SuccessToast(strings.signUpSuccess);
+    } catch (error) {
+      ErrorHandler(error);
+    } finally {
+      AppLoaderRef.current?.stop();
+      // onLoginNav();
+    }
+  }, []);
 
-  // const onSubmit = useCallback(
-  //   async (data: SingUpForm) => {
-  //     if (btnDisableRef.current) return;
+  // const onSubmit: SubmitHandler<Inputs> = useCallback(
+  //   async (data) => {
+  //     console.log("🟡 onSubmit called with data:", data);
+  //     console.log(
+  //       "🔹 btnDisableRef.current before check:",
+  //       btnDisableRef.current
+  //     );
+  //     console.log(
+  //       "🔹 AppLoaderRef.current before check:",
+  //       AppLoaderRef.current
+  //     );
+
+  //     if (btnDisableRef.current) {
+  //       console.log("Button is disabled, exiting function.");
+  //       return;
+  //     }
 
   //     btnDisableRef.current = true;
+  //     console.log("btnDisableRef.current set to true");
 
   //     Keyboard.dismiss();
-  //     const email = data?.email?.trim();
-  //     const username = data?.username?.trim();
-  //     const password = data?.password?.trim();
+  //     // const email = data?.email?.trim();
+  //     // const password = data?.password?.trim();
+  //     const email = "anash.silversky@gmail.com";
+  //     const password = "test@1234";
+  //     console.log("Email:", email);
+  //     console.log(
+  //       "🔑 Password:",
+  //       password ? "Exists (Hidden for security)" : "Not provided"
+  //     );
 
   //     AppLoaderRef.current?.start();
+  //     console.log("🚀 AppLoader started");
 
   //     try {
-  //       if (auth().currentUser) {
-  //         await auth().signOut();
+  //       const authInstance = auth();
+  //       console.log("Firebase Auth instance initialized");
+
+  //       if (authInstance.currentUser) {
+  //         console.log("Signing out existing user...");
+  //         await authInstance.signOut();
   //       }
 
-  //       await auth().createUserWithEmailAndPassword(email, password);
-  //       const firebaseToken = await auth().currentUser?.getIdToken();
-  //       const pushToken = await getFCMToken();
+  //       console.log("Creating new user...");
+  //       const userCredential =
+  //         await authInstance.createUserWithEmailAndPassword(email, password);
+  //       console.log("User created successfully:", userCredential.user.uid);
 
-  //       await signUpApi({
-  //         username: username,
+  //       const firebaseToken = await userCredential.user.getIdToken();
+  //       console.log(
+  //         "🔑 Firebase Token received:",
+  //         firebaseToken ? ("Exists", firebaseToken) : "Not received"
+  //       );
+
+  //       console.log("Sending login API request...");
+  //       const response = await loginApi({
   //         email: email,
   //         device_type: Platform.OS,
-  //         firebase_token: firebaseToken,
-  //         push_token: pushToken,
+  //         firebase_token: firebaseToken ?? "",
+  //         push_token: "Dummy",
   //       });
 
-  //       // await auth().currentUser?.sendEmailVerification();
+  //       console.log(" Login API Response:", response);
+
+  //       console.log("Sending email verification...");
+  //       await userCredential.user.sendEmailVerification();
+  //       console.log(" Email verification sent");
+
   //       onSendVerification(email);
-  //       await auth().signOut();
+  //       console.log("onSendVerification function called");
+
+  //       console.log("Signing out user...");
+  //       await authInstance.signOut();
+  //       console.log("User signed out");
   //     } catch (er) {
-  //       ErrorHandler(er);
-  //       if (auth()?.currentUser) {
-  //         await auth().currentUser?.delete();
+  //       console.error("Error caught in onSubmit:", er);
+
+  //       const authInstance = auth();
+  //       if (authInstance.currentUser) {
+  //         console.log("Deleting user due to error...");
+  //         await deleteUser(authInstance.currentUser);
+  //         console.log("User deleted");
   //       }
+
   //       AppLoaderRef.current?.stop();
+  //       console.log("AppLoader stopped");
   //     } finally {
   //       btnDisableRef.current = false;
+  //       console.log("btnDisableRef.current reset to false");
   //     }
   //   },
-  //   [onSendVerification],
+  //   [onSendVerification]
   // );
-
-
-  // const onSendVerification = useCallback(async (email: string) => {
-  //   try {
-  //     await emailVerificationApi({email: email});
-  //     SuccessToast(strings.signUpSuccess);
-  //   } catch (error) {
-  //     ErrorHandler(error);
-  //   } finally {
-  //     AppLoaderRef.current?.stop();
-  //     onLoginNav();
-  //   }
-  // }, []);
-
-
 
   return (
     <ScrollView
@@ -262,7 +316,7 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist400,
     fontSize: 16,
     lineHeight: 19.2,
-    color:colors.secondaryLight
+    color: colors.secondaryLight,
   },
   bottomButtonContainer: {
     flexDirection: "row",

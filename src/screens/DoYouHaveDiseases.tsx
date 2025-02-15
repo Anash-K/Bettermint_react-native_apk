@@ -26,8 +26,9 @@ type DiseaseState = {
   Thyroid: boolean;
   "Fatty Liver": boolean;
   "PCOD / PCOS"?: boolean;
+  "None of Above": boolean;
 };
-const { width } = Dimensions.get("screen");
+const { width, height } = Dimensions.get("screen");
 
 const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
   navigation,
@@ -42,6 +43,7 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
     "Blood Pressure": false,
     Thyroid: false,
     "Fatty Liver": false,
+    "None of Above": false,
   };
 
   if (gender !== "Male") {
@@ -58,22 +60,22 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
     }));
   };
 
+  console.log(height,"devide deight")
+
   const handleNextNav = useCallback(() => {
     isProfileSetup
       ? navigation.goBack()
       : navigation.navigate("PleaseShareYourMeasurement");
   }, []);
 
-  console.log(width, "width");
-
   return (
     <ScrollView
-      style={[styles.container, CustomStyle.safeAreaMarginBottom]}
+      style={[styles.container]}
       contentContainerStyle={styles.contentStyle}
       showsVerticalScrollIndicator={false}
       bounces={false}
     >
-      <View style={{ flex: 1 }}>
+      <View style={[{ flex: 1 }]}>
         <Text style={CustomStyle.title}>
           Do you have any of these diseases.
         </Text>
@@ -108,7 +110,8 @@ const DoYouHaveDiseases: React.FC<ScreenProps<"DoYouHaveDiseases">> = ({
           onPress={handleNextNav}
           buttonStyle={[
             styles.buttonStyle,
-            width < 400 && styles.responsiveButtonStyle,
+            // width < 400 && styles.responsiveButtonStyle,
+            // height < 914 && styles.responsiveButtonStyle,
           ]}
         />
       </View>
@@ -122,7 +125,9 @@ const styles = StyleSheet.create({
   responsiveButtonStyle: {
     marginBottom: Platform.select({ android: 40 }),
   },
-  buttonStyle: {},
+  buttonStyle: {
+    marginBottom: Platform.select({ ios: 30, android: 20 }),
+  },
   contentStyle: {
     flexGrow: 1,
   },

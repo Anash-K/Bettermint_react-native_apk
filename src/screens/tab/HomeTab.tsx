@@ -121,9 +121,9 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
                 <Text style={styles.scoreNumber}>/2800</Text>
               </View>
             </View>
-            <View style={{ borderRadius: 100 }}>
+            <View style={styles.progressBarBox}>
               <Progress.Bar
-                progress={0.4}
+                progress={0.9}
                 animated={true}
                 color={colors.primary}
                 unfilledColor={colors.commonInputBorderColor}
@@ -143,7 +143,9 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
         <View style={styles.contentContainer}>
           <View style={styles.topBoxes}>
             {/* Begginer Box */}
-            <View style={{ flex: 1 , backgroundColor:'white' ,borderRadius:20 }}>
+            <View
+              style={{ flex: 1, backgroundColor: "white", borderRadius: 20 }}
+            >
               <View style={styles.beginnerBox}>
                 <View style={styles.beginnerBoxHeader}>
                   <FastImage
@@ -357,6 +359,9 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
 export default HomeTab;
 
 const styles = StyleSheet.create({
+  progressBarBox: {
+    borderRadius: 100,
+  },
   innerScroallableContainer: {},
   scrollableContainer: {
     flex: 1,

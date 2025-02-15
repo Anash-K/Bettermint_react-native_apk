@@ -7,9 +7,12 @@ import CustomEmotionSelector from "../common/CustomEmotionSelector";
 import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
 import StatusBarWrapper from "../components/StatusBarWrapper";
+import { useDispatch } from "react-redux";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 
 const LogStress: React.FC<ScreenProps<"LogStress">> = ({ navigation }) => {
   const CustomStyle = useCustomStyle();
+  const dispatch = useDispatch();
 
   const textArray = [
     "Me",
@@ -41,6 +44,7 @@ const LogStress: React.FC<ScreenProps<"LogStress">> = ({ navigation }) => {
   }, [selectedOptions]);
 
   const handleNextNav = useCallback(() => {
+    dispatch(setFieldAction({ field: "isStressLevel", value: true }));
     navigation.navigate("LogEmotion");
   }, []);
 

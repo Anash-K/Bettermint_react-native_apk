@@ -1,7 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
-// apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'
 project.ext.vectoricons = [
     iconFontNames: [ 'AntDesign.ttf','MaterialIcons.ttf', 'EvilIcons.ttf' ] // Specify font files
 ]
@@ -121,6 +121,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    // implementation platform('com.google.firebase:firebase-bom:33.9.0')
-    // implementation 'com.google.firebase:firebase-analytics'
+    implementation platform('com.google.firebase:firebase-bom:33.9.0')
+    implementation 'com.google.firebase:firebase-analytics'
 }

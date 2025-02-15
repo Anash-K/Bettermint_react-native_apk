@@ -15,6 +15,7 @@ interface UserState {
     reason?: string;
   };
   isWorkout: boolean;
+  isStressLevel: boolean;
 }
 
 // Initial state with proper typing
@@ -32,18 +33,16 @@ export const initialUserState: UserState = {
     reason: "",
   },
   isWorkout: false,
+  isStressLevel: false,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
   reducers: {
-    setFieldAction(
-      state,
-      action: PayloadAction<{
-        field: keyof UserState;
-        value: any;
-      }>
+    setFieldAction<K extends keyof UserState>(
+      state: UserState,
+      action: PayloadAction<{ field: K; value: UserState[K] }>
     ) {
       const { field, value } = action.payload;
       state[field] = value;

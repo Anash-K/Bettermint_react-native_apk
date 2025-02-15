@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/rootReducer";
 import SleepDataLog from "../../components/logTabSubComponent/SleepDataLog";
 import WorkoutDataLog from "../../components/logTabSubComponent/WorkoutDataLog";
+import StressDataLog from "../../components/logTabSubComponent/StressDataLog";
 
 interface LogCardItem {
   id: number;
@@ -67,7 +68,7 @@ const initialValues: LogCardItem[] = [
 
 const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
   const [logCardData, setLogCardData] = useState(initialValues);
-  const { sleepTrack, isWorkout } = useSelector(
+  const { sleepTrack, isWorkout, isStressLevel } = useSelector(
     (state: RootState) => state.userDetails
   );
 
@@ -101,7 +102,15 @@ const LogTab: React.FC<ScreenProps<"LogTab">> = ({ navigation }) => {
         )
       );
     }
-  }, [sleepTrack, isWorkout]);
+
+    if (isStressLevel) {
+      setLogCardData((prev) =>
+        prev.map((item) =>
+          item.id === 3 ? { ...item, Details: <StressDataLog /> } : item
+        )
+      );
+    }
+  }, [sleepTrack, isWorkout, isStressLevel]);
 
   return (
     <View style={styles.container}>

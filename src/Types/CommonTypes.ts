@@ -1,4 +1,4 @@
-export interface Loader {
+export interface LoaderType {
     start: () => void;
     stop: () => void;
   }
