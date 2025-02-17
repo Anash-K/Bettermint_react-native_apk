@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
 import { CustomImages } from "../assets/CustomImages";
-import { colors } from "../constants/colors";
+import { colors } from "./colors";
 import CustomFont from "../assets/fonts/customFonts";
 import { useCustomStyle } from "./CustomStyles";
 

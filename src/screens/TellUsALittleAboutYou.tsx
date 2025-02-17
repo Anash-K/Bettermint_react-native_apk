@@ -20,12 +20,19 @@ import useTimeFormatter from "../utils/timeFormatter";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
 import { RootState } from "../redux/rootReducer";
+import { ICountry } from "react-native-international-phone-number";
 
 interface Inputs {
   name: string;
   DOB: string | null;
   Gender: string;
   City: string;
+  mobileNumber: string;
+  height: number;
+  height_unit: string;
+  weight: number;
+  weight_unit: string;
+  status: string;
 }
 
 const dropdownItems = [
@@ -48,11 +55,14 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
       formState: { errors },
     } = useForm<Inputs>();
 
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [isDatePickerVisible, setDatePickerVisibility] =
+      useState<boolean>(false);
+    const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(
+      null
+    );
     const { isProfileSetup } = useSelector(
       (state: RootState) => state.userDetails
     );
-
 
     const showDatePicker = useCallback(() => {
       setDatePickerVisibility(true);
@@ -61,6 +71,11 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     const hideDatePicker = useCallback(() => {
       setDatePickerVisibility(false);
     }, [isDatePickerVisible]);
+
+    const handleSelectedCountry = useCallback((country: ICountry) => {
+      setSelectedCountry(country);
+      console.log(country?.callingCode);
+    }, []);
 
     const handleConfirm = useCallback(
       (date: Date) => {
@@ -77,7 +92,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     const dispatch = useDispatch();
     const CustomStyle = useCustomStyle();
 
-    const onSubmit = useCallback((data: any) => {
+    const onSubmit = useCallback((data: Inputs) => {
       dispatch(gender(data.Gender));
       {
         isProfileSetup
@@ -89,6 +104,29 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     const handleGenderChange = useCallback((gender: any) => {
       setValue("Gender", gender.title);
       setError("Gender", { type: "manual", message: "" });
+    }, []);
+
+    const handleInputChange = useCallback((text: string) => {
+      const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15); // Allow only numbers & limit to 15 digits
+
+      if (formattedText.length > 15) {
+        setError("mobileNumber", {
+          type: "manual",
+          message: "Phone number cannot exceed 15 characters",
+        });
+        return;
+      } else if (!/^[0-9]*$/.test(formattedText)) {
+        setError("mobileNumber", {
+          type: "manual",
+          message: "Only numeric values are allowed",
+        });
+        return;
+      } else {
+        setError("mobileNumber", { type: "manual", message: undefined });
+      }
+      // setTouched(true); // Set touched when user types
+
+      setValue("mobileNumber", formattedText); // Fix: Use formattedText instead of text
     }, []);
 
     return (
@@ -194,7 +232,55 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
           {errors.City && (
             <Text style={styles.errorMessage}>{errors?.City?.message}</Text>
           )}
+          <Controller
+            control={control}
+            name="mobileNumber"
+            rules={{ required: "mobile number is required" }}
+            render={({ field: { value, onChange } }) => (
+              <CustomInput
+                label="Mobile Number"
+                placeholderText="Enter mobile number"
+                onChange={handleInputChange}
+                isPhoneInput={true}
+                value={value}
+                selectedCountry={selectedCountry}
+                OnCountryChange={handleSelectedCountry}
+              />
+            )}
+          />
+          {errors.City && (
+            <Text style={styles.errorMessage}>{errors?.City?.message}</Text>
+          )}
+
+          <Controller
+            control={control}
+            name="height"
+            rules={{ required: "height is required" }}
+            render={({ field: { value, onChange } }) => (
+              <CustomInput
+                label="Height"
+                placeholderText="Enter Height"
+                onChange={onChange}
+                value={value}
+                inputConfigurations={{
+                  value: value as any,
+                  onChangeText: onChange,
+                }}
+              />
+            )}
+          />
+          {errors.height && (
+            <Text style={styles.errorMessage}>{errors?.height?.message}</Text>
+          )}
         </View>
+        {__DEV__ && (
+          <CustomButton
+            text="Dev Mode"
+            onPress={() => navigation.navigate("BottomTabStack")}
+            buttonStyle={{ marginBottom: 15 }}
+          />
+        )}
+
         <CustomButton
           text={isProfileSetup ? "Save Changes" : "Continue"}
           onPress={handleSubmit(onSubmit)}

@@ -22,7 +22,7 @@ import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
 
 interface CustomInputProps {
-  value?: string | null ;
+  value?: string | null | number ;
   inputConfigurations?: TextInputProps;
   labelStyle?: TextStyle;
   inputBoxStyle?: ViewStyle;

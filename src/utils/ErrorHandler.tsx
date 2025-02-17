@@ -135,22 +135,49 @@ export const httpStatusCodes: httpErrorCodesType = {
   505: 'HTTP Version Not Supported',
 };
 
-export const ErrorHandler = (Error: ErrorType | any) => {
-  if (Error?.data?.message && Error?.data?.message?.trim()?.length !== 0) {
-    CustomToaster({type: ALERT_TYPE.DANGER, message: Error?.data.message});
-  } else if (Error?.status && httpStatusCodes[Error.status]) {
+export const ErrorHandler = (error: ErrorType | any) => {
+  // Handle Firebase errors like email already in use, wrong password, etc.
+  if (error?.code) {
+    const firebaseMessage = firebaseErrorCodes[error.code];
+    if (firebaseMessage) {
+      CustomToaster({
+        type: ALERT_TYPE.DANGER,
+        message: firebaseMessage,
+      });
+    } else {
+      CustomToaster({
+        type: ALERT_TYPE.DANGER,
+        message: 'Something went wrong with Firebase',
+      });
+    }
+  } 
+  // Handle network/API errors with status codes
+  else if (error?.status && httpStatusCodes[error.status]) {
     CustomToaster({
       type: ALERT_TYPE.DANGER,
-      message: httpStatusCodes[Error.status],
+      message: httpStatusCodes[error.status],
     });
-  } else if (Error?.code) {
+  }
+  // Handle errors with specific data message
+  else if (error?.data?.message && error?.data?.message?.trim()?.length !== 0) {
     CustomToaster({
       type: ALERT_TYPE.DANGER,
-      message: firebaseErrorCodes[Error.code] ?? 'something went wrong',
+      message: error?.data?.message,
     });
-  } else if (Error?.message && Error?.message?.trim()?.length !== 0) {
-    CustomToaster({type: ALERT_TYPE.DANGER, message: Error?.message});
-  } else {
-    CustomToaster({type: ALERT_TYPE.DANGER, message: 'Something went wrong'});
+  }
+  // Handle general errors with message property
+  else if (error?.message && error?.message?.trim()?.length !== 0) {
+    CustomToaster({
+      type: ALERT_TYPE.DANGER,
+      message: error?.message,
+    });
+  }
+  // Catch-all for any error that's not explicitly handled above
+  else {
+    CustomToaster({
+      type: ALERT_TYPE.DANGER,
+      message: 'Something went wrong. Please try again.',
+    });
   }
 };
+

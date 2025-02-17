@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useCallback } from "react";
 import AxiosInstance from "./AxiosInstance";
 
 interface LoginData {
@@ -10,8 +8,17 @@ interface LoginData {
 }
 
 export const loginApi = async (loginData: LoginData) => {
-    console.log(loginData,"logData")
   const response = await AxiosInstance.post("login", loginData);
-  console.log(response, "response");
   return response;
 };
+
+export const logoutApi = async () => {
+  const response = await AxiosInstance.post("logout");
+  return response;
+};
+
+export const deleteApi = async () => {
+  const response = await AxiosInstance.post("delete-account");
+  return response;
+};
+

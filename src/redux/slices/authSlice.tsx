@@ -4,12 +4,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface AuthState {
   token: string | null;
   gender: string;
+  email: string;
 }
 
 // Initial state with type
 const initialState: AuthState = {
   token: null,
   gender: "Male",
+  email: "",
 };
 
 // Create slice with typed reducers
@@ -17,11 +19,14 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login(state, action: PayloadAction<string>) {
-      state.token = action.payload;
+    login(state, action: PayloadAction<AuthState>) {
+      const { email, token } = action.payload;
+      state.token = token;
+      state.email = email;
     },
     logout(state) {
       state.token = null;
+      state.email = "";
     },
     gender(state, action: PayloadAction<string>) {
       state.gender = action.payload;

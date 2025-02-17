@@ -1,5 +1,7 @@
 
 
 export const MutationKey = ({
-    LogoutKey:'logoutUser'
+    LogoutKey:'logoutUser',
+    LoginKey:'loginUser',
+    deleteKey:'deleteUser'
 } as const)

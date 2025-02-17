@@ -1,5 +1,7 @@
 import {
   ImageBackground,
+  Keyboard,
+  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -7,8 +9,7 @@ import {
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
-import React, { useCallback } from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useCallback, useEffect, useRef } from "react";
 import { ScreenProps } from "../../navigator/Stack";
 import { useCustomStyle } from "../../constants/CustomStyles";
 import { CustomImages } from "../../assets/CustomImages";
@@ -16,15 +17,120 @@ import { colors } from "../../constants/colors";
 import CustomFont from "../../assets/fonts/customFonts";
 import CustomInput from "../../common/CustomInput";
 import CustomButton from "../../common/CustomButton";
+import { loginApi } from "../../axious/PostApis";
+import { Controller, useForm } from "react-hook-form";
+import { AppLoaderRef } from "../../../App";
+import { CustomToaster } from "../../common/CustomToaster";
+import { ALERT_TYPE } from "react-native-alert-notification";
+import auth from "@react-native-firebase/auth";
+import { ErrorHandler } from "../../utils/ErrorHandler";
+import { login } from "../../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
+import EmailVerificationModal from "../../Modals/EmailVerificationModal";
+
+interface Inputs {
+  email: string;
+  password: string;
+}
 
 const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
-  const handleChange = useCallback(() => {}, []);
-  const handlePress = useCallback(() => {}, []);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    getValues,
+    control,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const btnDisableRef = useRef<boolean>(false);
+  const verificationRef = useRef<boolean>(false);
+  const emailRef = useRef<string | null>(null);
+  const dispatch = useDispatch();
+
   const handleNav = useCallback((PageName: any) => {
     navigation.navigate(PageName);
   }, []);
-  const insets = useSafeAreaInsets();
   const CustomStyle = useCustomStyle();
+
+  const onSubmit = useCallback(async (data: Inputs) => {
+    Keyboard.dismiss();
+
+    if (btnDisableRef.current) return;
+    btnDisableRef.current = true;
+
+    const email = data?.email?.trim();
+    const pass = data?.password?.trim();
+
+    AppLoaderRef.current?.start();
+
+    try {
+      await auth().signInWithEmailAndPassword(email, pass);
+
+      if (!auth().currentUser?.emailVerified) {
+        await auth().signOut();
+        emailRef.current = email;
+        setTimeout(() => {
+          verificationRef.current = true;
+        }, 500);
+        return;
+      }
+
+      const firebaseToken = await auth().currentUser?.getIdToken();
+      const pushToken = "dummy";
+
+      const res = await loginApi({
+        device_type: Platform.OS,
+        push_token: pushToken,
+        firebase_token: firebaseToken ?? "",
+        email: email,
+      });
+
+      if (res?.status === 200) {
+        CustomToaster({
+          type: ALERT_TYPE.SUCCESS,
+          message: "Login successFully",
+        });
+      }
+
+      setTimeout(() => {
+        dispatch(
+          login({
+            email: email,
+            token: res?.data?.payload?.access_token,
+          } as any)
+        );
+      }, 700);
+    } catch (er) {
+      if (auth().currentUser) {
+        auth().signOut();
+      }
+      ErrorHandler(er);
+    } finally {
+      console.log(AppLoaderRef.current, "loader3");
+      AppLoaderRef.current?.stop();
+      btnDisableRef.current = false;
+    }
+  }, []);
+
+  const resendVerificationEmail = useCallback(async () => {
+    try {
+      await auth().currentUser?.sendEmailVerification();
+      CustomToaster({
+        type: ALERT_TYPE.SUCCESS,
+        message: "Email sent successfully",
+      });
+    } catch (error) {
+      ErrorHandler(error);
+    } finally {
+      await auth().signOut();
+      AppLoaderRef.current?.stop();
+    }
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    verificationRef.current == false;
+  }, [verificationRef.current]);
 
   return (
     <ScrollView
@@ -43,21 +149,54 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
       </ImageBackground>
       <View style={styles.innerContainer}>
         <Text style={[CustomStyle.title, styles.pageTitle]}>Welcome Back</Text>
-        <CustomInput
-          label="Email"
-          placeholderText="Enter email"
-          onChange={handleChange}
+        <Controller
+          control={control}
+          name="email"
+          rules={{ required: "Email is required" }}
+          render={({ field: { onChange, value } }) => (
+            <CustomInput
+              label="Email"
+              placeholderText="Enter email"
+              onChange={onChange}
+              value={value}
+              inputConfigurations={{
+                value: value,
+                onChangeText: onChange,
+              }}
+            />
+          )}
         />
-        <CustomInput
-          label="Password"
-          placeholderText="Enter Password"
-          onChange={handleChange}
-          isPassword={true}
+        {errors.email && (
+          <Text style={CustomStyle.errorMessage}>{errors.email.message}</Text>
+        )}
+
+        <Controller
+          control={control}
+          name="password"
+          rules={{ required: "Password is required" }}
+          render={({ field: { onChange, value } }) => (
+            <CustomInput
+              label="Password"
+              placeholderText="Enter Password"
+              onChange={onChange}
+              value={value}
+              isPassword={true}
+              inputConfigurations={{
+                value: value,
+                onChangeText: onChange,
+              }}
+            />
+          )}
         />
+        {errors.password && (
+          <Text style={CustomStyle.errorMessage}>
+            {errors.password.message}
+          </Text>
+        )}
         <CustomButton
           buttonStyle={styles.loginButton}
           text="Login"
-          onPress={handleNav.bind(this, "SignUp")}
+          onPress={handleSubmit(onSubmit)}
         />
         <CustomButton
           text="Forgot Password?"
@@ -76,6 +215,11 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
           onPress={handleNav.bind(this, "SignUp")}
         />
       </View>
+      <EmailVerificationModal
+        isVisible={verificationRef.current}
+        closeModal={handleModalClose}
+        OnConfirm={resendVerificationEmail}
+      />
     </ScrollView>
   );
 };
@@ -94,7 +238,7 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist400,
     fontSize: 16,
     lineHeight: 19.2,
-    color:colors.secondaryLight
+    color: colors.secondaryLight,
   },
   bottomButtonContainer: {
     flexDirection: "row",

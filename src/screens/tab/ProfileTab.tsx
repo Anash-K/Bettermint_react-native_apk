@@ -22,8 +22,11 @@ import { RootState } from "../../redux/rootReducer";
 import { logout } from "../../redux/slices/authSlice";
 import { useMutation } from "@tanstack/react-query";
 import { MutationKey } from "../../Types/MutationKeys";
-import { logoutApi } from "../../axious/GetApis";
 import { AppLoaderRef } from "../../../App";
+import { CustomToaster } from "../../common/CustomToaster";
+import { ALERT_TYPE } from "react-native-alert-notification";
+import { deleteApi, logoutApi } from "../../axious/PostApis";
+import { ErrorHandler } from "../../utils/ErrorHandler";
 
 interface modalDetailsType {
   contentText: string;
@@ -46,6 +49,9 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
     const { isProfileSetup } = useSelector(
       (state: RootState) => state.userDetails
     );
+    const { email, token } = useSelector((state: RootState) => state.auth);
+
+    console.log(email, token, "creden");
     const [isModalVisible, setIsModalVisible] = useState<
       "delete" | "logout" | null
     >(null);
@@ -61,19 +67,72 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
       navigation.navigate(screenName);
     }, []);
 
+    const { mutate: logoutUser } = useMutation({
+      mutationKey: [MutationKey.LogoutKey],
+      mutationFn: logoutApi,
+      onMutate: () => AppLoaderRef.current?.start(),
+      onError: (error) => {
+        ErrorHandler(error);
+      },
+      onSuccess(data) {
+        console.log(data);
+        if (data.status === 200) {
+          CustomToaster({
+            type: ALERT_TYPE.SUCCESS,
+            message: "Logout Successfully",
+          });
+          setTimeout(() => {
+            dispatch(logout());
+          }, 500);
+        }
+      },
+      onSettled: () => {
+        closeModal();
+        AppLoaderRef.current?.stop();
+      },
+    });
+
+    const { mutate: deleteUser } = useMutation({
+      mutationKey: [MutationKey.deleteKey],
+      mutationFn: deleteApi,
+      onMutate: () => AppLoaderRef.current?.start(),
+      onError: (error) => {
+        ErrorHandler(error);
+      },
+      onSuccess(data) {
+        console.log(data);
+        if (data.status === 200) {
+          CustomToaster({
+            type: ALERT_TYPE.SUCCESS,
+            message: "Account deleted successfully",
+          });
+          setTimeout(() => {
+            dispatch(logout());
+          }, 500);
+        }
+      },
+      onSettled: () => {
+        closeModal();
+        AppLoaderRef.current?.stop();
+      },
+    });
+
     const ActionsDataSet = {
       delete: {
         contentText: "Are you sure? Your journey doesn’t have to end!",
         actionText: "Delete account",
         logo: CustomImages.trashIcon,
-        handle: () => {},
+        handle: () => {
+          deleteUser();
+        },
       },
       logout: {
         contentText: "Taking a pause? We’ll be here when you’re back!",
         actionText: "Logout",
         logo: CustomImages.logout,
         handle: () => {
-          dispatch(logout());
+          // dispatch(logout());
+          logoutUser();
         },
       },
     };
@@ -87,16 +146,6 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
         SetModalDetails(ActionsDataSet.logout);
       }
     }, []);
-
-    const {mutate: logoutUser} = useMutation ({
-      mutationKey:[MutationKey.LogoutKey],
-      mutationFn: async() => await logoutApi,
-      onMutate:AppLoaderRef.current?.start(),
-      onError:(error) =>{
-        console.log(error)
-      },
-      onSettled:AppLoaderRef.current?.stop()
-    })
 
     return (
       <View style={styles.container}>

@@ -19,6 +19,7 @@ AxiosInstance.interceptors.request.use((request) => {
 
   const storeData = store.getState();
   if (storeData.auth?.token) {
+    console.log('token', storeData.auth?.token)
     request.headers.Authorization = `Bearer ${storeData.auth?.token}`;
   }
 

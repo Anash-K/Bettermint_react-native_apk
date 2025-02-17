@@ -3,10 +3,11 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import BootSplash from "react-native-bootsplash";
 import RootScreen from "./src/navigator/RootScreen";
 import { NavigationContainer } from "@react-navigation/native";
-import { Loader } from "./src/Types/CommonTypes";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export const AppLoaderRef = React.createRef<Loader>();
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { LoaderType } from "./src/Types/CommonTypes";
+
+export const AppLoaderRef = React.createRef<LoaderType>();
 const queryClient = new QueryClient();
 
 export const setDefaultFontScaling = () => {

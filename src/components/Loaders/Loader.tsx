@@ -1,6 +1,7 @@
 import React, { forwardRef, memo, useImperativeHandle, useState } from "react";
 import { Modal, View, StyleSheet, ActivityIndicator, Text } from "react-native";
 import { LoaderType } from "../../Types/CommonTypes";
+import { colors } from "../../constants/colors";
 
 const Loader = memo(
   forwardRef<LoaderType>((_, ref) => {
@@ -25,7 +26,7 @@ const Loader = memo(
           <ActivityIndicator
             style={styles.loader}
             size={80}
-            color="rgba(32, 201, 151, 1)"
+            color={colors.primary}
           />
         </View>
       </Modal>

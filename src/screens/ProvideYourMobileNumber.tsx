@@ -71,7 +71,7 @@ const ProvideYourMobileNumber: React.FC<
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
-        <View style={{ flex: 1 }}>
+        <View style={styles.content}>
           <Text style={[CustomStyle.title, styles.title]}>
             Please Provide Your Mobile Number
           </Text>
@@ -97,6 +97,9 @@ const ProvideYourMobileNumber: React.FC<
 export default ProvideYourMobileNumber;
 
 const styles = StyleSheet.create({
+  content:{ 
+    flex: 1
+   },
   title: {
     maxWidth: 300,
     marginHorizontal: "auto",

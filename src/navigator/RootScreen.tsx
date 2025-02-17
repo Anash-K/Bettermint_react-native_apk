@@ -6,6 +6,9 @@ import BottomTabStack from "./BottomTabNavigator";
 import AuthStack from "./AuthStack";
 import { useSelector } from "react-redux";
 import { colors } from "../constants/colors";
+import CustomToastWrapper from "../components/CustomToastWrapper";
+import Loader from "../components/Loaders/Loader";
+import { AppLoaderRef } from "../../App";
 
 export type RootStackParams = {
   AuthStack: undefined;
@@ -19,22 +22,28 @@ const RootScreen: React.FC<RootStackParams> = () => {
   const { token } = useSelector((state: any) => state.auth);
 
   return (
-    <React.Fragment>
-      <StatusBar barStyle={"light-content"} backgroundColor={colors.primary} />
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        {!token ? (
-          <Stack.Screen name="AuthStack" component={AuthStack} />
-        ) : (
-          <>
-            <Stack.Screen name="MainStack" component={MainStack} />
-          </>
-        )}
-      </Stack.Navigator>
-    </React.Fragment>
+    <CustomToastWrapper>
+      <React.Fragment>
+        <StatusBar
+          barStyle={"light-content"}
+          backgroundColor={colors.primary}
+        />
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          {!token ? (
+            <Stack.Screen name="AuthStack" component={AuthStack} />
+          ) : (
+            <>
+              <Stack.Screen name="MainStack" component={MainStack} />
+            </>
+          )}
+        </Stack.Navigator>
+        <Loader ref={AppLoaderRef} />
+      </React.Fragment>
+    </CustomToastWrapper>
   );
 };
 

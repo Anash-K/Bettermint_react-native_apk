@@ -34,6 +34,8 @@ import {
 } from "firebase/auth";
 import auth from "@react-native-firebase/auth";
 import { loginApi } from "../../axious/PostApis";
+import { ALERT_TYPE } from "react-native-alert-notification";
+import { CustomToaster } from "../../common/CustomToaster";
 // import { getFCMToken } from "../../utils/FCM";
 
 type Inputs = {
@@ -55,131 +57,94 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
   const dispatch = useDispatch();
   const CustomStyle = useCustomStyle();
   const btnDisableRef = useRef<boolean>(false);
+  const authInstance = auth();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    toggleEmailModal();
-  };
+  // const onSubmit: SubmitHandler<Inputs> = (data) => {
+  //   console.log(data);
+  //   toggleEmailModal();
+  // };
 
   const handlePress = useCallback(() => {
     navigation.navigate("Login");
   }, []);
+
   const toggleEmailModal = useCallback(() => {
     setIsModal(!isModal);
   }, [isModal]);
 
   const handleConfirm = useCallback(() => {
-    toggleEmailModal();
-    setTimeout(() => {
-      dispatch(login("testing"));
-    }, 1000);
-  }, []);
+    AppLoaderRef.current?.start();
+    resendVerificationEmail(); // Call resend email function
+  }, [getValues]);
 
-  const onSendVerification = useCallback(async (email: string) => {
+  const resendVerificationEmail = useCallback(async () => {
     try {
-      // await emailVerificationApi({email: email});
-      // SuccessToast(strings.signUpSuccess);
+      await auth().currentUser?.sendEmailVerification();
+      CustomToaster({
+        type: ALERT_TYPE.SUCCESS,
+        message: "Email sent successfully",
+      });
     } catch (error) {
       ErrorHandler(error);
     } finally {
+      await authInstance.signOut();
       AppLoaderRef.current?.stop();
-      // onLoginNav();
     }
   }, []);
 
-  // const onSubmit: SubmitHandler<Inputs> = useCallback(
-  //   async (data) => {
-  //     console.log("🟡 onSubmit called with data:", data);
-  //     console.log(
-  //       "🔹 btnDisableRef.current before check:",
-  //       btnDisableRef.current
-  //     );
-  //     console.log(
-  //       "🔹 AppLoaderRef.current before check:",
-  //       AppLoaderRef.current
-  //     );
+  const handleSuccess = useCallback(() => {
+    CustomToaster({
+      type: ALERT_TYPE.SUCCESS,
+      message: "Sign-up successfully please login",
+    });
+    setIsModal(true);
+  }, []);
 
-  //     if (btnDisableRef.current) {
-  //       console.log("Button is disabled, exiting function.");
-  //       return;
-  //     }
+  const onSubmit: SubmitHandler<Inputs> = useCallback(async (data) => {
+    if (btnDisableRef.current) {
+      return;
+    }
 
-  //     btnDisableRef.current = true;
-  //     console.log("btnDisableRef.current set to true");
+    btnDisableRef.current = true;
 
-  //     Keyboard.dismiss();
-  //     // const email = data?.email?.trim();
-  //     // const password = data?.password?.trim();
-  //     const email = "anash.silversky@gmail.com";
-  //     const password = "test@1234";
-  //     console.log("Email:", email);
-  //     console.log(
-  //       "🔑 Password:",
-  //       password ? "Exists (Hidden for security)" : "Not provided"
-  //     );
+    Keyboard.dismiss();
+    const email = data?.email?.trim();
+    const password = data?.password?.trim();
 
-  //     AppLoaderRef.current?.start();
-  //     console.log("🚀 AppLoader started");
+    AppLoaderRef.current?.start();
 
-  //     try {
-  //       const authInstance = auth();
-  //       console.log("Firebase Auth instance initialized");
+    try {
+      if (authInstance.currentUser) {
+        await authInstance.signOut();
+      }
 
-  //       if (authInstance.currentUser) {
-  //         console.log("Signing out existing user...");
-  //         await authInstance.signOut();
-  //       }
+      const userCredential = await authInstance.createUserWithEmailAndPassword(
+        email,
+        password
+      );
 
-  //       console.log("Creating new user...");
-  //       const userCredential =
-  //         await authInstance.createUserWithEmailAndPassword(email, password);
-  //       console.log("User created successfully:", userCredential.user.uid);
+      const firebaseToken = await userCredential.user.getIdToken();
 
-  //       const firebaseToken = await userCredential.user.getIdToken();
-  //       console.log(
-  //         "🔑 Firebase Token received:",
-  //         firebaseToken ? ("Exists", firebaseToken) : "Not received"
-  //       );
+      const response = await loginApi({
+        email: email,
+        device_type: Platform.OS,
+        firebase_token: firebaseToken ?? "",
+        push_token: "Dummy",
+      });
 
-  //       console.log("Sending login API request...");
-  //       const response = await loginApi({
-  //         email: email,
-  //         device_type: Platform.OS,
-  //         firebase_token: firebaseToken ?? "",
-  //         push_token: "Dummy",
-  //       });
+      await userCredential.user.sendEmailVerification();
 
-  //       console.log(" Login API Response:", response);
+      await authInstance.signOut();
 
-  //       console.log("Sending email verification...");
-  //       await userCredential.user.sendEmailVerification();
-  //       console.log(" Email verification sent");
+      handleSuccess();
 
-  //       onSendVerification(email);
-  //       console.log("onSendVerification function called");
-
-  //       console.log("Signing out user...");
-  //       await authInstance.signOut();
-  //       console.log("User signed out");
-  //     } catch (er) {
-  //       console.error("Error caught in onSubmit:", er);
-
-  //       const authInstance = auth();
-  //       if (authInstance.currentUser) {
-  //         console.log("Deleting user due to error...");
-  //         await deleteUser(authInstance.currentUser);
-  //         console.log("User deleted");
-  //       }
-
-  //       AppLoaderRef.current?.stop();
-  //       console.log("AppLoader stopped");
-  //     } finally {
-  //       btnDisableRef.current = false;
-  //       console.log("btnDisableRef.current reset to false");
-  //     }
-  //   },
-  //   [onSendVerification]
-  // );
+    } catch (er) {
+      ErrorHandler(er);
+    } finally {
+      AppLoaderRef.current?.stop();
+      btnDisableRef.current = false;
+    }
+  }, []);
 
   return (
     <ScrollView
