@@ -46,12 +46,13 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
   ({ navigation }) => {
     const { top } = useSafeAreaInsets();
     const dispatch = useDispatch();
-    const { isProfileSetup } = useSelector(
+    const { isProfileSetup , profileInfo } = useSelector(
       (state: RootState) => state.userDetails
     );
+
     const { email, token } = useSelector((state: RootState) => state.auth);
 
-    console.log(email, token, "creden");
+    console.log(email, token, "creden" , profileInfo);
     const [isModalVisible, setIsModalVisible] = useState<
       "delete" | "logout" | null
     >(null);
@@ -97,11 +98,12 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
       mutationFn: deleteApi,
       onMutate: () => AppLoaderRef.current?.start(),
       onError: (error) => {
+        console.log(error,"error")
         ErrorHandler(error);
       },
       onSuccess(data) {
-        console.log(data);
-        if (data.status === 200) {
+        console.log(data,"res");
+        if (data?.status === 200) {
           CustomToaster({
             type: ALERT_TYPE.SUCCESS,
             message: "Account deleted successfully",

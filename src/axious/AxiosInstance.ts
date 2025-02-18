@@ -3,8 +3,13 @@ import axios from "axios";
 import store from "../redux/configureStore";
 import { logout } from "../redux/slices/authSlice";
 
+const Urls = {
+  liveUrl: "https://app.betterminthealth.com/api/",
+  localUrl: "http://192.168.1.126:8080/",
+};
+
 const AxiosInstance = axios.create({
-  baseURL: "https://app.betterminthealth.com/api/",
+  baseURL: Urls.liveUrl,
   headers: {
     Accept: "application/json",
     // "Content-Type": "multipart/form-data",
@@ -19,7 +24,7 @@ AxiosInstance.interceptors.request.use((request) => {
 
   const storeData = store.getState();
   if (storeData.auth?.token) {
-    console.log('token', storeData.auth?.token)
+    console.log("token", storeData.auth?.token);
     request.headers.Authorization = `Bearer ${storeData.auth?.token}`;
   }
 

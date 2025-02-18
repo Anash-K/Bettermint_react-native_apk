@@ -5,10 +5,12 @@ import { useSelector } from "react-redux";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
+import { RootState } from "../redux/rootReducer";
+import React, { memo } from "react";
+import { ScreenProps } from "../navigator/Stack";
 
-const Guide = () => {
-  const { gender } = useSelector((state: any) => state.auth);
-  const CustomStyle = useCustomStyle();
+const Guide:React.FC<ScreenProps<'Guide'>> = () => {
+  const { profileInfo } = useSelector((state: RootState) => state.userDetails);
 
   return (
     <ScrollView
@@ -19,7 +21,9 @@ const Guide = () => {
     >
       <FastImage
         source={
-          gender == "Male" ? CustomImages.maleBody : CustomImages.femaleBody
+          profileInfo.gender == "Male"
+            ? CustomImages.maleBody
+            : CustomImages.femaleBody
         }
         resizeMode="contain"
         style={styles.bodyStyle}
@@ -34,7 +38,7 @@ const Guide = () => {
   );
 };
 
-export default Guide;
+export default memo(Guide);
 
 const styles = StyleSheet.create({
   content: {

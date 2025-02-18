@@ -6,17 +6,17 @@ import {
   TouchableOpacity,
   ViewStyle,
   TextStyle,
-  FlatList,
-  Platform,
 } from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
+import FastImage from "react-native-fast-image";
+import { CustomImages } from "../assets/CustomImages";
 
 interface CustomOptions {
   startingNumber: number;
   endingNumber: number;
-};
+}
 
 interface CustomSelectorProps {
   question: string;
@@ -30,7 +30,9 @@ interface CustomSelectorProps {
   buttonStyle?: ViewStyle;
   optionStyle?: TextStyle;
   CustomOptions?: CustomOptions;
-};
+  isMultiSelect?: boolean;
+  setSelectedOptions?: () => void;
+}
 
 interface CustomOptionsComponent {
   customOptions: number | undefined;
@@ -40,7 +42,7 @@ interface CustomOptionsComponent {
   onSelect: (text: string) => void;
   optionStyle: TextStyle | TextStyle[] | undefined;
   outerBorderBoxStyle: ViewStyle | undefined;
-};
+}
 
 const CustomOptionsComponent = ({
   customOptions,
@@ -94,10 +96,11 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
   buttonStyle,
   optionStyle,
   CustomOptions,
+  isMultiSelect,
 }) => {
-  let generatedOptions: string[] = [];
   const CustomStyle = useCustomStyle();
 
+  let generatedOptions: string[] = [];
   if (
     CustomOptions?.startingNumber !== undefined &&
     CustomOptions.endingNumber !== undefined
@@ -118,6 +121,16 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
       <Text style={[styles.question, questionStyle]}>
         {question ?? "Question?"}
       </Text>
+      {isMultiSelect ? (
+        <View style={styles.multiSelectBox}>
+          <FastImage
+            source={CustomImages.multiSelect}
+            style={styles.multiSelect}
+          />
+
+          <Text style={styles.subTitle}>Multi-select</Text>
+        </View>
+      ) : null}
       <View style={[styles.optionsContainer, optionContainer]}>
         {generatedOptions.map((item, index) => (
           <CustomOptionsComponent
@@ -131,25 +144,6 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
             item={item}
           />
         ))}
-        {/* <FlatList
-          data={generatedOptions}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={[styles.optionsContainer, optionContainer]}
-          horizontal={true}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <CustomOptionsComponent
-              customOptions={CustomOptions?.startingNumber}
-              optionStyle={optionStyle}
-              outerBorderBoxStyle={outerBorderBoxStyle}
-              selectedOption={selectedOption}
-              buttonStyle={buttonStyle}
-              onSelect={onSelect}
-              item={item}
-            />
-          )}
-        /> */}
       </View>
     </View>
   );
@@ -158,6 +152,23 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
 export default CustomTextOptionSelector;
 
 const styles = StyleSheet.create({
+  subTitle: {
+    fontFamily: CustomFont.Urbanist700,
+    fontSize: 16,
+    lineHeight: 19.2,
+    color: colors.secondaryLight,
+  },
+  multiSelectBox: {
+    flexDirection: "row",
+    columnGap: 8,
+    justifyContent: "center",
+    marginBottom: 24,
+    alignItems: "center",
+  },
+  multiSelect: {
+    width: 16,
+    height: 16,
+  },
   textOption: {
     width: "auto",
     height: "auto",

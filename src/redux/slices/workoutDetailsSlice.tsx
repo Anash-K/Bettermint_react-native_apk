@@ -2,12 +2,21 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define the state type
 interface UserState {
-  height: number;
-  weight: number;
-  steps: number;
-  currentStatus: string | null;
+  profileInfo: {
+    name: string;
+    date_of_birth: string;
+    mobile_number:string;
+    gender: string;
+    height: number;
+    weight: number;
+    status: string;
+    city: string;
+    height_unit: string;
+    weight_unit: string;
+    profile_picture: string;
+  };
   isProfileSetup: boolean;
-  projectPhotos: string[];
+  profilePicture: string;
   numberOfWorkout: number;
   sleepTrack: {
     bedTime: string;
@@ -20,12 +29,21 @@ interface UserState {
 
 // Initial state with proper typing
 export const initialUserState: UserState = {
-  height: 0,
-  weight: 0,
-  steps: 0,
-  currentStatus: null,
+  profileInfo: {
+    name: "",
+    date_of_birth: "",
+    gender: "",
+    mobile_number:'',
+    height: 0,
+    weight: 0,
+    status: "",
+    city: "",
+    height_unit: "",
+    weight_unit: "",
+    profile_picture: "",
+  },
   isProfileSetup: false,
-  projectPhotos: [],
+  profilePicture: '',
   numberOfWorkout: 0,
   sleepTrack: {
     bedTime: "",

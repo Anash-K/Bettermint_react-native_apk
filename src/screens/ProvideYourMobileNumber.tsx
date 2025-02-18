@@ -21,8 +21,10 @@ const ProvideYourMobileNumber: React.FC<
   const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(null);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [touched, setTouched] = useState(false); // Track if input has been touched
-  const { isProfileSetup } = useSelector((state: RootState) => state.userDetails);
+  const [touched, setTouched] = useState<boolean>(false); // Track if input has been touched
+  const { isProfileSetup } = useSelector(
+    (state: RootState) => state.userDetails
+  );
 
   const handleSelectedCountry = useCallback((country: ICountry) => {
     setSelectedCountry(country);
@@ -30,24 +32,24 @@ const ProvideYourMobileNumber: React.FC<
   }, []);
 
   const handleInputChange = useCallback(
-  (text: string) => {
-    const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15); // Allow only numbers & limit to 15 digits
+    (text: string) => {
+      const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15); // Allow only numbers & limit to 15 digits
 
-    if (formattedText.length > 15) {
-      setError("Phone number cannot exceed 15 characters");
-      return;
-    } else if (!/^[0-9]*$/.test(formattedText)) {
-      setError("Only numeric values are allowed");
-      return;
-    } else {
-      setError(null);
-    }
-    setTouched(true); // Set touched when user types
+      if (formattedText.length > 15) {
+        setError("Phone number cannot exceed 15 characters");
+        return;
+      } else if (!/^[0-9]*$/.test(formattedText)) {
+        setError("Only numeric values are allowed");
+        return;
+      } else {
+        setError(null);
+      }
+      setTouched(true); // Set touched when user types
 
-    setPhoneNumber(formattedText); // Fix: Use formattedText instead of text
-  },
-  [phoneNumber, touched, error]
-);
+      setPhoneNumber(formattedText); // Fix: Use formattedText instead of text
+    },
+    [phoneNumber, touched, error]
+  );
 
   const handleNextNav = useCallback(() => {
     // Check if phone number is required
@@ -97,9 +99,9 @@ const ProvideYourMobileNumber: React.FC<
 export default ProvideYourMobileNumber;
 
 const styles = StyleSheet.create({
-  content:{ 
-    flex: 1
-   },
+  content: {
+    flex: 1,
+  },
   title: {
     maxWidth: 300,
     marginHorizontal: "auto",

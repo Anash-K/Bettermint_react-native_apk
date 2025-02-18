@@ -132,6 +132,8 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
         push_token: "Dummy",
       });
 
+      console.log(response)
+
       await userCredential.user.sendEmailVerification();
 
       await authInstance.signOut();
@@ -139,6 +141,7 @@ const SignUp: React.FC<ScreenProps<"SignUp">> = ({ navigation }) => {
       handleSuccess();
 
     } catch (er) {
+      console.log(er)
       ErrorHandler(er);
     } finally {
       AppLoaderRef.current?.stop();

@@ -136,8 +136,10 @@ export const httpStatusCodes: httpErrorCodesType = {
 };
 
 export const ErrorHandler = (error: ErrorType | any) => {
+  console.log(error);
   // Handle Firebase errors like email already in use, wrong password, etc.
   if (error?.code) {
+    console.log(error,"code condition");
     const firebaseMessage = firebaseErrorCodes[error.code];
     if (firebaseMessage) {
       CustomToaster({

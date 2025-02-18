@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScreenProps } from "../navigator/Stack";
 import { gender, logout } from "../redux/slices/authSlice";
@@ -21,10 +21,11 @@ import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
 import { RootState } from "../redux/rootReducer";
 import { ICountry } from "react-native-international-phone-number";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 
 interface Inputs {
   name: string;
-  DOB: string | null;
+  DOB: string;
   Gender: string;
   City: string;
   mobileNumber: string;
@@ -40,6 +41,15 @@ const dropdownItems = [
   { title: "Female" },
   { title: "Other" },
 ];
+
+const statusOptions = [
+  { title: "Working" },
+  { title: "Studying" },
+  { title: "Neither" },
+];
+
+const heightUnit = [{ title: "cm" }, { title: "ft, in" }];
+const weightUnit = [{ title: "Kg" }, { title: "lbs" }];
 
 const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
   memo(({ navigation, route }) => {
@@ -58,7 +68,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     const [isDatePickerVisible, setDatePickerVisibility] =
       useState<boolean>(false);
     const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(
-      null
+      "+91"
     );
     const { isProfileSetup } = useSelector(
       (state: RootState) => state.userDetails
@@ -74,13 +84,12 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
 
     const handleSelectedCountry = useCallback((country: ICountry) => {
       setSelectedCountry(country);
-      console.log(country?.callingCode);
     }, []);
 
     const handleConfirm = useCallback(
       (date: Date) => {
         let SomeDate = useTimeFormatter({ date: date });
-        setValue("DOB", SomeDate);
+        setValue("DOB", SomeDate ?? "");
         setError("DOB", { type: "manual", message: "" });
         hideDatePicker();
       },
@@ -92,19 +101,51 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     const dispatch = useDispatch();
     const CustomStyle = useCustomStyle();
 
-    const onSubmit = useCallback((data: Inputs) => {
-      dispatch(gender(data.Gender));
-      {
-        isProfileSetup
-          ? navigation.goBack()
-          : navigation.navigate("ProvideYourMobileNumber");
-      }
-    }, []);
+    const onSubmit = useCallback(
+      (data: Inputs) => {
+        if (data.mobileNumber.length < 10) {
+          setError("mobileNumber", {
+            type: "required",
+            message: "Mobile number must contain 10 digit",
+          });
+          return;
+        }
+        let mobileNumber = `${selectedCountry?.callingCode}${data.mobileNumber}`;
 
-    const handleGenderChange = useCallback((gender: any) => {
-      setValue("Gender", gender.title);
-      setError("Gender", { type: "manual", message: "" });
-    }, []);
+        dispatch(
+          setFieldAction({
+            field: "profileInfo",
+            value: {
+              name: data.name,
+              date_of_birth: data.DOB,
+              gender: data.Gender,
+              mobile_number: mobileNumber,
+              city: data.City,
+              height: data.height,
+              weight: data.weight,
+              status: data.status,
+              height_unit: data.height_unit,
+              weight_unit: data.weight_unit,
+              profile_picture: "",
+            },
+          })
+        );
+        {
+          isProfileSetup
+            ? navigation.goBack()
+            : navigation.navigate("AddYourPhoto");
+        }
+      },
+      [selectedCountry]
+    );
+
+    const handleFieldChange = useCallback(
+      (fieldName: keyof Inputs, value: any) => {
+        setValue(fieldName, value.title);
+        setError(fieldName, { type: "manual", message: "" });
+      },
+      []
+    );
 
     const handleInputChange = useCallback((text: string) => {
       const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15); // Allow only numbers & limit to 15 digits
@@ -124,9 +165,8 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
       } else {
         setError("mobileNumber", { type: "manual", message: undefined });
       }
-      // setTouched(true); // Set touched when user types
 
-      setValue("mobileNumber", formattedText); // Fix: Use formattedText instead of text
+      setValue("mobileNumber", formattedText); 
     }, []);
 
     return (
@@ -154,7 +194,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
           <Controller
             control={control}
             name="name"
-            rules={{ required: "Email is required" }}
+            rules={{ required: "name is required" }}
             render={({ field: { onChange, value } }) => (
               <CustomInput
                 label="Name"
@@ -178,7 +218,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
             render={({ field: { value, onChange } }) => (
               <CustomInput
                 label="DOB"
-                placeholderText="Enter dOB"
+                placeholderText="Enter date of birth"
                 onChange={onChange}
                 value={value}
                 onFocusAction={showDatePicker}
@@ -201,7 +241,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
               <CustomInput
                 label="Gender"
                 placeholderText="Enter gender"
-                onChange={handleGenderChange}
+                onChange={(text) => handleFieldChange("Gender", text)}
                 value={value}
                 isDropDown={true}
                 dropdownItems={dropdownItems}
@@ -235,7 +275,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
           <Controller
             control={control}
             name="mobileNumber"
-            rules={{ required: "mobile number is required" }}
+            rules={{ required: "Mobile number is required" }}
             render={({ field: { value, onChange } }) => (
               <CustomInput
                 label="Mobile Number"
@@ -248,29 +288,126 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
               />
             )}
           />
-          {errors.City && (
-            <Text style={styles.errorMessage}>{errors?.City?.message}</Text>
+          {errors.mobileNumber && (
+            <Text style={styles.errorMessage}>
+              {errors?.mobileNumber?.message}
+            </Text>
           )}
+          <View style={styles.doubleInputs}>
+            <Controller
+              control={control}
+              name="height"
+              rules={{ required: "Height is required" }}
+              render={({ field: { value, onChange } }) => (
+                <CustomInput
+                  label="Height"
+                  placeholderText="Enter height"
+                  onChange={onChange}
+                  value={value}
+                  inputBoxStyle={styles.largeInput}
+                  inputConfigurations={{
+                    value: value as any,
+                    onChangeText: onChange,
+                    keyboardType: "number-pad",
+                    maxLength: 4,
+                  }}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="height_unit"
+              rules={{ required: "Height unit is required" }}
+              render={({ field: { value, onChange } }) => (
+                <CustomInput
+                  placeholderText="unit"
+                  onChange={(text) => handleFieldChange("height_unit", text)}
+                  inputBoxStyle={styles.smallInput}
+                  value={value}
+                  isDropDown={true}
+                  dropdownItems={heightUnit}
+                />
+              )}
+            />
+          </View>
+          <View style={styles.doubleInputs}>
+            {errors.height && (
+              <Text style={styles.errorMessage}>{errors?.height?.message}</Text>
+            )}
+            {errors.height_unit && (
+              <Text style={styles.errorMessage}>
+                {errors?.height_unit?.message}
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.doubleInputs}>
+            <Controller
+              control={control}
+              name="weight"
+              rules={{ required: "Weight is required" }}
+              render={({ field: { value, onChange } }) => (
+                <CustomInput
+                  label="Weight"
+                  placeholderText="Enter weight"
+                  onChange={onChange}
+                  inputBoxStyle={styles.largeInput}
+                  value={value}
+                  inputConfigurations={{
+                    value: value as any,
+                    onChangeText: onChange,
+                    keyboardType: "number-pad",
+                    maxLength: 4,
+                  }}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="weight_unit"
+              rules={{ required: "Weight unit is required" }}
+              render={({ field: { value } }) => (
+                <CustomInput
+                  placeholderText="unit"
+                  onChange={(text) => handleFieldChange("weight_unit", text)}
+                  inputBoxStyle={styles.smallInput}
+                  value={value}
+                  isDropDown={true}
+                  dropdownItems={weightUnit}
+                />
+              )}
+            />
+          </View>
+          <View style={styles.doubleInputs}>
+            {errors.weight && (
+              <Text style={styles.errorMessage}>{errors?.weight?.message}</Text>
+            )}
+            {errors.weight_unit && (
+              <Text style={styles.errorMessage}>
+                {errors?.weight_unit?.message}
+              </Text>
+            )}
+          </View>
 
           <Controller
             control={control}
-            name="height"
-            rules={{ required: "height is required" }}
-            render={({ field: { value, onChange } }) => (
+            name="status"
+            rules={{ required: "Status is required" }}
+            render={({ field: { value } }) => (
               <CustomInput
-                label="Height"
-                placeholderText="Enter Height"
-                onChange={onChange}
+                label="Current Status"
+                placeholderText="Enter status"
+                onChange={(text) => handleFieldChange("status", text)}
                 value={value}
-                inputConfigurations={{
-                  value: value as any,
-                  onChangeText: onChange,
-                }}
+                isDropDown={true}
+                dropdownItems={statusOptions}
               />
             )}
           />
-          {errors.height && (
-            <Text style={styles.errorMessage}>{errors?.height?.message}</Text>
+          {errors.status && (
+            <Text style={styles.errorMessage}>{errors?.status?.message}</Text>
           )}
         </View>
         {__DEV__ && (
@@ -295,9 +432,19 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     );
   });
 
-export default TellUsALittleAboutYou;
+export default memo(TellUsALittleAboutYou);
 
 const styles = StyleSheet.create({
+  largeInput: {
+    flex: 0.95,
+  },
+  smallInput: {
+    flex: 0.5,
+  },
+  doubleInputs: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   title: {
     textAlign: "left",
     fontFamily: CustomFont.Urbanist800,
@@ -309,9 +456,10 @@ const styles = StyleSheet.create({
   },
   innerContent: {
     flexGrow: 1,
+    marginBottom: Platform.select({ android: 40 }),
   },
   topContainer: {
-    flex: 1,
+    flexGrow: 1,
     marginBottom: 20,
   },
   errorMessage: {

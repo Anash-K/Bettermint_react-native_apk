@@ -8,17 +8,28 @@ interface LoginData {
 }
 
 export const loginApi = async (loginData: LoginData) => {
-  const response = await AxiosInstance.post("login", loginData);
-  return response;
+  try {
+    const response = await AxiosInstance.post("login", loginData);
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const logoutApi = async () => {
-  const response = await AxiosInstance.post("logout");
-  return response;
+  try {
+    const response = await AxiosInstance.post("logout");
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const deleteApi = async () => {
-  const response = await AxiosInstance.post("delete-account");
-  return response;
+  try {
+    const response = await AxiosInstance.post("delete-account");
+    return response;
+  } catch (error) {
+    error;
+  }
 };
-

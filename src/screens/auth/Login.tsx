@@ -79,12 +79,23 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
       const firebaseToken = await auth().currentUser?.getIdToken();
       const pushToken = "dummy";
 
+      // console.log({
+      //   device_type: Platform.OS,
+      //   push_token: pushToken,
+      //   firebase_token: firebaseToken ?? "",
+      //   email: email,
+      // });
+
+      // return;
+
       const res = await loginApi({
         device_type: Platform.OS,
         push_token: pushToken,
         firebase_token: firebaseToken ?? "",
         email: email,
       });
+
+      console.log(res,"fres")
 
       if (res?.status === 200) {
         CustomToaster({

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useCallback } from "react";
+import React, { memo, useCallback } from "react";
 import { ScreenProps } from "./Stack";
 import ProvideYourMobileNumber from "../screens/ProvideYourMobileNumber";
 import TellUsALittleAboutYou from "../screens/TellUsALittleAboutYou";
@@ -65,13 +65,15 @@ import LogStopEating from "../screens/LogStopEating";
 import LogWaterConsumed from "../screens/LogWaterConsumed";
 import LogBalancedMeals from "../screens/LogBalancedMeals";
 import LogFixYourBasics from "../screens/LogFixYourBasics";
+import SelfAssessment from "../screens/SelfAssessment";
 
 export type StackParams = {
   TellUsALittleAboutYou: undefined;
-  ProvideYourMobileNumber: undefined;
-  WhatsYourHeight: undefined;
-  WhatsYourWeight: undefined;
-  WhatBestDescribe: undefined;
+  SelfAssessment: undefined;
+  // ProvideYourMobileNumber: undefined;
+  // WhatsYourHeight: undefined;
+  // WhatsYourWeight: undefined;
+  // WhatBestDescribe: undefined;
   AddYourPhoto: undefined;
   WhatsYourMeasurement: undefined;
   Guide: undefined;
@@ -118,8 +120,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
   const { isProfileSetup } = useSelector(
     (state: RootState) => state.userDetails
   );
-  const nav = useNavigation();
-  const handlePress = useCallback(() => {}, []);
+
   return (
     <>
       <StatusBar
@@ -159,6 +160,34 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           }}
         />
         <Stack.Screen
+          name="SelfAssessment"
+          component={SelfAssessment}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            header: () => (
+              <CustomHeader
+                title={isProfileSetup ? "" : "Self-Assessment"}
+                leftComponent={
+                  <CustomButton
+                    icon={CustomImages.blackDropDownIcon}
+                    buttonStyle={styles.backButtonStyle}
+                    iconStyle={styles.backArrowIcon}
+                    onPress={() => navigation.goBack()}
+                  />
+                }
+                rightComponent={
+                  <CustomButton
+                    icon={CustomImages.refreshIcon}
+                    buttonStyle={styles.btnRefreshIconStyle}
+                    iconStyle={styles.refreshIconStyle}
+                    onPress={() => navigation.navigate("Guide")}
+                  />
+                }
+              />
+            ),
+          })}
+        />
+        {/* <Stack.Screen
           name="ProvideYourMobileNumber"
           component={ProvideYourMobileNumber}
           options={{
@@ -185,7 +214,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
           options={{
             headerTitle: "",
           }}
-        />
+        /> */}
         <Stack.Screen
           name="AddYourPhoto"
           component={AddYourPhoto}
@@ -197,7 +226,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
                   text="Skip"
                   buttonStyle={styles.skipButton}
                   textStyle={styles.skipText}
-                  onPress={() => navigation.navigate("WhatsYourMeasurement")}
+                  onPress={() => navigation.navigate('SelfAssessment')}
                 />
               ),
           })}
@@ -209,7 +238,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
             headerShown: false,
           }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="WhatsYourMeasurement"
           component={WhatsYourMeasurement}
           options={({ navigation }) => ({
@@ -236,7 +265,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
               />
             ),
           })}
-        />
+        /> */}
         <Stack.Screen
           name="Guide"
           component={Guide}
@@ -953,7 +982,7 @@ const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
   );
 };
 
-export default MainStack;
+export default memo(MainStack);
 
 const styles = StyleSheet.create({
   crossIcon: {

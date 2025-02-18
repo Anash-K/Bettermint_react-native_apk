@@ -27,6 +27,7 @@ const authSlice = createSlice({
     logout(state) {
       state.token = null;
       state.email = "";
+      state == initialState;
     },
     gender(state, action: PayloadAction<string>) {
       state.gender = action.payload;
