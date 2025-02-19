@@ -37,6 +37,7 @@ const LogBalancedWorkout: React.FC<ScreenProps<"LogBalancedWorkout">> = () => {
   const [selectedOptions, setSelectedOptions] = useState<{
     [key: string]: string;
   }>({});
+  
   const handleSelect = useCallback(
     (question: string, option: string) => {
       setSelectedOptions((prev) => ({

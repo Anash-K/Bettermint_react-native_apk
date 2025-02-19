@@ -20,7 +20,7 @@ interface CustomSelectorProps {
   question: string;
   options?: string[];
   onSelect: (selectedOption: string) => void; // Callback function to pass the selected option
-  selectedOption: string;
+  selectedOption: string | number;
   outerCardStyle?: ViewStyle;
   questionStyle?: TextStyle;
   optionContainer?: ViewStyle;
@@ -32,7 +32,7 @@ interface CustomSelectorProps {
 
 interface CustomOptionsComponent {
   customOptions: number | undefined;
-  selectedOption: string;
+  selectedOption: string | number;
   item: string;
   buttonStyle: ViewStyle | undefined;
   onSelect: (text: string) => void;
@@ -116,7 +116,7 @@ const CustomSelector: React.FC<CustomSelectorProps> = ({
       </Text>
       <View style={[styles.optionsContainer, optionContainer]}>
         <FlatList
-          data={generatedOptions}
+          data={generatedOptions as any}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={[styles.optionsContainer, optionContainer]}
           horizontal={true}

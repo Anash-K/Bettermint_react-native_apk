@@ -27,6 +27,8 @@ import { ErrorHandler } from "../../utils/ErrorHandler";
 import { login } from "../../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import EmailVerificationModal from "../../Modals/EmailVerificationModal";
+import { validations } from "../../utils/Validations";
+import ImportantNoticeModal from "../../Modals/ImprotantNoticeModal";
 
 interface Inputs {
   email: string;
@@ -47,6 +49,7 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
   const verificationRef = useRef<boolean>(false);
   const emailRef = useRef<string | null>(null);
   const dispatch = useDispatch();
+  const IsModalVisible = useRef<boolean>(false);
 
   const handleNav = useCallback((PageName: any) => {
     navigation.navigate(PageName);
@@ -79,23 +82,12 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
       const firebaseToken = await auth().currentUser?.getIdToken();
       const pushToken = "dummy";
 
-      // console.log({
-      //   device_type: Platform.OS,
-      //   push_token: pushToken,
-      //   firebase_token: firebaseToken ?? "",
-      //   email: email,
-      // });
-
-      // return;
-
       const res = await loginApi({
         device_type: Platform.OS,
         push_token: pushToken,
         firebase_token: firebaseToken ?? "",
         email: email,
       });
-
-      console.log(res,"fres")
 
       if (res?.status === 200) {
         CustomToaster({
@@ -143,6 +135,10 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
     verificationRef.current == false;
   }, [verificationRef.current]);
 
+  const handleNoticeClose = useCallback(() => {
+    IsModalVisible.current == false;
+  }, []);
+
   return (
     <ScrollView
       style={[styles.container, CustomStyle.safeAreaMarginBottom]}
@@ -163,7 +159,10 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
         <Controller
           control={control}
           name="email"
-          rules={{ required: "Email is required" }}
+          rules={{
+            required: validations.email?.required,
+            pattern: validations?.email?.pattern,
+          }}
           render={({ field: { onChange, value } }) => (
             <CustomInput
               label="Email"
@@ -230,6 +229,10 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
         isVisible={verificationRef.current}
         closeModal={handleModalClose}
         OnConfirm={resendVerificationEmail}
+      />
+      <ImportantNoticeModal
+        isVisible={IsModalVisible}
+        closeModal={handleModalClose}
       />
     </ScrollView>
   );

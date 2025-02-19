@@ -413,7 +413,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
         {__DEV__ && (
           <CustomButton
             text="Dev Mode"
-            onPress={() => navigation.navigate("BottomTabStack")}
+            onPress={() => navigation.navigate('SelfAssessment')}
             buttonStyle={{ marginBottom: 15 }}
           />
         )}

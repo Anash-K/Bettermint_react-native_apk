@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -21,7 +21,7 @@ interface CustomOptions {
 interface CustomSelectorProps {
   question: string;
   options?: string[];
-  onSelect: (selectedOption: string) => void; // Callback function to pass the selected option
+  onSelect: (selectedOption: string | string[]) => void; // Callback function to pass the selected option
   selectedOption: string;
   outerCardStyle?: ViewStyle;
   questionStyle?: TextStyle;
@@ -31,22 +31,19 @@ interface CustomSelectorProps {
   optionStyle?: TextStyle;
   CustomOptions?: CustomOptions;
   isMultiSelect?: boolean;
-  setSelectedOptions?: () => void;
 }
 
 interface CustomOptionsComponent {
-  customOptions: number | undefined;
-  selectedOption: string;
+  isSelected: boolean;
   item: string;
   buttonStyle: ViewStyle | undefined;
-  onSelect: (text: string) => void;
+  onSelect: () => void;
   optionStyle: TextStyle | TextStyle[] | undefined;
   outerBorderBoxStyle: ViewStyle | undefined;
 }
 
 const CustomOptionsComponent = ({
-  customOptions,
-  selectedOption,
+  isSelected,
   item,
   buttonStyle,
   onSelect,
@@ -57,23 +54,23 @@ const CustomOptionsComponent = ({
     <View
       style={[
         styles.outerBox,
-        selectedOption == item && styles.focusBox,
+        isSelected && styles.focusBox,
         outerBorderBoxStyle,
       ]}
     >
       <TouchableOpacity
         style={[
           styles.option,
-          !customOptions && styles.textOption,
-          selectedOption == item && styles.buttonFocus,
+          styles.textOption,
+          isSelected && styles.buttonFocus,
           buttonStyle,
         ]}
-        onPress={() => onSelect(item)} // Trigger callback with selected option
+        onPress={onSelect} // Trigger callback with selected option
       >
         <Text
           style={[
             styles.optionText,
-            selectedOption == item && styles.textFocus,
+            isSelected && styles.textFocus,
             optionStyle,
           ]}
         >
@@ -88,7 +85,6 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
   question,
   options = [],
   onSelect,
-  selectedOption,
   outerCardStyle,
   questionStyle,
   optionContainer,
@@ -96,9 +92,9 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
   buttonStyle,
   optionStyle,
   CustomOptions,
-  isMultiSelect,
+  isMultiSelect = false,
 }) => {
-  const CustomStyle = useCustomStyle();
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   let generatedOptions: string[] = [];
   if (
@@ -116,32 +112,57 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
     generatedOptions = options;
   }
 
+  const handleSelect = (item: string) => {
+    if (isMultiSelect) {
+      setSelectedOptions((prev) => {
+        let newSelection;
+
+        if (item === "None Of These") {
+          // If "None Of These" is selected, deselect all others
+          newSelection = prev.includes(item) ? [] : [item];
+        } else {
+          // If another option is selected, remove "None Of These" if present
+          newSelection = prev.includes("None Of These")
+            ? [item]
+            : prev.includes(item)
+            ? prev.filter((opt) => opt !== item)
+            : [...prev, item];
+        }
+        return newSelection;
+      });
+    } else {
+      setSelectedOptions([item]);
+    }
+  };
+
+  useEffect(() =>{
+    onSelect(selectedOptions)
+  },[selectedOptions]);
+
   return (
-    <View style={[styles.card, CustomStyle.CommonCardShadow, outerCardStyle]}>
+    <View style={[styles.card, outerCardStyle]}>
       <Text style={[styles.question, questionStyle]}>
         {question ?? "Question?"}
       </Text>
-      {isMultiSelect ? (
+      {isMultiSelect && (
         <View style={styles.multiSelectBox}>
           <FastImage
             source={CustomImages.multiSelect}
             style={styles.multiSelect}
           />
-
           <Text style={styles.subTitle}>Multi-select</Text>
         </View>
-      ) : null}
+      )}
       <View style={[styles.optionsContainer, optionContainer]}>
         {generatedOptions.map((item, index) => (
           <CustomOptionsComponent
             key={index}
-            customOptions={CustomOptions?.startingNumber}
-            optionStyle={[optionStyle as any]}
-            outerBorderBoxStyle={outerBorderBoxStyle}
-            selectedOption={selectedOption}
-            buttonStyle={buttonStyle}
-            onSelect={onSelect}
             item={item}
+            isSelected={selectedOptions.includes(item)}
+            onSelect={() => handleSelect(item)}
+            buttonStyle={buttonStyle}
+            optionStyle={optionStyle}
+            outerBorderBoxStyle={outerBorderBoxStyle}
           />
         ))}
       </View>

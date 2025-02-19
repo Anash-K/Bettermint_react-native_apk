@@ -4,16 +4,20 @@ import FastImage from "react-native-fast-image";
 import React, { useCallback } from "react";
 import { ScreenProps } from "../navigator/Stack";
 import { CustomImages } from "../assets/CustomImages";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CustomFont from "../assets/fonts/customFonts";
 import CustomButton from "../common/CustomButton";
 import { colors } from "../constants/colors";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 const SmallBriefBettermint: React.FC<ScreenProps<"SmallBriefBettermint">> = ({
   navigation,
 }) => {
   const CustomStyle = useCustomStyle();
-  const { bottom } = useSafeAreaInsets();
+  const {physicalMeasurements,medicalMeasurements} = useSelector((state:RootState) =>state.userDetails);
+
+  console.log(physicalMeasurements,'data',medicalMeasurements);
+  
 
   const handleNextNav = useCallback(() => {
     navigation.navigate("MovementAssesment");

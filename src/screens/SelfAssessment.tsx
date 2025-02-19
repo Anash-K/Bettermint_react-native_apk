@@ -1,14 +1,18 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import { Platform, ScrollView, StyleSheet } from "react-native";
+import React, { memo, useCallback, useState } from "react";
 
 import { ScreenProps } from "../navigator/Stack";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomSelector from "../common/CustomSelector";
 import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
+import { validationAlert } from "../Modals/ValidationAlert";
+import { isFormValid } from "../utils/isFormValid";
+import { useDispatch } from "react-redux";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 export interface handleOptionSelectType {
   fieldName: string;
-  text: string;
+  text: string | string[];
 }
 
 const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
@@ -20,6 +24,7 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
     "Blood Pressure",
     "Thyroid",
     "Fatty Liver",
+    "None Of These",
   ];
 
   const FamilyHistory = [
@@ -28,82 +33,98 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
     "Cholesterol",
     "Cancer",
     "Heart Attack",
+    "None Of These",
   ];
 
   const initialState = {
-    ofterYouEat: "0",
-    youOrderFood: "0",
-    litersOfWaterDrink: "0",
-    chestSize: "0",
-    waist: "0",
-    hip: "0",
-    thigh: "0",
+    chestSize: 0,
+    waist: 0,
+    hip: 0,
+    thigh: 0,
     disease: "",
     familyHistory: "",
   };
 
-  const [nutritionInfo, setNutritionInfo] = useState(initialState);
+  const [physicalInfo, setPhysicalInfo] = useState(initialState);
   const CustomStyle = useCustomStyle();
+  const dispatch = useDispatch();
 
   const handleOptionSelect = useCallback(
     ({ fieldName, text }: handleOptionSelectType) => {
-      setNutritionInfo((prevState) => ({
+      setPhysicalInfo((prevState) => ({
         ...prevState,
         [fieldName]: text,
       }));
     },
-    [nutritionInfo]
+    [physicalInfo]
   );
 
   const handlePress = useCallback(() => {
-    navigation.navigate("AddingColorfullVeggies");
-  }, []);
+    if (!isFormValid(physicalInfo)) {
+      validationAlert();
+      return;
+    }
+    dispatch(
+      setFieldAction({
+        field: "physicalMeasurements",
+        value: {
+          chest: physicalInfo.chestSize,
+          waist: physicalInfo.waist,
+          hip: physicalInfo.hip,
+          thigh: physicalInfo.thigh,
+          user_diseases: physicalInfo.disease,
+          user_family_diseases: physicalInfo.familyHistory,
+        },
+      })
+    );
+    navigation.navigate("PleaseShareYourMeasurement");
+  }, [navigation, physicalInfo]);
 
   return (
     <ScrollView style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
       <CustomSelector
         question="What’s your chest measurement? (inches)"
-        CustomOptions={{ startingNumber: 1, endingNumber: 28 }}
+        CustomOptions={{ startingNumber: 1, endingNumber: 50 }}
         onSelect={(text) =>
           handleOptionSelect({
             fieldName: "chestSize",
             text,
           })
         }
-        selectedOption={nutritionInfo.chestSize}
+        selectedOption={physicalInfo.chestSize}
       />
       <CustomSelector
         question="What’s your waist measurement? (inches)"
-        CustomOptions={{ startingNumber: 1, endingNumber: 28 }}
+        CustomOptions={{ startingNumber: 1, endingNumber: 50 }}
         onSelect={(text) =>
           handleOptionSelect({
             fieldName: "waist",
             text,
           })
         }
-        selectedOption={nutritionInfo.waist}
+        selectedOption={physicalInfo.waist}
       />
       <CustomSelector
         question="What’s your hip measurement? (inches)"
-        CustomOptions={{ startingNumber: 1, endingNumber: 7 }}
+        CustomOptions={{ startingNumber: 1, endingNumber: 50 }}
         onSelect={(text) =>
           handleOptionSelect({
             fieldName: "hip",
             text,
           })
         }
-        selectedOption={nutritionInfo.hip}
+        selectedOption={physicalInfo.hip}
       />
       <CustomSelector
         question="What’s your thigh measurement? (inches)"
-        CustomOptions={{ startingNumber: 1, endingNumber: 7 }}
+        CustomOptions={{ startingNumber: 1, endingNumber: 50 }}
         onSelect={(text) =>
           handleOptionSelect({
             fieldName: "thigh",
             text,
           })
         }
-        selectedOption={nutritionInfo.thigh}
+        selectedOption={physicalInfo.thigh}
       />
       <CustomTextOptionSelector
         question="Do you have any of these diseases."
@@ -115,7 +136,7 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
           })
         }
         isMultiSelect
-        selectedOption={nutritionInfo.disease}
+        selectedOption={physicalInfo.disease}
       />
       <CustomTextOptionSelector
         question="Do you have a family history of any of the following?"
@@ -127,7 +148,7 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
           })
         }
         isMultiSelect
-        selectedOption={nutritionInfo.familyHistory}
+        selectedOption={physicalInfo.familyHistory}
       />
       <CustomButton
         text="Continue"
@@ -138,9 +159,12 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
   );
 };
 
-export default SelfAssessment;
+export default memo(SelfAssessment);
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 12,
+  },
   buttonStyle: {
     marginHorizontal: 16,
     marginTop: 48,
