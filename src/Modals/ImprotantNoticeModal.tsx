@@ -36,20 +36,50 @@ const ImportantNoticeModal: React.FC<EmailVerificationModal> = ({
         <View style={styles.overlay}>
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
-              <FastImage source={CustomImages.mailIcon} style={styles.icon} />
-              <Text style={styles.title}>Verification Email Sent!</Text>
+              <FastImage
+                source={CustomImages.importantIcon}
+                style={styles.icon}
+              />
+              <Text style={styles.title}>Important Notice</Text>
               <Text style={[CustomStyle.subtitle, styles.subTitle]}>
-                Verify your email to complete signup. Don’t forget to check
-                spam!
+                This app is designed for individuals within a specific age and
+                health range. It is not intended for
+              </Text>
+              <View style={styles.detailsBox}>
+                <Text
+                  style={[CustomStyle.contentParaStyle, styles.detailsLine]}
+                >
+                  1. Pregnant or lactating mothers
+                </Text>
+                <Text
+                  style={[CustomStyle.contentParaStyle, styles.detailsLine]}
+                >
+                  2. Individuals over 55 years old
+                </Text>
+                <Text
+                  style={[CustomStyle.contentParaStyle, styles.detailsLine]}
+                >
+                  3. Individuals under 16 years old
+                </Text>
+              </View>
+              <Text
+                style={[
+                  CustomStyle.subtitle,
+                  styles.subTitle,
+                  styles.bottomText,
+                ]}
+              >
+                By continuing, I confirm that I meet the eligibility criteria to
+                use this app.
               </Text>
               <CustomButton
-                text="Resend verification email"
+                text="Continue"
                 buttonStyle={styles.confirmButton}
                 textStyle={styles.confirmText}
                 onPress={OnConfirm}
               />
               <CustomButton
-                text="Cancel"
+                text="Exit App"
                 buttonStyle={styles.cancelButton}
                 textStyle={styles.cancelText}
                 onPress={closeModal}
@@ -66,6 +96,20 @@ const ImportantNoticeModal: React.FC<EmailVerificationModal> = ({
 export default ImportantNoticeModal;
 
 const styles = StyleSheet.create({
+  detailsLine: {
+    marginBottom: 0,
+  },
+  bottomText: {
+    marginTop: 24,
+  },
+  detailsBox: {
+    backgroundColor: colors.lightYellow,
+    width: "100%",
+    justifyContent: "center",
+    padding: 12,
+    borderRadius: 12,
+    rowGap: 12,
+  },
   icon: {
     width: 80,
     height: 80,

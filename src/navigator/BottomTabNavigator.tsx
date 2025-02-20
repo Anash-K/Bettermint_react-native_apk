@@ -1,4 +1,4 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
 import React from "react";
 import { ScreenProps } from "./Stack";
 import { CustomImages } from "../assets/CustomImages";
@@ -58,7 +58,7 @@ const TabBarIcon = ({
 };
 
 const BottomTabStack: React.FC<ScreenProps<"BottomTabStack">> = () => {
-  const { top, bottom } = useSafeAreaInsets();
+  const { bottom } = useSafeAreaInsets();
   const _renderIcon = (routeName, selectedTab) => {
     let icon = "";
 
@@ -232,148 +232,3 @@ const styles = StyleSheet.create({
     height: 34,
   },
 });
-
-// const BottomTab = createBottomTabNavigator<BottomParams>();
-
-// const BottomTabStack: React.FC<ScreenProps<"BottomTabStack">> = () => {
-//   const { top, bottom } = useSafeAreaInsets();
-//   return (
-//     <React.Fragment>
-//       <StatusBar barStyle={'dark-content'}  />
-//       <BottomTab.Navigator
-//         screenOptions={{
-//           tabBarInactiveTintColor: colors.tabBarInActive,
-//           tabBarActiveTintColor: colors.primary,
-//           tabBarShowLabel: false, // Explicitly hide the label
-//           tabBarStyle: [{ height: bottom + 64 }, styles.tabBarStyle],
-//         }}
-//       >
-//         <BottomTab.Screen
-//           name="HomeTab"
-//           component={HomeTab}
-//           options={{
-//             headerShown: false,
-//             tabBarIcon: ({ focused, color }) => {
-//               return (
-//                 <TabBarIcon
-//                   size={20}
-//                   icon={CustomImages.homeTab}
-//                   color={color}
-//                   focused={focused}
-//                 />
-//               );
-//             },
-//           }}
-//         />
-//         <BottomTab.Screen
-//           name="CalenderTab"
-//           component={CalenderTab}
-//           options={{
-//             headerShown: false,
-//             tabBarIcon: ({ focused, color }) => {
-//               return (
-//                 <TabBarIcon
-//                   size={20}
-//                   icon={CustomImages.calender}
-//                   color={color}
-//                   focused={focused}
-//                 />
-//               );
-//             },
-//           }}
-//         />
-//         <BottomTab.Screen
-//           name="LogTab"
-//           component={LogTab}
-//           options={{
-//             headerShown: false,
-//             tabBarStyle: styles.logTabBar,
-//             tabBarIcon: ({ focused, color }) => {
-//               return (
-//                 <TabBarIcon
-//                   size={20}
-//                   icon={CustomImages.add}
-//                   color={color}
-//                   focused={focused}
-//                   TabStyle={styles.logTabIcon}
-//                 />
-//               );
-//             },
-//           }}
-//         />
-//         <BottomTab.Screen
-//           name="TrendsTab"
-//           component={TrendsTab}
-//           options={{
-//             headerShown: false,
-//             tabBarIcon: ({ focused, color }) => {
-//               return (
-//                 <TabBarIcon
-//                   size={20}
-//                   icon={CustomImages.trends}
-//                   color={color}
-//                   focused={focused}
-//                 />
-//               );
-//             },
-//           }}
-//         />
-//         <BottomTab.Screen
-//           name="ProfileTab"
-//           component={ProfileTab}
-//           options={{
-//             headerShown: false,
-//             tabBarIcon: ({ focused, color }) => {
-//               return (
-//                 <TabBarIcon
-//                   size={20}
-//                   icon={CustomImages.profile}
-//                   color={color}
-//                   focused={focused}
-//                 />
-//               );
-//             },
-//           }}
-//         />
-//       </BottomTab.Navigator>
-//     </React.Fragment>
-//   );
-// };
-
-// export default BottomTabStack;
-
-// const styles = StyleSheet.create({
-//   logTabBar: {
-//     marginTop: -20,
-//   },
-//   logTabIcon: {
-//     marginBottom: 60,
-//     backgroundColor: colors.primaryLight,
-//     width: 48,
-//     height: 48,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   tabBarStyle: {
-//     paddingTop: 10,
-//     borderTopStartRadius: 30,
-//     borderTopEndRadius: 30,
-//   },
-//   focusedIcon: {
-//     backgroundColor: colors.tabIconBackground,
-//   },
-//   tabIconBox: {
-//     padding: 12,
-//     borderRadius: 40,
-//   },
-//   LogoBox: {
-//     justifyContent: "center",
-//     alignItems: "center",
-//     flexDirection: "column",
-//     height: 100,
-//   },
-//   tabLogo: {
-//     width: 187,
-//     height: 34,
-//   },
-// });

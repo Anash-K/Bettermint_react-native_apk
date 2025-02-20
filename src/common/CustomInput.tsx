@@ -166,6 +166,7 @@ const CustomInput: React.FC<CustomInputProps> = memo(
                     searchPlaceHolder={placeholderText}
                     searchPlaceHolderColor={colors.secondary}
                     onBlur={handleBlur}
+                    defaultValue={dropdownItems.find((item) => item.title === value)}
                     onSelect={(selectedItem, index) => {
                       console.log(selectedItem, index);
                       onChange(selectedItem);

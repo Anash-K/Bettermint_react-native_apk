@@ -3,14 +3,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // Define the state type
 interface AuthState {
   token: string | null;
-  gender: string;
+  isConfirmed: boolean;
   email: string;
 }
 
 // Initial state with type
 const initialState: AuthState = {
   token: null,
-  gender: "Male",
+  isConfirmed: false,
   email: "",
 };
 
@@ -29,13 +29,13 @@ const authSlice = createSlice({
       state.email = "";
       state == initialState;
     },
-    gender(state, action: PayloadAction<string>) {
-      state.gender = action.payload;
+    setIsConfirmed(state, action: PayloadAction<boolean>) {
+      state.isConfirmed = action.payload;
       console.log(action.payload);
     },
   },
 });
 
 // Export actions and reducer
-export const { login, logout, gender } = authSlice.actions;
+export const { login, logout, setIsConfirmed } = authSlice.actions;
 export default authSlice.reducer;

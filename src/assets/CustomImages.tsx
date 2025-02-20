@@ -114,4 +114,5 @@ export const CustomImages = {
   circleLoader: require("./Images/circularloader.png"),
   pinkLoader: require("./Images/pinkLoader.png"),
   HomeBar: require("./Images/homeBar.png"),
+  importantIcon:require("./Images/importantIcon.png"),
 };

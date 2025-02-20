@@ -5,6 +5,7 @@ interface UserState {
   profileInfo: {
     name: string;
     date_of_birth: string;
+    callingCode:string;
     mobile_number: string;
     gender: string;
     height: number;
@@ -50,6 +51,7 @@ export const initialUserState: UserState = {
     name: "",
     date_of_birth: "",
     gender: "",
+    callingCode:'',
     mobile_number: "",
     height: 0,
     weight: 0,

@@ -1,72 +1,89 @@
 import {
   Keyboard,
-  Platform,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-
-import React, { useCallback, useState } from "react";
-
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useCallback } from "react";
 import { ScreenProps } from "../navigator/Stack";
 import { Controller, useForm } from "react-hook-form";
 import { useCustomStyle } from "../constants/CustomStyles";
 import CustomInput from "../common/CustomInput";
 import CustomButton from "../common/CustomButton";
+import { AppLoaderRef } from "../../App";
+import { ErrorHandler } from "../utils/ErrorHandler";
+import auth from "@react-native-firebase/auth";
+import { validations } from "../utils/validations";
+import { CustomToaster } from "../common/CustomToaster";
+import { ALERT_TYPE } from "react-native-alert-notification";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 interface Inputs {
-  "Old Password": string;
-  "New Password": string;
-  "Confirm New Password": string;
+  oldPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
 }
 
 const ChangePassword: React.FC<ScreenProps<"ChangePassword">> = ({
   navigation,
 }) => {
   const {
-    register,
     handleSubmit,
-    watch,
     getValues,
     control,
-    setValue,
-    setError,
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit = (data: Inputs) => {
-    if (data["New Password"] !== data["Confirm New Password"]) {
-      setError("Confirm New Password", { message: "Passwords do not match" });
-      return;
-    }
-    console.log("Password changed:", data);
-    // Implement password change logic here
-  };
-
   const CustomStyle = useCustomStyle();
+  const { email } = useSelector((state: RootState) => state.auth);
 
-  const handlePress = useCallback(() => {
-    navigation.goBack();
-  }, []);
-  const insets = useSafeAreaInsets();
+  const changePassword = useCallback(async (data: Inputs) => {
+    AppLoaderRef.current?.start();
+    const { oldPassword, newPassword } = data;
+
+    try {
+      const user = auth().currentUser;
+
+      if (!user) {
+        CustomToaster({
+          type: ALERT_TYPE.DANGER,
+          message:
+            "You are not logged in. Please log in to change your password.",
+        });
+        return;
+      }
+      const userCredential = auth.EmailAuthProvider.credential(
+        email,
+        oldPassword
+      );
+      await user.reauthenticateWithCredential(userCredential);
+      await user.updatePassword(newPassword);
+      CustomToaster({
+        type: ALERT_TYPE.SUCCESS,
+        message: "Password changed successfully",
+      });
+      navigation.goBack();
+    } catch (error) {
+      ErrorHandler(error);
+    } finally {
+      AppLoaderRef.current?.stop();
+    }
+  },[email]);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View
-        style={[
-          styles.container,
-          { marginBottom: Platform.select({ ios: insets.bottom }) },
-        ]}
-      >
+      <View style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
         <View style={styles.content}>
           <Controller
             control={control}
-            name="Old Password"
-            rules={{ required: "Old Password is required" }}
+            name="oldPassword"
+            rules={validations.password}
             render={({ field: { onChange, value } }) => (
               <CustomInput
                 label="Old Password"
+                placeholderText="Enter old password"
                 onChange={onChange}
                 value={value}
                 isPassword={true}
@@ -77,18 +94,19 @@ const ChangePassword: React.FC<ScreenProps<"ChangePassword">> = ({
               />
             )}
           />
-          {errors["Old Password"] && (
+          {errors.oldPassword && (
             <Text style={CustomStyle.errorMessage}>
-              {errors?.["Old Password"]?.message}
+              {errors?.oldPassword?.message}
             </Text>
           )}
           <Controller
             control={control}
-            name="New Password"
-            rules={{ required: "New Password is required" }}
+            name="newPassword"
+            rules={validations.password}
             render={({ field: { onChange, value } }) => (
               <CustomInput
                 label="New Password"
+                placeholderText="Enter new password"
                 onChange={onChange}
                 value={value}
                 isPassword={true}
@@ -99,22 +117,23 @@ const ChangePassword: React.FC<ScreenProps<"ChangePassword">> = ({
               />
             )}
           />
-          {errors["New Password"] && (
+          {errors.newPassword && (
             <Text style={CustomStyle.errorMessage}>
-              {errors?.["New Password"]?.message}
+              {errors?.newPassword?.message}
             </Text>
           )}
           <Controller
             control={control}
-            name="Confirm New Password"
+            name="confirmNewPassword"
             rules={{
               required: "Confirm Password is required",
               validate: (value) =>
-                value === getValues('New Password') || "Passwords do not match",
+                value === getValues("newPassword") || "Passwords do not match",
             }}
             render={({ field: { onChange, value } }) => (
               <CustomInput
                 label="Confirm New Password"
+                placeholderText="Retype new password again"
                 onChange={onChange}
                 value={value}
                 isPassword={true}
@@ -125,13 +144,16 @@ const ChangePassword: React.FC<ScreenProps<"ChangePassword">> = ({
               />
             )}
           />
-          {errors["Confirm New Password"] && (
+          {errors.confirmNewPassword && (
             <Text style={CustomStyle.errorMessage}>
-              {errors?.["Confirm New Password"]?.message}
+              {errors?.confirmNewPassword?.message}
             </Text>
           )}
         </View>
-        <CustomButton text="Change password" onPress={handleSubmit(onSubmit)} />
+        <CustomButton
+          text="Change password"
+          onPress={handleSubmit(changePassword)}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -142,10 +164,10 @@ export default ChangePassword;
 const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
+    marginBottom: 20,
   },
   container: {
     flex: 1,
     padding: 16,
-    paddingBottom: Platform.select({ android: 40 }),
   },
 });

@@ -51,8 +51,6 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
     );
 
     const { email, token } = useSelector((state: RootState) => state.auth);
-
-    console.log(email, token, "creden" , profileInfo);
     const [isModalVisible, setIsModalVisible] = useState<
       "delete" | "logout" | null
     >(null);
@@ -118,6 +116,8 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
         AppLoaderRef.current?.stop();
       },
     });
+
+    
 
     const ActionsDataSet = {
       delete: {

@@ -1,193 +1,143 @@
-import {
-  Dimensions,
-  FlatList,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import ScaleRoller from "../utils/ScaleRoller";
-import { useCustomStyle } from "../constants/CustomStyles";
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import CustomFont from "../assets/fonts/customFonts";
-import { colors } from "../constants/colors";
-
+import { Platform, ScrollView, StyleSheet } from "react-native";
+import React, { memo, useCallback, useState } from "react";
 
 import { ScreenProps } from "../navigator/Stack";
-import { useDispatch, useSelector } from "react-redux";
-import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
+import { useCustomStyle } from "../constants/CustomStyles";
+import CustomSelector from "../common/CustomSelector";
+import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
+import { validationAlert } from "../Modals/ValidationAlert";
+import { isFormValid } from "../utils/isFormValid";
+import { useDispatch } from "react-redux";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
+export interface handleOptionSelectType {
+  fieldName: string;
+  text: string | string[];
+}
 
-const { width, height } = Dimensions.get("screen");
-
-const MovementAssesment: React.FC<ScreenProps<"MovementAssesment">> = ({
+const MovementAssessment: React.FC<ScreenProps<"MovementAssessment">> = ({
   navigation,
 }) => {
-  const gender = useSelector((state: any) => state.auth);
-  const dispatch = useDispatch();
-  const customStyle = useCustomStyle();
+  const DiseasesOption = [
+    'Yes','No'
+  ];
 
-  const heightData: { key: any }[] = Array.from({ length: 250 }, (_, i) => ({
-    key: `${1 + i}`,
-  }));
+  const FamilyHistory = [
+    "Diabetes",
+    "Blood Pressure",
+    "Cholesterol",
+    "Cancer",
+    "Heart Attack",
+    "None Of These",
+  ];
 
-  const [selectedHeight, setSelectedHeight] = useState<number | null>(null);
-  const [activeDrawer, setActiveDrawer] = useState("Chest");
-  const flatListRef = useRef<any>(null);
-  const screenWidth = Dimensions.get("screen").width;
-  const itemWidth = 80;
-
-  useEffect(() => {
-    if (flatListRef.current) {
-      setTimeout(() => {
-        flatListRef.current.scrollToOffset({
-          offset:
-            (heightData.length / 2) * itemWidth -
-            screenWidth / 2 +
-            itemWidth / 4,
-          animated: false,
-        });
-      }, 100);
-    }
-  }, []);
-
-  const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
-    if (viewableItems.length > 0) {
-      const centerIndex = Math.round(
-        viewableItems[0].index + viewableItems.length / 2.2
-      );
-      setSelectedHeight(heightData[centerIndex]?.key);
-    }
-  }, []);
-
-  const viewabilityConfig = {
-    itemVisiblePercentThreshold: 50,
+  const initialState = {
+    chestSize: 0,
+    waist: 0,
+    hip: 0,
+    thigh: 0,
+    disease: "",
+    familyHistory: "",
   };
 
-  const handlePress = useCallback((btnText: string) => {
-    setActiveDrawer(btnText);
-  }, []);
+  const [physicalInfo, setPhysicalInfo] = useState(initialState);
+  const CustomStyle = useCustomStyle();
+  const dispatch = useDispatch();
 
-  const handleNextNav = useCallback(() => {
-    dispatch(setFieldAction({ field: "steps", value: selectedHeight ?? 0 }));
-    navigation.navigate("DoYouWorkOut");
-  }, [dispatch, selectedHeight, navigation]);
+  const handleOptionSelect = useCallback(
+    ({ fieldName, text }: handleOptionSelectType) => {
+      setPhysicalInfo((prevState) => ({
+        ...prevState,
+        [fieldName]: text,
+      }));
+    },
+    [physicalInfo]
+  );
 
+  const handlePress = useCallback(() => {
+    if (!isFormValid(physicalInfo)) {
+      validationAlert();
+      return;
+    }
+    dispatch(
+      setFieldAction({
+        field: "physicalMeasurements",
+        value: {
+          chest: physicalInfo.chestSize,
+          waist: physicalInfo.waist,
+          hip: physicalInfo.hip,
+          thigh: physicalInfo.thigh,
+          user_diseases: physicalInfo.disease,
+          user_family_diseases: physicalInfo.familyHistory,
+        },
+      })
+    );
+    navigation.navigate("PleaseShareYourMeasurement");
+  }, [navigation, physicalInfo]);
 
   return (
-    <ScrollView
-      nestedScrollEnabled={true}
-      style={[styles.container]}
-      overScrollMode="never"
-      bounces={false}
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.contentStyle}
-    >
-      <View style={{ flex: 1 }}>
-        <Text style={[customStyle.title, styles.title]}>
-          How many steps do you do in a day on an average?
-        </Text>
-
-        {selectedHeight && (
-          <View style={styles.selectedValueBox}>
-            <Text style={styles.selectedHeightText}>{selectedHeight}K</Text>
-          </View>
-        )}
-        <FlatList
-          ref={flatListRef}
-          data={heightData}
-          renderItem={({ item }) => (
-            <ScaleRoller
-              firstDigit={item.key}
-              selectedHeight={selectedHeight}
-            />
-          )}
-          keyExtractor={(item) => item.key}
-          contentContainerStyle={{
-            ...styles.contentRoller,
-            paddingHorizontal: screenWidth / 1 - itemWidth / 2,
-          }}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          snapToAlignment="center"
-          snapToInterval={itemWidth}
-          decelerationRate="fast"
-          onViewableItemsChanged={onViewableItemsChanged}
-          viewabilityConfig={viewabilityConfig}
-        />
-      </View>
-      <View style={styles.bottomBtn}>
-        <CustomButton
-          buttonStyle={styles.submitButton}
-          text="Continue"
-          onPress={handleNextNav}
-        />
-      </View>
+    <ScrollView style={[styles.container, CustomStyle.safeAreaMarginBottom]}>
+      <CustomSelector
+        question="How many steps do you do in a day on an average?"
+        CustomOptions={{ startingNumber: 1, endingNumber: 50 }}
+        onSelect={(text) =>
+          handleOptionSelect({
+            fieldName: "chestSize",
+            text,
+          })
+        }
+        selectedOption={physicalInfo.chestSize}
+      />
+      <CustomTextOptionSelector
+        question="Do you work out for at least 50 mins a day for 5 days a week?"
+        options={DiseasesOption}
+        onSelect={(text) =>
+          handleOptionSelect({
+            fieldName: "disease",
+            text,
+          })
+        }
+        isMultiSelect
+        selectedOption={physicalInfo.disease}
+      />
+      <CustomTextOptionSelector
+        question="What form of workout do you usually do?"
+        options={FamilyHistory}
+        onSelect={(text) =>
+          handleOptionSelect({
+            fieldName: "familyHistory",
+            text,
+          })
+        }
+        isMultiSelect
+        selectedOption={physicalInfo.familyHistory}
+      />
+      <CustomButton
+        text="Continue"
+        onPress={handlePress}
+        buttonStyle={styles.buttonStyle}
+      />
     </ScrollView>
   );
 };
 
-export default MovementAssesment;
+export default memo(MovementAssessment);
 
 const styles = StyleSheet.create({
-  contentStyle: {
-    justifyContent: "center",
-    alignItems: "center",
-    flexGrow: 1,
+  title: {
+    fontSize: 12,
   },
-  bottomBtn: {
-    width: "100%",
-    paddingHorizontal: 16,
-  },
-  submitButton: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  commonButtonStyle: {
-    flex: 1,
-    // width:'33%'
-  },
-  buttonBox: {
-    flexDirection: "row",
-    backgroundColor: colors.white,
+  buttonStyle: {
     marginHorizontal: 16,
-    borderRadius: 54,
-    marginBottom: 68,
-    flexWrap: "wrap",
+    marginTop: 48,
+    marginBottom: Platform.select({ ios: 15, android: 30 }),
   },
-  selectedValueBox: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "baseline",
-    columnGap: 4,
-    marginBottom: 48,
-  },
-  unit: {
-    fontFamily: CustomFont.Urbanist600,
-    fontSize: 36,
-    lineHeight: 44,
-    color: colors.secondaryLight,
-  },
-  contentRoller: {
-    flexDirection: "row",
+  litersOfWaterOption: {
+    width: "100%",
+    fontSize: 14,
   },
   container: {
     flex: 1,
-    marginBottom: Platform.select({ android: 35, ios: 45 }),
-  },
-  title: {
-    marginBottom: 48,
-    maxWidth: 343,
-    marginHorizontal: "auto",
-    marginTop: 21,
-  },
-  selectedHeightText: {
-    marginTop: 20,
-    fontSize: 96,
-    lineHeight: 96,
-    fontFamily: CustomFont.Urbanist800,
-    color: colors.primary,
-    fontWeight: Platform.select({ ios: 800 }),
+    paddingTop: 15,
   },
 });

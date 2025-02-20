@@ -20,7 +20,7 @@ const CustomToastWrapper: React.FC<CustomToastWrapperProps> = ({
           warning: "#FFA500", // Warning color
           info: colors.primary, // Info color
           card: colors.secondaryWhite, // Card background color
-          label: "#FFFFFF", // Label text color
+          label: colors.secondaryLight, // Label text color
         },
         {
           overlay: "#fff", // Overlay background color (dark theme)
@@ -29,7 +29,7 @@ const CustomToastWrapper: React.FC<CustomToastWrapperProps> = ({
           warning: "#FFA500", // Warning color
           info: colors.primary, // Info color
           card: colors.secondaryWhite, // Card background color
-          label: "#FFFFFF", // Label text color
+          label: colors.secondaryLight, // Label text color
         },
       ]}
     >

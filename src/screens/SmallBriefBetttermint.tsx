@@ -1,7 +1,14 @@
-import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
 import FastImage from "react-native-fast-image";
-import React, { useCallback } from "react";
+import React, { memo, useCallback, useRef } from "react";
 import { ScreenProps } from "../navigator/Stack";
 import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
@@ -9,19 +16,56 @@ import CustomButton from "../common/CustomButton";
 import { colors } from "../constants/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
+import { useMutation } from "@tanstack/react-query";
+import { MutationKey } from "../Types/MutationKeys";
+import { AppLoaderRef } from "../../App";
+import { UpdateProfile } from "../axious/PostApis";
+import { ErrorHandler } from "../utils/ErrorHandler";
+import { CustomToaster } from "../common/CustomToaster";
+import { ALERT_TYPE } from "react-native-alert-notification";
 
 const SmallBriefBettermint: React.FC<ScreenProps<"SmallBriefBettermint">> = ({
   navigation,
 }) => {
   const CustomStyle = useCustomStyle();
-  const {physicalMeasurements,medicalMeasurements} = useSelector((state:RootState) =>state.userDetails);
+  const { profileInfo, physicalMeasurements, medicalMeasurements } =
+    useSelector((state: RootState) => state.userDetails);
+  const buttonRef = useRef<boolean>(false);
 
-  console.log(physicalMeasurements,'data',medicalMeasurements);
-  
+  console.log(profileInfo, physicalMeasurements, "data", medicalMeasurements);
+
+  const { mutate: updateUserProfile } = useMutation({
+    mutationKey: [MutationKey.updateProfile],
+    onMutate: () => AppLoaderRef.current?.start(),
+    mutationFn: async () =>
+      await UpdateProfile({
+        ...profileInfo,
+        ...physicalMeasurements,
+        ...medicalMeasurements,
+      } as any),
+    onSuccess(data) {
+      console.log(data, "res data");
+      if (data?.status === 200) {
+        CustomToaster({
+          type: ALERT_TYPE.SUCCESS,
+          message: "Profile updated Successfully",
+        });
+      }
+      setTimeout(() => {
+        navigation.navigate("MovementAssesment");
+      }, 500);
+    },
+    onError(error) {
+      console.log(error, "error");
+      ErrorHandler(error);
+    },
+    onSettled: () => AppLoaderRef.current?.stop(),
+  });
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate("MovementAssesment");
+    updateUserProfile();
   }, []);
+
   return (
     <ScrollView
       style={[styles.container, CustomStyle.safeAreaMarginBottom]}
@@ -68,7 +112,7 @@ const SmallBriefBettermint: React.FC<ScreenProps<"SmallBriefBettermint">> = ({
   );
 };
 
-export default SmallBriefBettermint;
+export default memo(SmallBriefBettermint);
 
 const styles = StyleSheet.create({
   button: {
@@ -86,16 +130,16 @@ const styles = StyleSheet.create({
     fontFamily: CustomFont.Urbanist500,
     fontSize: 16,
     lineHeight: 19.2,
-    color:colors.secondary
+    color: colors.secondary,
   },
   paraTwo: {
     marginTop: 32,
-    color:colors.secondary
+    color: colors.secondary,
   },
   paraOne: {
     marginTop: 16,
     marginBottom: 32,
-    color:colors.secondary
+    color: colors.secondary,
   },
   icon: {
     width: 220,

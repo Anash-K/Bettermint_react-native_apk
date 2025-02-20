@@ -18,7 +18,7 @@ export type AuthStackParams = {
 
 const Stack = createStackNavigator<AuthStackParams>();
 
-const AuthStack: React.FC<ScreenProps<"AuthStack">> = () => {
+const AuthStack: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={({ navigation }) => ({

@@ -1,4 +1,5 @@
 import {
+  BackHandler,
   ImageBackground,
   Keyboard,
   Platform,
@@ -9,7 +10,7 @@ import {
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { ScreenProps } from "../../navigator/Stack";
 import { useCustomStyle } from "../../constants/CustomStyles";
 import { CustomImages } from "../../assets/CustomImages";
@@ -24,11 +25,12 @@ import { CustomToaster } from "../../common/CustomToaster";
 import { ALERT_TYPE } from "react-native-alert-notification";
 import auth from "@react-native-firebase/auth";
 import { ErrorHandler } from "../../utils/ErrorHandler";
-import { login } from "../../redux/slices/authSlice";
-import { useDispatch } from "react-redux";
+import { login, setIsConfirmed } from "../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 import EmailVerificationModal from "../../Modals/EmailVerificationModal";
-import { validations } from "../../utils/Validations";
 import ImportantNoticeModal from "../../Modals/ImprotantNoticeModal";
+import { validations } from "../../utils/validations";
+import { RootState } from "../../redux/rootReducer";
 
 interface Inputs {
   email: string;
@@ -49,11 +51,12 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
   const verificationRef = useRef<boolean>(false);
   const emailRef = useRef<string | null>(null);
   const dispatch = useDispatch();
-  const IsModalVisible = useRef<boolean>(false);
+  const { isConfirmed } = useSelector((state: RootState) => state.auth);
 
   const handleNav = useCallback((PageName: any) => {
     navigation.navigate(PageName);
   }, []);
+
   const CustomStyle = useCustomStyle();
 
   const onSubmit = useCallback(async (data: Inputs) => {
@@ -70,7 +73,7 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
     try {
       await auth().signInWithEmailAndPassword(email, pass);
 
-      if (!auth().currentUser?.emailVerified) {
+      if (!auth().currentUser?.emailVerified && email) {
         await auth().signOut();
         emailRef.current = email;
         setTimeout(() => {
@@ -132,12 +135,17 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
   }, []);
 
   const handleModalClose = useCallback(() => {
-    verificationRef.current == false;
+    verificationRef.current = false;
   }, [verificationRef.current]);
 
   const handleNoticeClose = useCallback(() => {
-    IsModalVisible.current == false;
+    BackHandler.exitApp();
   }, []);
+
+  const handleNoticeConfirm = useCallback(() => {
+    dispatch(setIsConfirmed(true))
+  }, [dispatch]);
+
 
   return (
     <ScrollView
@@ -231,8 +239,9 @@ const Login: React.FC<ScreenProps<"Login">> = ({ navigation }) => {
         OnConfirm={resendVerificationEmail}
       />
       <ImportantNoticeModal
-        isVisible={IsModalVisible}
-        closeModal={handleModalClose}
+        isVisible={!isConfirmed}
+        closeModal={handleNoticeClose}
+        OnConfirm={handleNoticeConfirm}
       />
     </ScrollView>
   );

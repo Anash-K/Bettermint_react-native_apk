@@ -17,6 +17,7 @@ export const colors = {
   lottieBlue: "#45C6F6",
   lottiePink: "#FF76B6",
   lottieYellow: "#FFCF48",
+  lightYellow:'#FFF8E1',
   lottieGreen: "#3BC580",
   progressBarBackground: "#F7F4F2",
   tabBarInActive: "#C5C8C9",

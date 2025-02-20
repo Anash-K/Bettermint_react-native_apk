@@ -18,7 +18,7 @@ export type RootStackParams = {
 
 const Stack = createStackNavigator<RootStackParams>();
 
-const RootScreen: React.FC<RootStackParams> = () => {
+const RootScreen: React.FC = () => {
   const { token } = useSelector((state: any) => state.auth);
 
   return (
@@ -28,19 +28,7 @@ const RootScreen: React.FC<RootStackParams> = () => {
           barStyle={"light-content"}
           backgroundColor={colors.primary}
         />
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          {!token ? (
-            <Stack.Screen name="AuthStack" component={AuthStack} />
-          ) : (
-            <>
-              <Stack.Screen name="MainStack" component={MainStack} />
-            </>
-          )}
-        </Stack.Navigator>
+        {!token ? <AuthStack /> : <MainStack />}
         <Loader ref={AppLoaderRef} />
       </React.Fragment>
     </CustomToastWrapper>

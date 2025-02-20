@@ -3,7 +3,6 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import BootSplash from "react-native-bootsplash";
 import RootScreen from "./src/navigator/RootScreen";
 import { NavigationContainer } from "@react-navigation/native";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LoaderType } from "./src/Types/CommonTypes";
 

@@ -116,7 +116,7 @@ export type StackParams = {
 
 const Stack = createNativeStackNavigator<StackParams>();
 
-const MainStack: React.FC<ScreenProps<"MainStack">> = ({ navigation }) => {
+const MainStack: React.FC = () => {
   const { isProfileSetup } = useSelector(
     (state: RootState) => state.userDetails
   );

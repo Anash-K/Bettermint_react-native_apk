@@ -10,7 +10,6 @@ import {
 import React, { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ScreenProps } from "../navigator/Stack";
-import { gender, logout } from "../redux/slices/authSlice";
 import { useCustomStyle } from "../constants/CustomStyles";
 import { Controller, useForm } from "react-hook-form";
 import { colors } from "../constants/colors";
@@ -28,6 +27,7 @@ interface Inputs {
   DOB: string;
   Gender: string;
   City: string;
+  callingCode:string;
   mobileNumber: string;
   height: number;
   height_unit: string;
@@ -50,29 +50,56 @@ const statusOptions = [
 
 const heightUnit = [{ title: "cm" }, { title: "ft, in" }];
 const weightUnit = [{ title: "Kg" }, { title: "lbs" }];
+const defaultCountry: ICountry = {
+  name: "India",
+  code: "IN",
+  callingCode: "+91",
+};
 
 const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
   memo(({ navigation, route }) => {
-    const { token } = useSelector((state: any) => state.auth);
+    const { isProfileSetup, profileInfo } = useSelector(
+      (state: RootState) => state.userDetails
+    );
+    const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(
+      defaultCountry
+    );
+    console.log(profileInfo);
+
     const {
-      register,
       handleSubmit,
-      watch,
-      getValues,
       control,
       setValue,
       setError,
       formState: { errors },
-    } = useForm<Inputs>();
+    } = useForm<Inputs>({
+      defaultValues: {
+        name: profileInfo?.name,
+        DOB: profileInfo.date_of_birth,
+        Gender: profileInfo.gender,
+        callingCode:profileInfo.callingCode,
+        mobileNumber: "",
+        City: profileInfo.city,
+        height: profileInfo.height,
+        weight: profileInfo.weight,
+        status: profileInfo.status,
+        height_unit: profileInfo.height_unit,
+        weight_unit: profileInfo.weight_unit,
+      },
+    });
+
+    useEffect(() => {
+      if (profileInfo?.callingCode) {
+        setSelectedCountry((prev) => ({
+          ...prev, // Preserve previous country details
+          callingCode: profileInfo.callingCode, // Update calling code
+        }));
+      }
+    }, [profileInfo]);
+    
 
     const [isDatePickerVisible, setDatePickerVisibility] =
       useState<boolean>(false);
-    const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(
-      "+91"
-    );
-    const { isProfileSetup } = useSelector(
-      (state: RootState) => state.userDetails
-    );
 
     const showDatePicker = useCallback(() => {
       setDatePickerVisibility(true);
@@ -119,6 +146,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
               name: data.name,
               date_of_birth: data.DOB,
               gender: data.Gender,
+              callingCode:data.callingCode,
               mobile_number: mobileNumber,
               city: data.City,
               height: data.height,
@@ -166,7 +194,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
         setError("mobileNumber", { type: "manual", message: undefined });
       }
 
-      setValue("mobileNumber", formattedText); 
+      setValue("mobileNumber", formattedText);
     }, []);
 
     return (
@@ -276,7 +304,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
             control={control}
             name="mobileNumber"
             rules={{ required: "Mobile number is required" }}
-            render={({ field: { value, onChange } }) => (
+            render={({ field: { value } }) => (
               <CustomInput
                 label="Mobile Number"
                 placeholderText="Enter mobile number"
@@ -319,7 +347,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
               control={control}
               name="height_unit"
               rules={{ required: "Height unit is required" }}
-              render={({ field: { value, onChange } }) => (
+              render={({ field: { value } }) => (
                 <CustomInput
                   placeholderText="unit"
                   onChange={(text) => handleFieldChange("height_unit", text)}
@@ -413,7 +441,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
         {__DEV__ && (
           <CustomButton
             text="Dev Mode"
-            onPress={() => navigation.navigate('SelfAssessment')}
+            onPress={() => navigation.navigate("BottomTabStack")}
             buttonStyle={{ marginBottom: 15 }}
           />
         )}

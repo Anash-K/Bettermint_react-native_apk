@@ -26,9 +26,10 @@ import { useMutation } from "@tanstack/react-query";
 import { MutationKey } from "../Types/MutationKeys";
 import { UpdateProfile } from "../axious/PostApis";
 import { AppLoaderRef } from "../../App";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
-import { validations } from "../utils/Validations";
+import { validations } from "../utils/validations";
+import { RootState } from "../redux/rootReducer";
 
 interface Inputs {
   "Fasting blood sugar/glucose (mg / DL)": number;
@@ -43,17 +44,21 @@ interface Inputs {
 const PleaseShareYourMeasurement: React.FC<
   ScreenProps<"PleaseShareYourMeasurement">
 > = ({ navigation }) => {
+  const { medicalMeasurements } = useSelector(
+    (state: RootState) => state.userDetails
+  );
   const isProfileSetup = useProfileSetup();
   const dispatch = useDispatch();
   const { errorMessage } = useCustomStyle();
   const initialValues: Inputs = {
-    "Fasting blood sugar/glucose (mg / DL)": 0,
-    "Total Cholesterol (mg / DL)": 0,
-    "HDL Chol (mg / DL)": 0,
-    "LDL Chol (mg / DL)": 0,
-    "Avg SBP": 0,
-    "Avg DBP": 0,
-    "Date of report": "25 Dec, 2024",
+    "Fasting blood sugar/glucose (mg / DL)":
+      medicalMeasurements.blood_glucose ?? 0,
+    "Total Cholesterol (mg / DL)": medicalMeasurements.total_cholesterol ?? 0,
+    "HDL Chol (mg / DL)": medicalMeasurements.hdl_cholesterol ?? 0,
+    "LDL Chol (mg / DL)": medicalMeasurements.ldl_cholesterol ?? 0,
+    "Avg SBP": medicalMeasurements.systolic_blood_pressure ?? 0,
+    "Avg DBP": medicalMeasurements.diastolic_blood_pressure ?? 0,
+    "Date of report": medicalMeasurements.date_of_report ?? "25 Dec, 2024",
   };
 
   const {
@@ -254,10 +259,11 @@ const PleaseShareYourMeasurement: React.FC<
                   />
                 )}
               />
+              {errors["Date of report"] && (
+                <Text style={errorMessage}> Date of report is required</Text>
+              )}
             </View>
-            {errors["Date of report"] && (
-              <Text style={errorMessage}> Date of report is required</Text>
-            )}
+
             <CustomButton
               text={isProfileSetup ? "Update Reports" : "Continue"}
               onPress={handleSubmit(onSubmit)}
