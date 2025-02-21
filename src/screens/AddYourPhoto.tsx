@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useRef, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import {
   Image,
   InteractionManager,
@@ -17,7 +17,7 @@ import {
 import { PERMISSIONS } from "react-native-permissions";
 
 import ImagePicker from "react-native-image-crop-picker";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ScreenProps } from "../navigator/Stack";
 
 import { CustomImages } from "../assets/CustomImages";
@@ -35,20 +35,17 @@ import CustomImageHandler from "../common/CustomImageHandler";
 import CustomButton from "../common/CustomButton";
 import { handlePermission } from "../utils/PermissionHandler";
 import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
+import { RootState } from "../redux/rootReducer";
+import useUpdateUserProfile from "../hooks/useUpdateUserProfile";
 
 const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   navigation,
-  route,
 }) => {
-  // const userData = useSelector((state: any) => state.auth);
-  // const nameValidation = {
-  //   text: userData.name ? userData.name : '',
-  //   error: '',
-  //   isValid: false,
-  // };
+  const { profilePicture } = useSelector(
+    (state: RootState) => state.userDetails
+  );
 
   const [isModalVisible, setModalVisible] = useState(false);
-  const buttonRef = useRef<boolean>(false);
   const dispatch = useDispatch();
   const CustomStyle = useCustomStyle();
 
@@ -56,10 +53,12 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
     setModalVisible((prev) => !prev);
   }, []);
 
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    profilePicture ?? null
+  );
 
   const handleNextNav = useCallback(() => {
-    navigation.navigate('SelfAssessment');
+    navigation.navigate("SelfAssessment");
   }, [navigation]);
 
   const cameraPermission =
@@ -129,11 +128,12 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
       // Process the image if the path exists
       if (response.path) {
         getMimeTypeFromUri(response.path);
-
+        console.log(response.path, "path");
         setProfileImage(response.path);
+        6;
       }
     } catch (error) {
-      console.error("Camera error:", error);
+      // console.error("Camera error:", error);
     } finally {
       AppLoaderRef.current?.stop();
     }
@@ -166,28 +166,26 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
     }
   }, []);
 
+  const { mutateAsync: updateUserProfile } = useUpdateUserProfile(
+    "Profile picture updated successfully"
+  );
+
   const handleSubmit = useCallback(async () => {
-    let ImageType = "";
-    let ImageName = "";
-
-    if (profileImage) {
-      ImageType = getMimeTypeFromUri(profileImage);
-      ImageName = getFileNameFromUri(profileImage);
-    }
-
-    const data = {
-      profile: {
-        uri: profileImage,
-        type: ImageType,
-        name: ImageName,
-      },
+    let DataObject = {
+      profile_picture: profileImage,
     };
-    dispatch(
-      setFieldAction({ field: "profilePicture", value: data.profile.name })
-    );
-    handleNextNav();
-  }, [profileImage]);
 
+    try {
+      await updateUserProfile({
+        ...DataObject,
+      });
+    } catch (error) {
+      console.error("Profile update failed", error);
+      return;
+    }
+    dispatch(setFieldAction({ field: "profilePicture", value: profileImage }));
+    handleNextNav();
+  }, [profileImage, dispatch, profilePicture]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

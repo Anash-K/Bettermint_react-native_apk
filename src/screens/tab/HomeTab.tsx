@@ -10,17 +10,16 @@ import {
 import FastImage from "react-native-fast-image";
 import * as Progress from "react-native-progress";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import TabLogo from "../../constants/TabLogo";
 import { CustomImages } from "../../assets/CustomImages";
 import { colors } from "../../constants/colors";
 import CustomFont from "../../assets/fonts/customFonts";
-import { RootState } from "../../redux/rootReducer";
 import { ScreenProps } from "../../navigator/Stack";
 import EmojiOrImageCard from "../../common/EmojiCard";
 import LinearProgressBar from "../../common/LinearProgressBar";
-import * as ProgressBar from "react-native-progress";
+import { useMutation } from "@tanstack/react-query";
+import { MutationKey } from "../../Types/MutationKeys";
 
 interface initialValues {
   week: number;
@@ -36,9 +35,6 @@ interface ToxicStateType {
 }
 
 const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
-  const { steps, numberOfWorkout } = useSelector(
-    (state: RootState) => state.userDetails
-  );
 
   const [toxicState, setToxicState] = useState<ToxicStateType>({});
   const initialValues: initialValues = {
@@ -46,19 +42,6 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
     month: 75,
   };
   const [fill, setFill] = useState<initialValues>(initialValues);
-
-  const data = {
-    data: [0.5], // 70% progress (Ensure values are between 0 and 1)
-  };
-
-  const chartConfig = {
-    backgroundGradientFrom: "white", // Remove background
-    backgroundGradientTo: "white", // Remove background
-    color: (opacity = 0.5) => `rgba(102, 112, 115, ${opacity})`, // Chart color
-    strokeWidth: 2,
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false,
-  };
 
   setTimeout(() => {
     setToxicState({
@@ -99,6 +82,8 @@ const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
     });
     // ToxicStyle = ;
   }, 0);
+
+ 
 
   return (
     <View style={styles.container}>

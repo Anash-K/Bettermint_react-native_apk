@@ -93,7 +93,7 @@ export const CustomImages = {
   status: require("./Images/status.png"),
   weight: require("./Images/weight.png"),
   height: require("./Images/heightICon.png"),
-  scale: require("./Images/scale.png"),
+  wellBeing: require("./Images/wellbeing.png"),
   mobileIcon: require("./Images/mobileIcon.png"),
   history: require("./Images/history.png"),
   exclusiveIcon: require("./Images/exclusiveIcon.png"),

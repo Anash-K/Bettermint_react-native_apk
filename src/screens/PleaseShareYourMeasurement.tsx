@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 import { validations } from "../utils/validations";
 import { RootState } from "../redux/rootReducer";
+import useUpdateUserProfile from "../hooks/useUpdateUserProfile";
 
 interface Inputs {
   "Fasting blood sugar/glucose (mg / DL)": number;
@@ -58,7 +59,7 @@ const PleaseShareYourMeasurement: React.FC<
     "LDL Chol (mg / DL)": medicalMeasurements.ldl_cholesterol ?? 0,
     "Avg SBP": medicalMeasurements.systolic_blood_pressure ?? 0,
     "Avg DBP": medicalMeasurements.diastolic_blood_pressure ?? 0,
-    "Date of report": medicalMeasurements.date_of_report ?? "25 Dec, 2024",
+    "Date of report": medicalMeasurements.date_of_report ?? "2024-02-10",
   };
 
   const {
@@ -121,20 +122,34 @@ const PleaseShareYourMeasurement: React.FC<
     },
   ];
 
-  const onSubmit = useCallback((data: Inputs) => {
-    console.log("Submitted Data:", data);
-    console.log("Errors:", errors); // Log errors
+  const { mutateAsync: updateUserProfile } = useUpdateUserProfile(
+    "Your medical details have been successfully updated."
+  );
+
+  const onSubmit = useCallback(async (data: Inputs) => {
+    let DataObject = {
+      blood_glucose: data["Fasting blood sugar/glucose (mg / DL)"],
+      total_cholesterol: data["Total Cholesterol (mg / DL)"],
+      hdl_cholesterol: data["HDL Chol (mg / DL)"],
+      ldl_cholesterol: data["LDL Chol (mg / DL)"],
+      systolic_blood_pressure: data["Avg SBP"],
+      diastolic_blood_pressure: data["Avg DBP"],
+      date_of_report: data["Date of report"],
+    };
+    try {
+      await updateUserProfile({
+        ...DataObject,
+      });
+    } catch (error) {
+      console.error("Profile update failed", error);
+      return;
+    }
+
     dispatch(
       setFieldAction({
         field: "medicalMeasurements",
         value: {
-          blood_glucose: data["Fasting blood sugar/glucose (mg / DL)"],
-          total_cholesterol: data["Total Cholesterol (mg / DL)"],
-          hdl_cholesterol: data["HDL Chol (mg / DL)"],
-          ldl_cholesterol: data["LDL Chol (mg / DL)"],
-          systolic_blood_pressure: data["Avg SBP"],
-          diastolic_blood_pressure: data["Avg DBP"],
-          date_of_report: data["Date of report"],
+          ...DataObject,
         },
       })
     );

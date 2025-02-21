@@ -6,24 +6,29 @@ import CustomFont from "../assets/fonts/customFonts";
 import { useCustomStyle } from "./CustomStyles";
 import CustomImageHandler from "../common/CustomImageHandler";
 import CustomButton from "../common/CustomButton";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 interface ProfileCardType {
   onPressEdit: () => void;
 }
 
 const ProfileCard: React.FC<ProfileCardType> = memo(({ onPressEdit }) => {
-  const handleEditProfile = useCallback(() => {}, []);
   const CustomStyle = useCustomStyle();
+  const { profilePicture, profileInfo } = useSelector(
+    (state: RootState) => state.userDetails
+  );
+  // console.log(profileInfo.profile_picture,"test")
   return (
     <View style={[styles.container, CustomStyle.CommonCardShadow]}>
       <View style={styles.topView}>
         <CustomImageHandler
-          sourceImage={""}
+          sourceImage={profilePicture ?? ''}
           placeholderImage={CustomImages.profilePic}
           imageStyle={styles.imageStyle}
         />
         <View style={styles.profileDetails}>
-          <Text style={styles.userName}>Kevin Peterson</Text>
+          <Text style={styles.userName}>{profileInfo.name ?? ""}</Text>
           <CustomButton
             text="Edit profile"
             textStyle={styles.editProfileText}
@@ -39,13 +44,15 @@ const ProfileCard: React.FC<ProfileCardType> = memo(({ onPressEdit }) => {
         </View>
         <View style={styles.innerBlock}>
           <Text style={styles.categoryText}>
-            170<Text style={styles.unit}>cm</Text>
+            {profileInfo.height ?? ""}
+            <Text style={styles.unit}>{profileInfo.height_unit ?? ""}</Text>
           </Text>
           <Text style={styles.category}>Height</Text>
         </View>
         <View style={[styles.innerBlock, styles.lastBlock]}>
           <Text style={styles.categoryText}>
-            95<Text style={styles.unit}>kg</Text>
+            {profileInfo.weight ?? ""}
+            <Text style={styles.unit}>{profileInfo.weight_unit ?? ""}</Text>
           </Text>
           <Text style={styles.category}>Weight</Text>
         </View>

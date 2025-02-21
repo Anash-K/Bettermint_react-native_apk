@@ -62,11 +62,11 @@ interface ProfileDataProps {
 };
 
 export const UpdateProfile = async (profileData: ProfileDataProps) => {
-  // console.log(profileData,"profileData");
+  console.log(profileData,"profileData");
   try {
-    const response = await AxiosInstance.post("profile-update");
+    const response = await AxiosInstance.post("profile-update",profileData);
     return response;
   } catch (error) {
-    error;
+    throw error;
   }
 };

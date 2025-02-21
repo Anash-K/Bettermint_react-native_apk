@@ -10,7 +10,7 @@ import {
 import TabLogo from "../../constants/TabLogo";
 import { CustomImages } from "../../assets/CustomImages";
 import { colors } from "../../constants/colors";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "../../navigator/Stack";
 import ProfileCard from "../../constants/ProfileCard";
@@ -27,6 +27,8 @@ import { CustomToaster } from "../../common/CustomToaster";
 import { ALERT_TYPE } from "react-native-alert-notification";
 import { deleteApi, logoutApi } from "../../axious/PostApis";
 import { ErrorHandler } from "../../utils/ErrorHandler";
+import { GetProfileInfo } from "../../axious/GetApis";
+import { setFieldAction } from "../../redux/slices/workoutDetailsSlice";
 
 interface modalDetailsType {
   contentText: string;
@@ -46,7 +48,7 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
   ({ navigation }) => {
     const { top } = useSafeAreaInsets();
     const dispatch = useDispatch();
-    const { isProfileSetup , profileInfo } = useSelector(
+    const { isProfileSetup, profileInfo } = useSelector(
       (state: RootState) => state.userDetails
     );
 
@@ -96,11 +98,11 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
       mutationFn: deleteApi,
       onMutate: () => AppLoaderRef.current?.start(),
       onError: (error) => {
-        console.log(error,"error")
+        console.log(error, "error");
         ErrorHandler(error);
       },
       onSuccess(data) {
-        console.log(data,"res");
+        console.log(data, "res");
         if (data?.status === 200) {
           CustomToaster({
             type: ALERT_TYPE.SUCCESS,
@@ -117,7 +119,24 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
       },
     });
 
-    
+    const { mutate: getUserProfile } = useMutation({
+      mutationKey: [MutationKey.getProfileInfo],
+      onMutate: () => AppLoaderRef.current?.start,
+      mutationFn: async () => await GetProfileInfo(),
+      onError(error) {
+        console.log(error);
+        ErrorHandler(error);
+      },
+      onSuccess(data) {
+        console.log(data, "profile data");
+        dispatch(setFieldAction({ field: "profileInfo", value: {} }));
+      },
+      onSettled: () => AppLoaderRef.current?.stop(),
+    });
+
+    useEffect(() => {
+      getUserProfile();
+    }, []);
 
     const ActionsDataSet = {
       delete: {
@@ -133,7 +152,6 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
         actionText: "Logout",
         logo: CustomImages.logout,
         handle: () => {
-          // dispatch(logout());
           logoutUser();
         },
       },

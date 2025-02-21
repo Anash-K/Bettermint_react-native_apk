@@ -34,36 +34,36 @@ const SmallBriefBettermint: React.FC<ScreenProps<"SmallBriefBettermint">> = ({
 
   console.log(profileInfo, physicalMeasurements, "data", medicalMeasurements);
 
-  const { mutate: updateUserProfile } = useMutation({
-    mutationKey: [MutationKey.updateProfile],
-    onMutate: () => AppLoaderRef.current?.start(),
-    mutationFn: async () =>
-      await UpdateProfile({
-        ...profileInfo,
-        ...physicalMeasurements,
-        ...medicalMeasurements,
-      } as any),
-    onSuccess(data) {
-      console.log(data, "res data");
-      if (data?.status === 200) {
-        CustomToaster({
-          type: ALERT_TYPE.SUCCESS,
-          message: "Profile updated Successfully",
-        });
-      }
-      setTimeout(() => {
-        navigation.navigate("MovementAssesment");
-      }, 500);
-    },
-    onError(error) {
-      console.log(error, "error");
-      ErrorHandler(error);
-    },
-    onSettled: () => AppLoaderRef.current?.stop(),
-  });
+  // const { mutate: updateUserProfile } = useMutation({
+  //   mutationKey: [MutationKey.updateProfile],
+  //   onMutate: () => AppLoaderRef.current?.start(),
+  //   mutationFn: async () =>
+  //     await UpdateProfile({
+  //       ...profileInfo,
+  //       ...physicalMeasurements,
+  //       ...medicalMeasurements,
+  //     } as any),
+  //   onSuccess(data) {
+  //     console.log(data, "res data");
+  //     if (data?.status === 200) {
+  //       CustomToaster({
+  //         type: ALERT_TYPE.SUCCESS,
+  //         message: "Profile updated Successfully",
+  //       });
+  //     }
+  //     setTimeout(() => {
+        
+  //     }, 500);
+  //   },
+  //   onError(error) {
+  //     console.log(error, "error");
+  //     ErrorHandler(error);
+  //   },
+  //   onSettled: () => AppLoaderRef.current?.stop(),
+  // });
 
   const handleNextNav = useCallback(() => {
-    updateUserProfile();
+    navigation.navigate("MovementAssesment");
   }, []);
 
   return (

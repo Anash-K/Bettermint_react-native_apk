@@ -21,13 +21,15 @@ import CustomButton from "../common/CustomButton";
 import { RootState } from "../redux/rootReducer";
 import { ICountry } from "react-native-international-phone-number";
 import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
+import { formatCase } from "../utils/formateCase";
+import useUpdateUserProfile from "../hooks/useUpdateUserProfile";
 
 interface Inputs {
   name: string;
   DOB: string;
   Gender: string;
   City: string;
-  callingCode:string;
+  callingCode: string;
   mobileNumber: string;
   height: number;
   height_unit: string;
@@ -49,22 +51,19 @@ const statusOptions = [
 ];
 
 const heightUnit = [{ title: "cm" }, { title: "ft, in" }];
-const weightUnit = [{ title: "Kg" }, { title: "lbs" }];
-const defaultCountry: ICountry = {
-  name: "India",
-  code: "IN",
-  callingCode: "+91",
-};
+const weightUnit = [{ title: "kg" }, { title: "lbs" }];
 
 const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
-  memo(({ navigation, route }) => {
+  memo(({ navigation }) => {
     const { isProfileSetup, profileInfo } = useSelector(
       (state: RootState) => state.userDetails
     );
+
     const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(
-      defaultCountry
+      null
     );
-    console.log(profileInfo);
+
+    const [callingCode, setCallingCode] = useState("+91");
 
     const {
       handleSubmit,
@@ -76,27 +75,28 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
       defaultValues: {
         name: profileInfo?.name,
         DOB: profileInfo.date_of_birth,
-        Gender: profileInfo.gender,
-        callingCode:profileInfo.callingCode,
-        mobileNumber: "",
+        Gender: formatCase({ str: profileInfo.gender, type: "capitalize" }),
+        callingCode: profileInfo.callingCode,
+        mobileNumber: profileInfo.mobile_number,
         City: profileInfo.city,
         height: profileInfo.height,
         weight: profileInfo.weight,
-        status: profileInfo.status,
+        status: formatCase({ str: profileInfo.status, type: "capitalize" }),
         height_unit: profileInfo.height_unit,
         weight_unit: profileInfo.weight_unit,
       },
     });
 
+    console.log(profileInfo.mobile_number, "efe");
+
     useEffect(() => {
       if (profileInfo?.callingCode) {
-        setSelectedCountry((prev) => ({
-          ...prev, // Preserve previous country details
-          callingCode: profileInfo.callingCode, // Update calling code
-        }));
+        setCallingCode(profileInfo?.callingCode);
+        setTimeout(() => {
+          setValue("mobileNumber", profileInfo.mobile_number);
+        }, 0);
       }
-    }, [profileInfo]);
-    
+    }, [profileInfo, profileInfo.mobile_number]);
 
     const [isDatePickerVisible, setDatePickerVisibility] =
       useState<boolean>(false);
@@ -109,9 +109,15 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
       setDatePickerVisibility(false);
     }, [isDatePickerVisible]);
 
-    const handleSelectedCountry = useCallback((country: ICountry) => {
-      setSelectedCountry(country);
-    }, []);
+    const handleSelectedCountry = useCallback(
+      (country: ICountry) => {
+        setSelectedCountry(country);
+        if (country?.callingCode) {
+          setCallingCode(country.callingCode);
+        }
+      },
+      [callingCode, selectedCountry]
+    );
 
     const handleConfirm = useCallback(
       (date: Date) => {
@@ -128,33 +134,37 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     const dispatch = useDispatch();
     const CustomStyle = useCustomStyle();
 
+    const { mutateAsync: updateUserProfile } = useUpdateUserProfile();
+
     const onSubmit = useCallback(
-      (data: Inputs) => {
-        if (data.mobileNumber.length < 10) {
-          setError("mobileNumber", {
-            type: "required",
-            message: "Mobile number must contain 10 digit",
+      async (data: Inputs) => {
+        let DataObject = {
+          name: data.name,
+          date_of_birth: data.DOB,
+          gender: formatCase({ str: data.Gender, type: "lower" }),
+          callingCode: selectedCountry?.callingCode ?? "+91",
+          mobile_number: data.mobileNumber,
+          city: data.City,
+          height: data.height,
+          weight: data.weight,
+          status: formatCase({ str: data.status, type: "lower" }),
+          height_unit: data.height_unit,
+          weight_unit: data.weight_unit,
+        };
+
+        try {
+          await updateUserProfile({
+            ...DataObject,
           });
+        } catch (error) {
+          console.error("Profile update failed", error);
           return;
         }
-        let mobileNumber = `${selectedCountry?.callingCode}${data.mobileNumber}`;
-
         dispatch(
           setFieldAction({
             field: "profileInfo",
             value: {
-              name: data.name,
-              date_of_birth: data.DOB,
-              gender: data.Gender,
-              callingCode:data.callingCode,
-              mobile_number: mobileNumber,
-              city: data.City,
-              height: data.height,
-              weight: data.weight,
-              status: data.status,
-              height_unit: data.height_unit,
-              weight_unit: data.weight_unit,
-              profile_picture: "",
+              ...DataObject,
             },
           })
         );
@@ -164,7 +174,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
             : navigation.navigate("AddYourPhoto");
         }
       },
-      [selectedCountry]
+      [selectedCountry, navigation, updateUserProfile, profileInfo, dispatch]
     );
 
     const handleFieldChange = useCallback(
@@ -174,28 +184,6 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
       },
       []
     );
-
-    const handleInputChange = useCallback((text: string) => {
-      const formattedText = text.replace(/[^0-9]/g, "").slice(0, 15); // Allow only numbers & limit to 15 digits
-
-      if (formattedText.length > 15) {
-        setError("mobileNumber", {
-          type: "manual",
-          message: "Phone number cannot exceed 15 characters",
-        });
-        return;
-      } else if (!/^[0-9]*$/.test(formattedText)) {
-        setError("mobileNumber", {
-          type: "manual",
-          message: "Only numeric values are allowed",
-        });
-        return;
-      } else {
-        setError("mobileNumber", { type: "manual", message: undefined });
-      }
-
-      setValue("mobileNumber", formattedText);
-    }, []);
 
     return (
       <ScrollView
@@ -304,15 +292,16 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
             control={control}
             name="mobileNumber"
             rules={{ required: "Mobile number is required" }}
-            render={({ field: { value } }) => (
+            render={({ field: { value, onChange } }) => (
               <CustomInput
                 label="Mobile Number"
                 placeholderText="Enter mobile number"
-                onChange={handleInputChange}
+                onChange={onChange}
                 isPhoneInput={true}
                 value={value}
                 selectedCountry={selectedCountry}
                 OnCountryChange={handleSelectedCountry}
+                defaultCallingCode={callingCode}
               />
             )}
           />
@@ -440,8 +429,16 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
         </View>
         {__DEV__ && (
           <CustomButton
-            text="Dev Mode"
+            text="Bottom Stack Mode"
             onPress={() => navigation.navigate("BottomTabStack")}
+            buttonStyle={{ marginBottom: 15 }}
+          />
+        )}
+
+        {__DEV__ && (
+          <CustomButton
+            text="Small Brief Mode"
+            onPress={() => navigation.navigate("SmallBriefBettermint")}
             buttonStyle={{ marginBottom: 15 }}
           />
         )}

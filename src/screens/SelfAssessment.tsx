@@ -10,6 +10,8 @@ import { validationAlert } from "../Modals/ValidationAlert";
 import { isFormValid } from "../utils/isFormValid";
 import { useDispatch } from "react-redux";
 import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
+import useUpdateUserProfile from "../hooks/useUpdateUserProfile";
+import useUserDetails from "../hooks/useUserDetails";
 export interface handleOptionSelectType {
   fieldName: string;
   text: string | string[];
@@ -48,6 +50,7 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
   const [physicalInfo, setPhysicalInfo] = useState(initialState);
   const CustomStyle = useCustomStyle();
   const dispatch = useDispatch();
+  const { isProfileSetup } = useUserDetails();
 
   const handleOptionSelect = useCallback(
     ({ fieldName, text }: handleOptionSelectType) => {
@@ -59,25 +62,48 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
     [physicalInfo]
   );
 
-  const handlePress = useCallback(() => {
+  const { mutateAsync: updateUserProfile } = useUpdateUserProfile(
+    "Great job! Your self-assessment is successfully completed."
+  );
+
+  const handlePress = useCallback(async () => {
     if (!isFormValid(physicalInfo)) {
       validationAlert();
       return;
     }
+
+    let DataObject = {
+      chest: physicalInfo.chestSize,
+      waist: physicalInfo.waist,
+      hip: physicalInfo.hip,
+      thigh: physicalInfo.thigh,
+      user_diseases: physicalInfo.disease,
+      user_family_diseases: physicalInfo.familyHistory,
+    };
+
+    try {
+      await updateUserProfile({
+        ...DataObject,
+      });
+    } catch (error) {
+      console.error("Profile update failed", error);
+      return;
+    }
+
     dispatch(
       setFieldAction({
         field: "physicalMeasurements",
         value: {
-          chest: physicalInfo.chestSize,
-          waist: physicalInfo.waist,
-          hip: physicalInfo.hip,
-          thigh: physicalInfo.thigh,
-          user_diseases: physicalInfo.disease,
-          user_family_diseases: physicalInfo.familyHistory,
+          ...DataObject,
         },
       })
     );
-    navigation.navigate("PleaseShareYourMeasurement");
+
+    {
+      isProfileSetup
+        ? navigation.goBack()
+        : navigation.navigate("PleaseShareYourMeasurement");
+    }
   }, [navigation, physicalInfo]);
 
   return (

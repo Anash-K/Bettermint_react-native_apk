@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FastImageProps } from "react-native-fast-image";
 
 // Define the state type
 interface UserState {
@@ -14,10 +15,9 @@ interface UserState {
     city: string;
     height_unit: string;
     weight_unit: string;
-    profile_picture: string;
   };
   isProfileSetup: boolean;
-  profilePicture: string;
+  profilePicture: any;
   numberOfWorkout: number;
   sleepTrack: {
     bedTime: string;
@@ -59,7 +59,6 @@ export const initialUserState: UserState = {
     city: "",
     height_unit: "",
     weight_unit: "",
-    profile_picture: "",
   },
   isProfileSetup: false,
   profilePicture: "",

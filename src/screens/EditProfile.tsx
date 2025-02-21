@@ -22,9 +22,14 @@ import { GetProfileInfo } from "../axious/GetApis";
 import { AppLoaderRef } from "../../App";
 import { ErrorHandler } from "../utils/ErrorHandler";
 import { MutationKey } from "../Types/MutationKeys";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 const EditProfile: React.FC<ScreenProps<"EditProfile">> = memo(
   ({ navigation }) => {
+    const { profileInfo, profilePicture } = useSelector(
+      (state: RootState) => state.userDetails
+    );
     const CustomStyle = useCustomStyle();
     const handleActions = useCallback(({ page }: { page: any }) => {
       navigation.navigate(page);
@@ -38,7 +43,7 @@ const EditProfile: React.FC<ScreenProps<"EditProfile">> = memo(
         >
           <View style={styles.editImageBox}>
             <CustomImageHandler
-              sourceImage={""}
+              sourceImage={profilePicture ?? ""}
               placeholderImage={CustomImages.profilePic}
               imageStyle={styles.profilePic}
             />
@@ -53,78 +58,30 @@ const EditProfile: React.FC<ScreenProps<"EditProfile">> = memo(
               />
             </TouchableOpacity>
           </View>
-          <SimpleTabWrapper title="Personal Details">
-            <SimpleTabs
-              title="Basic Info"
-              tabIcon={CustomImages.editIcon}
-              HandlePress={handleActions.bind(this, {
-                page: "TellUsALittleAboutYou",
-              })}
-            />
-            <SimpleTabs
-              title="Mobile No."
-              tabIcon={CustomImages.mobileIcon}
-              actionText="+1 123-4567"
-              HandlePress={handleActions.bind(this, {
-                page: "ProvideYourMobileNumber",
-              })}
-            />
-            <SimpleTabs
-              title="Height"
-              tabIcon={CustomImages.height}
-              actionText="5ft, 11in"
-              HandlePress={handleActions.bind(this, {
-                page: "WhatsYourHeight",
-              })}
-            />
-            <SimpleTabs
-              title="Weight"
-              tabIcon={CustomImages.weight}
-              actionText="72kg"
-              HandlePress={handleActions.bind(this, {
-                page: "WhatsYourWeight",
-              })}
-            />
-            <SimpleTabs
-              title="Status"
-              tabIcon={CustomImages.status}
-              actionText="Working"
-              HandlePress={handleActions.bind(this, {
-                page: "WhatBestDescribe",
-              })}
-            />
-          </SimpleTabWrapper>
-          <SimpleTabWrapper title="Wellness Details">
-            <SimpleTabs
-              title="Body Measurements"
-              tabIcon={CustomImages.scale}
-              HandlePress={handleActions.bind(this, {
-                page: "WhatsYourMeasurement",
-              })}
-            />
-            <SimpleTabs
-              title="Disease"
-              tabIcon={CustomImages.disease}
-              HandlePress={handleActions.bind(this, {
-                page: "DoYouHaveDiseases",
-              })}
-            />
-            <SimpleTabs
-              title="Health Reports"
-              tabIcon={CustomImages.history}
-              actionText="Add"
-              HandlePress={handleActions.bind(this, {
-                page: "PleaseShareYourMeasurement",
-              })}
-            />
-            <SimpleTabs
-              title="Family History"
-              tabIcon={CustomImages.disease}
-              HandlePress={handleActions.bind(this, {
-                page: "DoYouHaveFamilyHistory",
-              })}
-            />
-          </SimpleTabWrapper>
+          <SimpleTabs
+            title="Personal Details"
+            tabIcon={CustomImages.status}
+            actionText=""
+            HandlePress={handleActions.bind(this, {
+              page: "TellUsALittleAboutYou",
+            })}
+          />
+          <SimpleTabs
+            title="Wellness Details"
+            tabIcon={CustomImages.wellBeing}
+            actionText=""
+            HandlePress={handleActions.bind(this, {
+              page: "SelfAssessment",
+            })}
+          />
+          <SimpleTabs
+            title="Health Reports"
+            tabIcon={CustomImages.history}
+            actionText=""
+            HandlePress={handleActions.bind(this, {
+              page: "PleaseShareYourMeasurement",
+            })}
+          />
         </ScrollView>
       </StatusBarWrapper>
     );
@@ -145,6 +102,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: colors.primary,
     borderRadius: 100,
+    marginBottom: 32,
   },
   editBox: {
     width: 34,
@@ -163,7 +121,7 @@ const styles = StyleSheet.create({
     width: 175,
     height: 175,
     margin: "auto",
-    // borderRadius:
+    borderRadius: 175 / 2,
   },
   container: {
     flex: 1,

@@ -6,5 +6,4 @@ export const MutationKey = ({
     deleteKey:'deleteUser',
     updateProfile:'updateUserData',
     getProfileInfo:'profileInfo',
-    changePassword:'changePassword'
 } as const)

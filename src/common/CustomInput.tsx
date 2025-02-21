@@ -15,7 +15,6 @@ import {
 } from "react-native";
 import FastImage from "react-native-fast-image";
 import SelectDropdown from "react-native-select-dropdown";
-// import PhoneInput from "react-native-phone-number-input";
 import PhoneInput, { ICountry } from "react-native-international-phone-number";
 import { colors } from "../constants/colors";
 import { CustomImages } from "../assets/CustomImages";
@@ -46,6 +45,7 @@ interface CustomInputProps {
   isPhoneNumber?: boolean;
   OnCountryChange?: (country: ICountry) => void;
   selectedCountry?: any;
+  defaultCallingCode?:string;
 }
 
 const CustomInput: React.FC<CustomInputProps> = memo(
@@ -73,6 +73,7 @@ const CustomInput: React.FC<CustomInputProps> = memo(
     onBlurAction,
     OnCountryChange,
     selectedCountry,
+    defaultCallingCode = '+91'
   }) => {
     const [isSecure, setIsSecure] = useState(true);
     const [textInputFocused, setTextInputFocused] = useState(false);
@@ -83,13 +84,7 @@ const CustomInput: React.FC<CustomInputProps> = memo(
       setDropDownFocused(false);
     }, [textInputFocused, dropDownFocused]);
 
-    const handleDropDownFocus = useCallback(() => {
-      setDropDownFocused(true);
-      setTextInputFocused(false);
-    }, [textInputFocused, dropDownFocused]);
-
     const handleBlur = useCallback(() => {
-      console.log("blur");
       setTextInputFocused(false);
       setDropDownFocused(false);
     }, [textInputFocused, dropDownFocused]);
@@ -114,7 +109,8 @@ const CustomInput: React.FC<CustomInputProps> = memo(
               <PhoneInput
                 onChangePhoneNumber={onChange}
                 selectedCountry={selectedCountry}
-                value={value ?? ""}
+                value={value}
+                maxLength={15}
                 onBlur={handleBlur}
                 onChangeSelectedCountry={OnCountryChange as any}
                 onFocus={handleTextInputFocus}
@@ -133,7 +129,7 @@ const CustomInput: React.FC<CustomInputProps> = memo(
                   flag: styles.flagStyle,
                 }}
                 style={styles.inputTextPhone}
-                defaultValue="+91"
+                defaultValue={defaultCallingCode}
                 keyboardType="phone-pad"
               />
             ) : (

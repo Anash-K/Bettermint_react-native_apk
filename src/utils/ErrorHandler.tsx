@@ -27,8 +27,6 @@ type httpErrorCodesType = {
 export const firebaseErrorCodes: firebaseErrorCodesType = {
   'auth/weak-password': 'Password should be at least 6 characters',
   'auth/too-many-requests': 'Too many requests. Please try again later',
-  'auth/invalid-credential':
-    'The supplied auth credential is incorrect, malformed, or has expired',
   'auth/claims-too-large': 'Claims too large',
   'auth/email-already-exists': 'Email already exists',
   'auth/user-not-found':

@@ -26,7 +26,7 @@ const SimpleTabs: React.FC<SimpleTabsType> = memo(
         <Image
           source={tabIcon}
           style={styles.tabIcon}
-          tintColor={colors.secondary}
+          // tintColor={colors.secondary}
         />
         <Text style={[styles.commonText, styles.title]}>{title}</Text>
         <Text style={[styles.commonText, styles.editText]}>{actionText}</Text>
