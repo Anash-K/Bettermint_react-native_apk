@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,6 @@ import {
   ViewStyle,
   TextStyle,
 } from "react-native";
-import { useCustomStyle } from "../constants/CustomStyles";
 import CustomFont from "../assets/fonts/customFonts";
 import { colors } from "../constants/colors";
 import FastImage from "react-native-fast-image";
@@ -22,7 +21,7 @@ interface CustomSelectorProps {
   question: string;
   options?: string[];
   onSelect: (selectedOption: string | string[]) => void; // Callback function to pass the selected option
-  selectedOption: string;
+  defaultValues: string | string[];
   outerCardStyle?: ViewStyle;
   questionStyle?: TextStyle;
   optionContainer?: ViewStyle;
@@ -40,9 +39,11 @@ interface CustomOptionsComponent {
   onSelect: () => void;
   optionStyle: TextStyle | TextStyle[] | undefined;
   outerBorderBoxStyle: ViewStyle | undefined;
+  optionsLength: number;
 }
 
 const CustomOptionsComponent = ({
+  optionsLength,
   isSelected,
   item,
   buttonStyle,
@@ -50,6 +51,7 @@ const CustomOptionsComponent = ({
   optionStyle,
   outerBorderBoxStyle,
 }: CustomOptionsComponent) => {
+  console.log(optionsLength, "option number");
   return (
     <View
       style={[
@@ -71,6 +73,7 @@ const CustomOptionsComponent = ({
           style={[
             styles.optionText,
             isSelected && styles.textFocus,
+            optionsLength <= 2 && styles.fullWidthOption,
             optionStyle,
           ]}
         >
@@ -93,6 +96,7 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
   optionStyle,
   CustomOptions,
   isMultiSelect = false,
+  defaultValues,
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -114,10 +118,9 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
 
   const handleSelect = (item: string) => {
     if (isMultiSelect) {
+      let newSelection;
       setSelectedOptions((prev) => {
-        let newSelection;
-
-        if (item === "None Of These") {
+        if (item === "NoneOfThese") {
           // If "None Of These" is selected, deselect all others
           newSelection = prev.includes(item) ? [] : [item];
         } else {
@@ -130,14 +133,25 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
         }
         return newSelection;
       });
+      onSelect(newSelection ?? []);
     } else {
       setSelectedOptions([item]);
+      onSelect([item]);
     }
   };
 
-  useEffect(() =>{
-    onSelect(selectedOptions)
-  },[selectedOptions]);
+  const memoizedDefaultValues = useMemo(
+    () => (Array.isArray(defaultValues) ? defaultValues : [defaultValues]),
+    [defaultValues]
+  );
+
+  useEffect(() => {
+    if (
+      JSON.stringify(selectedOptions) !== JSON.stringify(memoizedDefaultValues)
+    ) {
+      setSelectedOptions(memoizedDefaultValues);
+    }
+  }, [memoizedDefaultValues]);
 
   return (
     <View style={[styles.card, outerCardStyle]}>
@@ -156,6 +170,7 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
       <View style={[styles.optionsContainer, optionContainer]}>
         {generatedOptions.map((item, index) => (
           <CustomOptionsComponent
+            optionsLength={generatedOptions.length}
             key={index}
             item={item}
             isSelected={selectedOptions.includes(item)}
@@ -173,6 +188,9 @@ const CustomTextOptionSelector: React.FC<CustomSelectorProps> = ({
 export default CustomTextOptionSelector;
 
 const styles = StyleSheet.create({
+  fullWidthOption: {
+    width: "100%",
+  },
   subTitle: {
     fontFamily: CustomFont.Urbanist700,
     fontSize: 16,

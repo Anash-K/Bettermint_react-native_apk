@@ -28,7 +28,8 @@ import { ALERT_TYPE } from "react-native-alert-notification";
 import { deleteApi, logoutApi } from "../../axious/PostApis";
 import { ErrorHandler } from "../../utils/ErrorHandler";
 import { GetProfileInfo } from "../../axious/GetApis";
-import { setFieldAction } from "../../redux/slices/workoutDetailsSlice";
+import _ from "lodash";
+import useMergeProfileInfo from "../../hooks/useMergeProfileInfo";
 
 interface modalDetailsType {
   contentText: string;
@@ -58,7 +59,6 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
     >(null);
     const [modalDetails, SetModalDetails] =
       useState<modalDetailsType>(initialModalDetails);
-    console.log("profile tab", isProfileSetup);
 
     const closeModal = useCallback(() => {
       setIsModalVisible(null);
@@ -98,11 +98,9 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
       mutationFn: deleteApi,
       onMutate: () => AppLoaderRef.current?.start(),
       onError: (error) => {
-        console.log(error, "error");
         ErrorHandler(error);
       },
       onSuccess(data) {
-        console.log(data, "res");
         if (data?.status === 200) {
           CustomToaster({
             type: ALERT_TYPE.SUCCESS,
@@ -119,6 +117,8 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
       },
     });
 
+    const { mergeProfileInfo } = useMergeProfileInfo();
+
     const { mutate: getUserProfile } = useMutation({
       mutationKey: [MutationKey.getProfileInfo],
       onMutate: () => AppLoaderRef.current?.start,
@@ -128,8 +128,9 @@ const ProfileTab: React.FC<ScreenProps<"ProfileTab">> = memo(
         ErrorHandler(error);
       },
       onSuccess(data) {
-        console.log(data, "profile data");
-        dispatch(setFieldAction({ field: "profileInfo", value: {} }));
+        if (data.payload) {
+          mergeProfileInfo(data.payload);
+        }
       },
       onSettled: () => AppLoaderRef.current?.stop(),
     });

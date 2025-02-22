@@ -1747,10 +1747,10 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBApp (21.10.0):
+  - RNFBApp (21.10.1):
     - Firebase/CoreOnly (= 11.8.0)
     - React-Core
-  - RNFBAuth (21.10.0):
+  - RNFBAuth (21.10.1):
     - Firebase/Auth (= 11.8.0)
     - React-Core
     - RNFBApp
@@ -1893,7 +1893,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.6.0):
+  - RNScreens (4.7.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1914,9 +1914,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.6.0)
+    - RNScreens/common (= 4.7.0)
     - Yoga
-  - RNScreens/common (4.6.0):
+  - RNScreens/common (4.7.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1938,7 +1938,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNShare (12.0.7):
+  - RNShare (12.0.9):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2385,14 +2385,14 @@ SPEC CHECKSUMS:
   RNCMaskedView: 381d041f80e6bf7983d2c058a34362e6a362ce01
   RNDateTimePicker: dfea58203474b4a5b5d0550e2e9ed35026e7859f
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNFBApp: 958554cdc25d8405f4818f16f9474754d610a305
-  RNFBAuth: 38e709123d2f4391618c737ec313d84bb6e0fdf2
+  RNFBApp: 7608d07e90e99f81f3627b0e325cca3ddc9a2ab3
+  RNFBAuth: b217f886ed44f7be4f5c63be1ff303404c222664
   RNGestureHandler: f81b6b9710750770867f97c15ad941ac2542d089
   RNImageCropPicker: 64b6bec9ec185ee59b71a93d7058816bd0e1916e
   RNPermissions: 24f8cb082a2e533985a0efff20fa57c22c6b2909
   RNReanimated: ddc60075b382b872662cadaf9972b07d52a8fce7
-  RNScreens: 3d9895696d5716e9a780237a9c2589c7aa3d199f
-  RNShare: 2bcf3801394c0c7c59d587834ecb896601ff5d90
+  RNScreens: 7323923ec4ee6019d6702b9cc02e5f15a7e7276b
+  RNShare: 2ff8d5040f2c1651173d810a7bb6c1b0cd2c6699
   RNSVG: 3cd6669b7ad658c8b482db630dccf364c3b59cfb
   RNVectorIcons: 8c7af262a73890caabbac2bb081ddbaa1b8a768c
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d

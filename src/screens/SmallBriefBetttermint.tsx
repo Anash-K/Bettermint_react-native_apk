@@ -1,70 +1,48 @@
-import {
-  Alert,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useCustomStyle } from "../constants/CustomStyles";
 import FastImage from "react-native-fast-image";
-import React, { memo, useCallback, useRef } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { ScreenProps } from "../navigator/Stack";
 import { CustomImages } from "../assets/CustomImages";
 import CustomFont from "../assets/fonts/customFonts";
 import CustomButton from "../common/CustomButton";
 import { colors } from "../constants/colors";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/rootReducer";
+import { useDispatch } from "react-redux";
+import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 import { useMutation } from "@tanstack/react-query";
-import { MutationKey } from "../Types/MutationKeys";
-import { AppLoaderRef } from "../../App";
-import { UpdateProfile } from "../axious/PostApis";
+import { GetQuestions } from "../axious/GetApis";
 import { ErrorHandler } from "../utils/ErrorHandler";
-import { CustomToaster } from "../common/CustomToaster";
-import { ALERT_TYPE } from "react-native-alert-notification";
+import { AppLoaderRef } from "../../App";
+import { MutationKey } from "../Types/MutationKeys";
+import { setQnA } from "../redux/slices/qnaSlice";
 
 const SmallBriefBettermint: React.FC<ScreenProps<"SmallBriefBettermint">> = ({
   navigation,
 }) => {
   const CustomStyle = useCustomStyle();
-  const { profileInfo, physicalMeasurements, medicalMeasurements } =
-    useSelector((state: RootState) => state.userDetails);
-  const buttonRef = useRef<boolean>(false);
-
-  console.log(profileInfo, physicalMeasurements, "data", medicalMeasurements);
-
-  // const { mutate: updateUserProfile } = useMutation({
-  //   mutationKey: [MutationKey.updateProfile],
-  //   onMutate: () => AppLoaderRef.current?.start(),
-  //   mutationFn: async () =>
-  //     await UpdateProfile({
-  //       ...profileInfo,
-  //       ...physicalMeasurements,
-  //       ...medicalMeasurements,
-  //     } as any),
-  //   onSuccess(data) {
-  //     console.log(data, "res data");
-  //     if (data?.status === 200) {
-  //       CustomToaster({
-  //         type: ALERT_TYPE.SUCCESS,
-  //         message: "Profile updated Successfully",
-  //       });
-  //     }
-  //     setTimeout(() => {
-        
-  //     }, 500);
-  //   },
-  //   onError(error) {
-  //     console.log(error, "error");
-  //     ErrorHandler(error);
-  //   },
-  //   onSettled: () => AppLoaderRef.current?.stop(),
-  // });
-
+  const dispatch = useDispatch();
   const handleNextNav = useCallback(() => {
+    dispatch(setFieldAction({ field: "isProfileSetup", value: true }));
     navigation.navigate("MovementAssesment");
   }, []);
+
+  const { mutate : getQuest} = useMutation({
+    mutationKey:[MutationKey.questions],
+    onMutate:() => AppLoaderRef.current?.start(),
+    mutationFn:async() => await GetQuestions(),
+    onError(error) {
+      console.log("error", error);
+      ErrorHandler(error);
+    },
+    onSuccess(data) {
+      dispatch(setQnA(data.payload.data))
+    },
+    onSettled:() => AppLoaderRef.current?.stop(),
+  });
+
+  useEffect(() =>{
+    getQuest();
+  },[]);
 
   return (
     <ScrollView

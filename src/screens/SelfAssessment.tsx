@@ -1,5 +1,5 @@
 import { Platform, ScrollView, StyleSheet } from "react-native";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 
 import { ScreenProps } from "../navigator/Stack";
 import { useCustomStyle } from "../constants/CustomStyles";
@@ -8,10 +8,9 @@ import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
 import { validationAlert } from "../Modals/ValidationAlert";
 import { isFormValid } from "../utils/isFormValid";
-import { useDispatch } from "react-redux";
-import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 import useUpdateUserProfile from "../hooks/useUpdateUserProfile";
 import useUserDetails from "../hooks/useUserDetails";
+import useMergeProfileInfo from "../hooks/useMergeProfileInfo";
 export interface handleOptionSelectType {
   fieldName: string;
   text: string | string[];
@@ -20,6 +19,7 @@ export interface handleOptionSelectType {
 const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
   navigation,
 }) => {
+  const { isProfileSetup, profileInfo } = useUserDetails();
   const DiseasesOption = [
     "Diabetes / Prediabetes",
     "Cholesterol",
@@ -39,18 +39,30 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
   ];
 
   const initialState = {
-    chestSize: 0,
-    waist: 0,
-    hip: 0,
-    thigh: 0,
-    disease: "",
-    familyHistory: "",
+    chestSize: profileInfo.chest ?? 0,
+    waist: profileInfo.waist ?? 0,
+    hip: profileInfo.hip ?? 0,
+    thigh: profileInfo.thigh ?? 0,
+    disease: profileInfo.user_diseases?.length ? profileInfo.user_diseases : [],
+    familyHistory: profileInfo.user_family_diseases?.length
+      ? profileInfo.user_family_diseases
+      : [],
   };
+
+  useEffect(() => {
+    setPhysicalInfo((prevState) => ({
+      ...prevState,
+      disease: profileInfo?.user_diseases?.length
+        ? profileInfo.user_diseases
+        : [],
+      familyHistory: profileInfo?.user_family_diseases?.length
+        ? profileInfo.user_family_diseases
+        : [],
+    }));
+  }, []);
 
   const [physicalInfo, setPhysicalInfo] = useState(initialState);
   const CustomStyle = useCustomStyle();
-  const dispatch = useDispatch();
-  const { isProfileSetup } = useUserDetails();
 
   const handleOptionSelect = useCallback(
     ({ fieldName, text }: handleOptionSelectType) => {
@@ -63,8 +75,11 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
   );
 
   const { mutateAsync: updateUserProfile } = useUpdateUserProfile(
-    "Great job! Your self-assessment is successfully completed."
+    `Great job! Your self-assessment is successfully ${
+      isProfileSetup ? "updated" : "completed"
+    }.`
   );
+  const { mergeProfileInfo } = useMergeProfileInfo();
 
   const handlePress = useCallback(async () => {
     if (!isFormValid(physicalInfo)) {
@@ -90,14 +105,7 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
       return;
     }
 
-    dispatch(
-      setFieldAction({
-        field: "physicalMeasurements",
-        value: {
-          ...DataObject,
-        },
-      })
-    );
+    mergeProfileInfo(DataObject);
 
     {
       isProfileSetup
@@ -162,7 +170,7 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
           })
         }
         isMultiSelect
-        selectedOption={physicalInfo.disease}
+        defaultValues={physicalInfo.disease}
       />
       <CustomTextOptionSelector
         question="Do you have a family history of any of the following?"
@@ -174,10 +182,10 @@ const SelfAssessment: React.FC<ScreenProps<"SelfAssessment">> = ({
           })
         }
         isMultiSelect
-        selectedOption={physicalInfo.familyHistory}
+        defaultValues={physicalInfo.familyHistory}
       />
       <CustomButton
-        text="Continue"
+        text={isProfileSetup ? "Update Measurements" : "Continue"}
         onPress={handlePress}
         buttonStyle={styles.buttonStyle}
       />

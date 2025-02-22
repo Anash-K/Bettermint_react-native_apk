@@ -23,6 +23,9 @@ import { ICountry } from "react-native-international-phone-number";
 import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 import { formatCase } from "../utils/formateCase";
 import useUpdateUserProfile from "../hooks/useUpdateUserProfile";
+import useUserDetails from "../hooks/useUserDetails";
+import _ from "lodash";
+import useMergeProfileInfo from "../hooks/useMergeProfileInfo";
 
 interface Inputs {
   name: string;
@@ -55,9 +58,9 @@ const weightUnit = [{ title: "kg" }, { title: "lbs" }];
 
 const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
   memo(({ navigation }) => {
-    const { isProfileSetup, profileInfo } = useSelector(
-      (state: RootState) => state.userDetails
-    );
+    const { isProfileSetup, profileInfo } = useUserDetails();
+
+    console.log(profileInfo, "profile info");
 
     const [selectedCountry, setSelectedCountry] = useState<null | ICountry>(
       null
@@ -86,8 +89,6 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
         weight_unit: profileInfo.weight_unit,
       },
     });
-
-    console.log(profileInfo.mobile_number, "efe");
 
     useEffect(() => {
       if (profileInfo?.callingCode) {
@@ -135,6 +136,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
     const CustomStyle = useCustomStyle();
 
     const { mutateAsync: updateUserProfile } = useUpdateUserProfile();
+    const { mergeProfileInfo } = useMergeProfileInfo();
 
     const onSubmit = useCallback(
       async (data: Inputs) => {
@@ -160,14 +162,7 @@ const TellUsALittleAboutYou: React.FC<ScreenProps<"TellUsALittleAboutYou">> =
           console.error("Profile update failed", error);
           return;
         }
-        dispatch(
-          setFieldAction({
-            field: "profileInfo",
-            value: {
-              ...DataObject,
-            },
-          })
-        );
+        mergeProfileInfo(DataObject);
         {
           isProfileSetup
             ? navigation.goBack()

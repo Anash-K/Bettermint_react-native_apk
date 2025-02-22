@@ -37,13 +37,12 @@ import { handlePermission } from "../utils/PermissionHandler";
 import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 import { RootState } from "../redux/rootReducer";
 import useUpdateUserProfile from "../hooks/useUpdateUserProfile";
+import useMergeProfileInfo from "../hooks/useMergeProfileInfo";
 
 const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   navigation,
 }) => {
-  const { profilePicture } = useSelector(
-    (state: RootState) => state.userDetails
-  );
+  const { profileInfo } = useSelector((state: RootState) => state.userDetails);
 
   const [isModalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -54,7 +53,7 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   }, []);
 
   const [profileImage, setProfileImage] = useState<string | null>(
-    profilePicture ?? null
+    profileInfo.profile_picture ?? null
   );
 
   const handleNextNav = useCallback(() => {
@@ -169,23 +168,44 @@ const AddYourPhoto: React.FC<ScreenProps<"AddYourPhoto">> = ({
   const { mutateAsync: updateUserProfile } = useUpdateUserProfile(
     "Profile picture updated successfully"
   );
+  const { mergeProfileInfo } = useMergeProfileInfo();
 
   const handleSubmit = useCallback(async () => {
-    let DataObject = {
+    let ImageType = "";
+    let ImageName = "";
+
+    if (profileImage) {
+      ImageType = getMimeTypeFromUri(profileImage);
+      ImageName = getFileNameFromUri(profileImage);
+    }
+
+    const data = {
+      profile: {
+        uri: profileImage,
+        type: ImageType,
+        name: ImageName,
+      },
+    };
+
+    let DataObjectForApi = {
+      profile_picture: data.profile.name,
+    };
+
+    let DataObjectForLocal = {
       profile_picture: profileImage,
     };
 
     try {
       await updateUserProfile({
-        ...DataObject,
+        ...DataObjectForApi,
       });
     } catch (error) {
       console.error("Profile update failed", error);
       return;
     }
-    dispatch(setFieldAction({ field: "profilePicture", value: profileImage }));
+    mergeProfileInfo(DataObjectForLocal as any);
     handleNextNav();
-  }, [profileImage, dispatch, profilePicture]);
+  }, [profileImage, updateUserProfile, mergeProfileInfo]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

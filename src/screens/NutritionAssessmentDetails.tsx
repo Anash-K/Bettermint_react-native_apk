@@ -8,7 +8,7 @@ import CustomTextOptionSelector from "../common/CustomTextOptionSelector";
 import CustomButton from "../common/CustomButton";
 export interface handleOptionSelectType {
   fieldName: string;
-  text: string;
+  text: string | string[];
 }
 
 const NutritionAssessmentDetails: React.FC<
@@ -83,7 +83,7 @@ const NutritionAssessmentDetails: React.FC<
         onSelect={(text) =>
           handleOptionSelect({ fieldName: "litersOfWaterDrink", text })
         }
-        selectedOption={nutritionInfo.litersOfWaterDrink}
+        defaultValues={nutritionInfo.litersOfWaterDrink}
         optionStyle={{ fontSize: 14 }}
       />
       <CustomTextOptionSelector
@@ -92,7 +92,7 @@ const NutritionAssessmentDetails: React.FC<
         onSelect={(text) =>
           handleOptionSelect({ fieldName: "litersOfWaterDrink", text })
         }
-        selectedOption={nutritionInfo.litersOfWaterDrink}
+        defaultValues={nutritionInfo.litersOfWaterDrink}
         optionStyle={styles.litersOfWaterOption}
       />
       <CustomSelector

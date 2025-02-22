@@ -31,6 +31,8 @@ import { setFieldAction } from "../redux/slices/workoutDetailsSlice";
 import { validations } from "../utils/validations";
 import { RootState } from "../redux/rootReducer";
 import useUpdateUserProfile from "../hooks/useUpdateUserProfile";
+import useMergeProfileInfo from "../hooks/useMergeProfileInfo";
+import useUserDetails from "../hooks/useUserDetails";
 
 interface Inputs {
   "Fasting blood sugar/glucose (mg / DL)": number;
@@ -45,21 +47,19 @@ interface Inputs {
 const PleaseShareYourMeasurement: React.FC<
   ScreenProps<"PleaseShareYourMeasurement">
 > = ({ navigation }) => {
-  const { medicalMeasurements } = useSelector(
-    (state: RootState) => state.userDetails
-  );
+  const {profileInfo} = useUserDetails();
   const isProfileSetup = useProfileSetup();
   const dispatch = useDispatch();
   const { errorMessage } = useCustomStyle();
   const initialValues: Inputs = {
     "Fasting blood sugar/glucose (mg / DL)":
-      medicalMeasurements.blood_glucose ?? 0,
-    "Total Cholesterol (mg / DL)": medicalMeasurements.total_cholesterol ?? 0,
-    "HDL Chol (mg / DL)": medicalMeasurements.hdl_cholesterol ?? 0,
-    "LDL Chol (mg / DL)": medicalMeasurements.ldl_cholesterol ?? 0,
-    "Avg SBP": medicalMeasurements.systolic_blood_pressure ?? 0,
-    "Avg DBP": medicalMeasurements.diastolic_blood_pressure ?? 0,
-    "Date of report": medicalMeasurements.date_of_report ?? "2024-02-10",
+    profileInfo.blood_glucose ?? 0,
+    "Total Cholesterol (mg / DL)": profileInfo.total_cholesterol ?? 0,
+    "HDL Chol (mg / DL)": profileInfo.hdl_cholesterol ?? 0,
+    "LDL Chol (mg / DL)": profileInfo.ldl_cholesterol ?? 0,
+    "Avg SBP": profileInfo.systolic_blood_pressure ?? 0,
+    "Avg DBP": profileInfo.diastolic_blood_pressure ?? 0,
+    "Date of report": profileInfo.date_of_report ?? "2024-02-10",
   };
 
   const {
@@ -125,6 +125,7 @@ const PleaseShareYourMeasurement: React.FC<
   const { mutateAsync: updateUserProfile } = useUpdateUserProfile(
     "Your medical details have been successfully updated."
   );
+  const { mergeProfileInfo } = useMergeProfileInfo();
 
   const onSubmit = useCallback(async (data: Inputs) => {
     let DataObject = {
@@ -144,15 +145,7 @@ const PleaseShareYourMeasurement: React.FC<
       console.error("Profile update failed", error);
       return;
     }
-
-    dispatch(
-      setFieldAction({
-        field: "medicalMeasurements",
-        value: {
-          ...DataObject,
-        },
-      })
-    );
+    mergeProfileInfo(DataObject);
     handleNextNav();
   }, []);
 

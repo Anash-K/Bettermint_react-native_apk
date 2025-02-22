@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import FastImage from "react-native-fast-image";
 import * as Progress from "react-native-progress";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import TabLogo from "../../constants/TabLogo";
 import { CustomImages } from "../../assets/CustomImages";
@@ -20,6 +20,8 @@ import EmojiOrImageCard from "../../common/EmojiCard";
 import LinearProgressBar from "../../common/LinearProgressBar";
 import { useMutation } from "@tanstack/react-query";
 import { MutationKey } from "../../Types/MutationKeys";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/rootReducer";
 
 interface initialValues {
   week: number;
@@ -35,55 +37,57 @@ interface ToxicStateType {
 }
 
 const HomeTab: React.FC<ScreenProps<"HomeTab">> = () => {
-
   const [toxicState, setToxicState] = useState<ToxicStateType>({});
+  const { quest } = useSelector((state: RootState) => state.qna);
   const initialValues: initialValues = {
     week: 90,
     month: 75,
   };
   const [fill, setFill] = useState<initialValues>(initialValues);
 
-  setTimeout(() => {
-    setToxicState({
-      movementText: {
-        top: 10,
-        right: -17,
-        transform: [{ rotateZ: "45deg" }],
-        color: colors.lottiePink,
-        opacity: 1,
-      },
-      nourishText: {
-        bottom: 13,
-        right: -7,
-        transform: [{ rotateZ: "-46deg" }],
-        color: colors.lottieGreen,
-        opacity: 1,
-      },
-      wellbeingText: {
-        bottom: 10,
-        left: -15,
-        transform: [{ rotateZ: "45deg" }],
-        color: colors.lottieYellow,
-        opacity: 1,
-      },
-      titleLottieText: {
-        fontSize: 14,
-        lineHeight: 16.8,
-        fontFamily: CustomFont.Urbanist700,
-        position: "absolute",
-      },
-      sleepText: {
-        top: 10,
-        left: -5,
-        transform: [{ rotateZ: "-45deg" }],
-        color: colors.lottieBlue,
-        opacity: 1,
-      },
-    });
-    // ToxicStyle = ;
-  }, 0);
+  useEffect(() => {
+    setTimeout(() => {
+      setToxicState({
+        movementText: {
+          top: 10,
+          right: -17,
+          transform: [{ rotateZ: "45deg" }],
+          color: colors.lottiePink,
+          opacity: 1,
+        },
+        nourishText: {
+          bottom: 13,
+          right: -7,
+          transform: [{ rotateZ: "-46deg" }],
+          color: colors.lottieGreen,
+          opacity: 1,
+        },
+        wellbeingText: {
+          bottom: 10,
+          left: -15,
+          transform: [{ rotateZ: "45deg" }],
+          color: colors.lottieYellow,
+          opacity: 1,
+        },
+        titleLottieText: {
+          fontSize: 14,
+          lineHeight: 16.8,
+          fontFamily: CustomFont.Urbanist700,
+          position: "absolute",
+        },
+        sleepText: {
+          top: 10,
+          left: -5,
+          transform: [{ rotateZ: "-45deg" }],
+          color: colors.lottieBlue,
+          opacity: 1,
+        },
+      });
+      // ToxicStyle = ;
+    }, 0);
+  }, []);
 
- 
+  console.log("ques", quest);
 
   return (
     <View style={styles.container}>

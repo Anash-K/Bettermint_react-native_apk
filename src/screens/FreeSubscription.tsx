@@ -97,7 +97,9 @@ const styles = StyleSheet.create({
 
     marginTop: 21,
   },
-  tapToCopyText: {},
+  tapToCopyText: {
+    color: colors.secondary,
+  },
   copyCodeBox: {
     flexDirection: "row",
     alignItems: "center",
